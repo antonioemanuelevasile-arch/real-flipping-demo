@@ -210,6 +210,19 @@ footer.site{border-top:1px solid var(--line);padding:32px 32px;max-width:1200px;
 .pay-option .check{position:absolute;top:8px;right:8px;width:16px;height:16px;border-radius:50%;background:var(--brass);color:var(--white);display:none;align-items:center;justify-content:center;font-size:10px;}
 .pay-option.selected .check{display:flex;}
 
+.plan-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.plan-option{
+  display:flex;flex-direction:column;gap:4px;padding:14px 15px;border-radius:12px;
+  border:1px solid var(--line-strong);background:var(--white);text-align:left;position:relative;
+}
+.plan-option-name{font-size:14px;font-weight:700;}
+.plan-option-price{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);font-weight:600;}
+.plan-option-desc{font-size:11.5px;color:var(--ink-soft);line-height:1.4;margin-top:2px;}
+.plan-option.selected{border-color:var(--brass);background:var(--brass-tint);}
+.plan-option.selected .plan-option-price{color:var(--brass-deep);}
+.plan-option .check{position:absolute;top:10px;right:10px;width:16px;height:16px;border-radius:50%;background:var(--brass);color:var(--white);display:none;align-items:center;justify-content:center;font-size:10px;}
+.plan-option.selected .check{display:flex;}
+
 /* notifications */
 .notif-btn{
   position:relative;border:1px solid var(--line);background:var(--bg);border-radius:10px;
@@ -556,7 +569,37 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
       <div class="avatar">MV</div>
       <div>
         <h3>Marco V.</h3>
-        <div class="sub">investitore@realflipping.it · Piano <span class="plan-badge">Pro</span></div>
+        <div class="sub">investitore@realflipping.it · Piano <span class="plan-badge" id="account-plan-badge">Pro</span></div>
+      </div>
+    </div>
+
+    <div class="account-section">
+      <h4>Piano di abbonamento</h4>
+      <div class="plan-options" id="plan-options">
+        <button class="plan-option" data-plan="Basic" onclick="setPlan('Basic')">
+          <div class="plan-option-name">Basic</div>
+          <div class="plan-option-price">Gratis</div>
+          <div class="plan-option-desc">Dashboard, elenco operazioni, fiscalità stimata.</div>
+          <span class="check">✓</span>
+        </button>
+        <button class="plan-option" data-plan="Standard" onclick="setPlan('Standard')">
+          <div class="plan-option-name">Standard</div>
+          <div class="plan-option-price">€9/mese</div>
+          <div class="plan-option-desc">+ Consulente IA senza limiti, notifiche in tempo reale.</div>
+          <span class="check">✓</span>
+        </button>
+        <button class="plan-option" data-plan="Pro" onclick="setPlan('Pro')">
+          <div class="plan-option-name">Pro</div>
+          <div class="plan-option-price">€29/mese</div>
+          <div class="plan-option-desc">+ Accesso prioritario alle nuove operazioni, report fiscale annuale.</div>
+          <span class="check">✓</span>
+        </button>
+        <button class="plan-option" data-plan="Elite" onclick="setPlan('Elite')">
+          <div class="plan-option-name">Elite</div>
+          <div class="plan-option-price">€79/mese</div>
+          <div class="plan-option-desc">+ Consulente dedicato, ticket minimo ridotto, anteprima esclusiva.</div>
+          <span class="check">✓</span>
+        </button>
       </div>
     </div>
 
@@ -860,7 +903,7 @@ const FAQ = [
   {kw:['spv','societ','sicurezza dei fondi','dove vanno i miei soldi'], a:()=>`Ogni operazione di crowdfunding è veicolata da una SPV (società veicolo) dedicata al singolo progetto, separata dal patrimonio di RealFlipping: i fondi raccolti sono vincolati a quell'operazione specifica. È lo stesso meccanismo usato dalla maggior parte delle piattaforme di real estate crowdfunding regolamentate.`},
 ];
 
-let state = {loggedIn:false, dashFilter:'all', exploreFilter:'all', currentProjectId:null, currentView:'dashboard', fromView:'dashboard', language:'it', paymentMethod:'card', notifUnread:4};
+let state = {loggedIn:false, dashFilter:'all', exploreFilter:'all', currentProjectId:null, currentView:'dashboard', fromView:'dashboard', language:'it', paymentMethod:'card', plan:'Pro', notifUnread:4};
 
 const NOTIFICATIONS = [
   {title:'Nuove foto di cantiere caricate', project:'Palazzina Via dei Tigli', date:'2 giorni fa'},
@@ -884,6 +927,7 @@ function openAccount(){
   closeNotifications();
   document.getElementById('account-lang').value = state.language;
   renderPaymentOptions();
+  renderPlanOptions();
   document.getElementById('account-overlay').classList.remove('hidden');
 }
 function closeAccount(){document.getElementById('account-overlay').classList.add('hidden');}
@@ -896,6 +940,17 @@ function renderPaymentOptions(){
 function setPaymentMethod(method){
   state.paymentMethod = method;
   renderPaymentOptions();
+}
+function renderPlanOptions(){
+  document.querySelectorAll('.plan-option').forEach(el=>{
+    el.classList.toggle('selected', el.dataset.plan===state.plan);
+  });
+}
+function setPlan(plan){
+  state.plan = plan;
+  renderPlanOptions();
+  document.getElementById('account-plan-badge').textContent = plan;
+  renderNav();
 }
 function toggleNotifications(){
   document.getElementById('notif-dropdown').classList.toggle('open');
@@ -960,7 +1015,7 @@ function renderNav(){
           </div>
         </div>
       </div>
-      <div class="userchip" onclick="openAccount()" style="cursor:pointer;"><div class="avatar">MV</div>Marco V.<span class="plan-badge">Pro</span></div>
+      <div class="userchip" onclick="openAccount()" style="cursor:pointer;"><div class="avatar">MV</div>Marco V.<span class="plan-badge">${state.plan}</span></div>
       <button class="btn outline sm" onclick="logout()">Esci</button>`;
   }
 }
