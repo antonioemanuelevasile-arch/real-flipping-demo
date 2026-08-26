@@ -104,6 +104,13 @@ img{display:block;}
   display:flex;align-items:center;justify-content:center;
   font-size:11px;font-weight:700;font-family:'IBM Plex Mono',monospace;
 }
+.plan-badge{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;font-weight:700;letter-spacing:.02em;
+  color:var(--brass-deep);background:var(--brass-tint);
+  border:1px solid #EBD3AE;border-radius:20px;
+  padding:2px 8px;margin-left:2px;
+}
 
 /* ================= LANDING ================= */
 .hero{
@@ -176,8 +183,28 @@ footer.site{border-top:1px solid var(--line);padding:32px 32px;max-width:1200px;
 .login-note{font-size:11.5px;color:var(--ink-faint);margin-top:14px;text-align:center;}
 
 /* ================= APP SHELL ================= */
-#app-shell{display:flex;min-height:calc(100vh - 61px);}
-#sidebar{width:216px;flex:none;padding:24px 14px;display:flex;flex-direction:column;gap:2px;}
+#app-shell{min-height:calc(100vh - 61px);position:relative;}
+#sidebar{
+  position:fixed;top:61px;left:0;bottom:0;width:216px;
+  padding:24px 14px;display:flex;flex-direction:column;gap:2px;
+  background:var(--bg);border-right:1px solid var(--line);
+  transform:translateX(-100%);transition:transform .22s ease;
+  z-index:60;overflow-y:auto;
+}
+#sidebar.open{transform:translateX(0);box-shadow:2px 0 22px rgba(20,22,26,.10);}
+#sidebar-overlay{
+  position:fixed;top:61px;left:0;right:0;bottom:0;
+  background:rgba(20,22,26,.28);
+  opacity:0;pointer-events:none;transition:opacity .22s ease;z-index:55;
+}
+#sidebar-overlay.open{opacity:1;pointer-events:auto;}
+#sidebar-toggle{
+  border:1px solid var(--line);background:var(--bg);border-radius:10px;
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--ink);margin-right:6px;flex:none;
+}
+#sidebar-toggle:hover{background:var(--bg-soft);}
+#sidebar-toggle svg{width:18px;height:18px;}
 .sidelink{
   display:flex;align-items:center;gap:10px;
   padding:10px 13px;font-size:13.5px;font-weight:500;color:var(--ink-soft);
@@ -189,7 +216,7 @@ footer.site{border-top:1px solid var(--line);padding:32px 32px;max-width:1200px;
 .sidelink:hover{color:var(--ink);}
 #sidebar .sidefoot{margin-top:auto;padding:14px;border-radius:12px;background:var(--bg-soft);font-size:11.5px;color:var(--ink-soft);}
 
-#main{flex:1;min-width:0;padding:32px 40px 80px;max-width:1260px;}
+#main{min-width:0;padding:32px 40px 80px;max-width:1260px;margin:0 auto;}
 
 .pagehead{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;flex-wrap:wrap;gap:14px;}
 .pagehead h1{font-size:27px;}
@@ -344,8 +371,7 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
   .howgrid{grid-template-columns:1fr;}
   .landing-projects{grid-template-columns:1fr;}
   .kpi-row{grid-template-columns:repeat(2,1fr);}
-  #app-shell{flex-direction:column;}
-  #sidebar{width:100%;flex-direction:row;overflow-x:auto;border-bottom:1px solid var(--line);}
+  #sidebar{width:78vw;max-width:260px;}
   .proj-head{grid-template-columns:1fr;}
   .ai-wrap{grid-template-columns:1fr;height:auto;}
   .ai-side{border-right:none;border-bottom:1px solid var(--line);}
@@ -355,6 +381,7 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
 <body>
 
 <div id="topnav">
+  <button id="sidebar-toggle" class="hidden" onclick="toggleSidebar()" aria-label="Apri il menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
   <div class="logo"><span class="mark"></span>RealFlipping</div>
   <div class="navlinks" id="app-navlinks"></div>
   <div class="navcta" id="navcta"></div>
@@ -445,6 +472,7 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
 
 <!-- ============ APP (post-login) ============ -->
 <div id="app-shell" class="hidden">
+  <div id="sidebar-overlay" onclick="closeSidebar()"></div>
   <div id="sidebar">
     <button class="sidelink" data-view="dashboard" onclick="go('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Dashboard</button>
     <button class="sidelink" data-view="explore" onclick="go('explore')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Investi</button>
@@ -658,14 +686,25 @@ function doLogin(){
   state.loggedIn = true;
   document.getElementById('view-landing').classList.add('hidden');
   document.getElementById('app-shell').classList.remove('hidden');
+  document.getElementById('sidebar-toggle').classList.remove('hidden');
   renderNav();
   go('dashboard');
 }
 function logout(){
   state.loggedIn = false;
+  closeSidebar();
   document.getElementById('app-shell').classList.add('hidden');
   document.getElementById('view-landing').classList.remove('hidden');
+  document.getElementById('sidebar-toggle').classList.add('hidden');
   renderNav();
+}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
 }
 function renderNav(){
   const links = document.getElementById('app-navlinks');
@@ -676,7 +715,7 @@ function renderNav(){
   } else {
     links.innerHTML = '';
     cta.innerHTML = `
-      <div class="userchip"><div class="avatar">MV</div>Marco V.</div>
+      <div class="userchip"><div class="avatar">MV</div>Marco V.<span class="plan-badge">Pro</span></div>
       <button class="btn outline sm" onclick="logout()">Esci</button>`;
   }
 }
@@ -685,6 +724,7 @@ function renderNav(){
    ROUTER
    ============================================================ */
 function go(view, projectId){
+  closeSidebar();
   if(view!=='project') state.fromView = view;
   state.currentView = view;
   ['dashboard','explore','project','fiscal','ai'].forEach(v=>{
