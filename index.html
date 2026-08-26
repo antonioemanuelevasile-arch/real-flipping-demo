@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RealFlipping — Investi nel mattone, con metodo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFFFF;
+  --bg-soft:#F6F7F6;
+  --surface:#FFFFFF;
+  --ink:#14161A;
+  --ink-soft:#6A6F76;
+  --ink-faint:#9AA0A6;
+  --line:#EAEBEA;
+  --line-strong:#DCDEDC;
+  --brass:#B07D3F;
+  --brass-deep:#8C6432;
+  --brass-tint:#FBF2E7;
+  --petrol:#1F3A38;
+  --sage:#3F9863;
+  --sage-tint:#EAF6EE;
+  --brick:#C1503A;
+  --white:#FFFFFF;
+  --radius:14px;
+  --radius-sm:9px;
+  --shadow-sm: 0 1px 2px rgba(20,22,26,0.05), 0 1px 1px rgba(20,22,26,0.03);
+  --shadow-md: 0 8px 24px rgba(20,22,26,0.08), 0 2px 6px rgba(20,22,26,0.04);
+  --shadow-lg: 0 20px 48px rgba(20,22,26,0.14), 0 4px 12px rgba(20,22,26,0.06);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+.mono{font-family:'IBM Plex Mono',monospace;}
+h1,h2,h3,.display{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  letter-spacing:-0.015em;
+  margin:0;
+}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+.hidden{display:none !important;}
+img{display:block;}
+
+/* ================= NAV ================= */
+#topnav{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 32px;
+  background:rgba(255,255,255,0.86);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.logo{
+  display:flex;align-items:center;gap:9px;
+  font-family:'Fraunces',serif;font-weight:600;font-size:19px;
+  letter-spacing:-0.01em;
+}
+.logo .mark{
+  width:26px;height:26px;border-radius:8px;
+  background:linear-gradient(135deg,var(--petrol),#12211f);
+  position:relative;display:inline-block;
+}
+.logo .mark::before{
+  content:'';position:absolute;left:50%;top:6px;bottom:6px;width:2px;background:var(--brass-tint);transform:translateX(-1px);border-radius:2px;
+}
+.logo .mark::after{
+  content:'';position:absolute;top:50%;left:6px;right:6px;height:2px;background:var(--brass-tint);transform:translateY(-1px);border-radius:2px;
+}
+.navlinks{display:flex;align-items:center;gap:4px;}
+.navcta{display:flex;align-items:center;gap:10px;}
+.btn{
+  font-size:14px;font-weight:600;
+  padding:10px 20px;
+  border-radius:10px;
+  border:1px solid var(--ink);
+  background:var(--ink);color:var(--white);
+  transition:transform .12s ease, background .15s ease, box-shadow .15s ease;
+}
+.btn:hover{background:#000;box-shadow:var(--shadow-sm);}
+.btn:active{transform:translateY(1px);}
+.btn.outline{background:transparent;color:var(--ink);border-color:var(--line-strong);}
+.btn.outline:hover{background:var(--bg-soft);}
+.btn.brass{background:var(--brass);border-color:var(--brass);color:var(--white);}
+.btn.brass:hover{background:var(--brass-deep);}
+.btn.sm{padding:8px 15px;font-size:13px;}
+.userchip{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;color:var(--ink-soft);
+  padding:5px 12px 5px 5px;border:1px solid var(--line);border-radius:20px;
+}
+.avatar{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--petrol);color:var(--white);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;font-family:'IBM Plex Mono',monospace;
+}
+
+/* ================= LANDING ================= */
+.hero{
+  position:relative;
+  padding:76px 32px 60px;
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center;
+}
+.eyebrow{
+  font-size:13px;font-weight:600;color:var(--brass-deep);margin-bottom:16px;
+  display:flex;align-items:center;gap:9px;
+}
+.eyebrow::before{content:'';width:20px;height:2px;background:var(--brass);border-radius:2px;}
+.hero h1{font-size:clamp(36px,4.6vw,54px);line-height:1.06;}
+.hero h1 em{font-style:italic;color:var(--brass-deep);}
+.hero p.lead{font-size:16.5px;line-height:1.6;color:var(--ink-soft);max-width:46ch;margin-top:20px;}
+.hero-actions{display:flex;gap:12px;margin-top:30px;}
+.stat-strip{display:flex;gap:34px;margin-top:44px;padding-top:24px;border-top:1px solid var(--line);}
+.stat-strip .num{font-family:'IBM Plex Mono',monospace;font-size:21px;font-weight:600;}
+.stat-strip .lab{font-size:11.5px;color:var(--ink-soft);margin-top:4px;}
+
+.hero-visual{position:relative;border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg);aspect-ratio:1/1.02;}
+.hero-visual img{width:100%;height:100%;object-fit:cover;}
+.hero-float{
+  position:absolute;bottom:18px;left:18px;right:18px;
+  background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);
+  border-radius:12px;padding:14px 16px;
+  display:flex;justify-content:space-between;align-items:center;
+  box-shadow:var(--shadow-md);
+}
+.hero-float .t1{font-size:12.5px;font-weight:600;}
+.hero-float .t2{font-size:11px;color:var(--ink-soft);}
+.hero-float .roiflag{font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--sage);font-size:15px;}
+
+.section{max-width:1200px;margin:0 auto;padding:64px 32px;}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;gap:20px;flex-wrap:wrap;}
+.section-head h2{font-size:29px;}
+.section-head p{color:var(--ink-soft);font-size:14.5px;max-width:44ch;}
+
+.howgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.howcard{background:var(--bg-soft);border-radius:var(--radius);padding:26px 24px;}
+.howcard .n{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--brass-deep);margin-bottom:12px;}
+.howcard h3{font-size:17.5px;margin-bottom:9px;}
+.howcard p{font-size:13.5px;color:var(--ink-soft);line-height:1.55;}
+
+.landing-projects{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+footer.site{border-top:1px solid var(--line);padding:32px 32px;max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;color:var(--ink-faint);font-size:12px;flex-wrap:wrap;gap:10px;}
+
+/* login modal */
+#login-overlay{
+  position:fixed;inset:0;background:rgba(15,17,15,0.45);
+  display:flex;align-items:center;justify-content:center;z-index:200;
+  backdrop-filter:blur(3px);
+}
+.login-box{
+  width:380px;background:var(--white);border-radius:18px;
+  padding:32px 28px 26px;position:relative;box-shadow:var(--shadow-lg);
+}
+.login-box .close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:18px;color:var(--ink-soft);}
+.login-box h3{font-size:22px;margin-bottom:6px;}
+.login-box p.sub{font-size:13px;color:var(--ink-soft);margin-bottom:22px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:12px;color:var(--ink-soft);margin-bottom:6px;font-weight:600;}
+.field input{
+  width:100%;padding:11px 13px;border:1px solid var(--line-strong);border-radius:10px;
+  background:var(--bg-soft);font-size:14px;font-family:inherit;
+}
+.field input:focus{outline:2px solid var(--brass);outline-offset:1px;background:var(--white);}
+.login-box .btn{width:100%;margin-top:8px;padding:12px;}
+.login-note{font-size:11.5px;color:var(--ink-faint);margin-top:14px;text-align:center;}
+
+/* ================= APP SHELL ================= */
+#app-shell{display:flex;min-height:calc(100vh - 61px);}
+#sidebar{width:216px;flex:none;padding:24px 14px;display:flex;flex-direction:column;gap:2px;}
+.sidelink{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 13px;font-size:13.5px;font-weight:500;color:var(--ink-soft);
+  border-radius:10px;
+}
+.sidelink svg{width:16px;height:16px;flex:none;opacity:.75;}
+.sidelink.active{background:var(--bg-soft);color:var(--ink);font-weight:600;}
+.sidelink.active svg{opacity:1;}
+.sidelink:hover{color:var(--ink);}
+#sidebar .sidefoot{margin-top:auto;padding:14px;border-radius:12px;background:var(--bg-soft);font-size:11.5px;color:var(--ink-soft);}
+
+#main{flex:1;min-width:0;padding:32px 40px 80px;max-width:1260px;}
+
+.pagehead{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;flex-wrap:wrap;gap:14px;}
+.pagehead h1{font-size:27px;}
+.pagehead .sub{color:var(--ink-soft);font-size:13.5px;margin-top:6px;}
+
+/* dashboard cards */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px;}
+.kpi{background:var(--bg-soft);border-radius:var(--radius);padding:18px 20px;}
+.kpi .lab{font-size:11.5px;color:var(--ink-soft);font-weight:600;}
+.kpi .val{font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;margin-top:8px;}
+.kpi .delta{font-size:12px;margin-top:6px;font-weight:600;}
+.delta.up{color:var(--sage);}
+.delta.flat{color:var(--ink-faint);}
+
+.tabset{display:flex;gap:2px;margin-bottom:22px;border-bottom:1px solid var(--line);}
+.tabbtn{
+  padding:10px 4px;margin-right:22px;font-size:13.5px;font-weight:600;color:var(--ink-soft);
+  background:none;border:none;border-bottom:2px solid transparent;
+}
+.tabbtn.active{color:var(--ink);border-bottom-color:var(--brass);}
+
+.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(296px,1fr));gap:18px;}
+.inv-card{
+  background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;transition:box-shadow .15s, transform .15s;
+}
+.inv-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.inv-thumb{height:150px;position:relative;overflow:hidden;background:var(--bg-soft);}
+.inv-thumb img{width:100%;height:100%;object-fit:cover;}
+.inv-tag{
+  position:absolute;top:12px;left:12px;
+  background:rgba(255,255,255,0.94);backdrop-filter:blur(4px);
+  font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;
+}
+.inv-tag.flip{color:var(--brick);}
+.inv-tag.crowd{color:var(--petrol);}
+.inv-body{padding:16px 18px 18px;}
+.inv-body h3{font-size:16px;margin-bottom:2px;}
+.inv-loc{font-size:12px;color:var(--ink-soft);margin-bottom:12px;}
+.inv-stats{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:9px;}
+.inv-stats .k{color:var(--ink-soft);}
+.inv-stats .v{font-family:'IBM Plex Mono',monospace;font-weight:600;}
+.progressbar{height:6px;background:var(--bg-soft);border-radius:6px;overflow:hidden;margin-bottom:4px;}
+.progressbar .fill{height:100%;background:linear-gradient(90deg,var(--brass),var(--brass-deep));border-radius:6px;}
+.inv-foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;}
+.pill{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--bg-soft);color:var(--ink-soft);font-weight:600;}
+.pill.ok{color:var(--sage);background:var(--sage-tint);}
+.pill.wip{color:var(--brass-deep);background:var(--brass-tint);}
+
+.filterbar{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center;}
+.chip{
+  padding:8px 16px;font-size:13px;font-weight:600;
+  border:1px solid var(--line-strong);border-radius:20px;color:var(--ink-soft);background:var(--white);
+}
+.chip.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
+
+/* project detail */
+#view-project .backlink{
+  font-size:13px;font-weight:600;color:var(--ink-soft);display:inline-flex;gap:6px;align-items:center;
+  margin-bottom:18px;border:none;background:none;padding:0;
+}
+#view-project .backlink:hover{color:var(--ink);}
+.proj-head{display:grid;grid-template-columns:1.3fr 0.9fr;gap:32px;margin-bottom:10px;}
+.proj-title-row h1{font-size:29px;}
+.proj-meta{display:flex;gap:22px;margin-top:12px;flex-wrap:wrap;}
+.proj-meta .m{font-size:12.5px;color:var(--ink-soft);}
+.proj-meta .m b{color:var(--ink);font-family:'IBM Plex Mono',monospace;font-weight:600;display:block;margin-top:2px;font-size:13.5px;}
+.proj-tagline{font-size:12.5px;font-weight:700;color:var(--brass-deep);text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px;}
+
+.ba-wrap{
+  position:relative;aspect-ratio:16/10;border-radius:var(--radius);overflow:hidden;background:var(--bg-soft);margin-top:18px;box-shadow:var(--shadow-sm);
+}
+.ba-wrap .layer{position:absolute;inset:0;}
+.ba-wrap .layer img{width:100%;height:100%;object-fit:cover;}
+.ba-wrap .layer.after{clip-path:inset(0 0 0 50%);}
+.ba-handle{position:absolute;top:0;bottom:0;left:50%;width:3px;background:var(--white);transform:translateX(-1.5px);box-shadow:0 0 0 1px rgba(0,0,0,0.08);}
+.ba-handle::after{
+  content:'⟷';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:38px;height:38px;background:var(--white);color:var(--ink);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:var(--shadow-md);
+}
+.ba-label{position:absolute;top:14px;font-size:11px;font-weight:700;background:rgba(20,22,26,0.72);color:var(--white);border-radius:20px;padding:5px 12px;}
+.ba-label.before{left:14px;}
+.ba-label.after{right:14px;}
+input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass);}
+
+.invest-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:24px;height:fit-content;box-shadow:var(--shadow-sm);}
+.invest-card .roi{font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:700;color:var(--sage);}
+.invest-card .roi-lab{font-size:12px;color:var(--ink-soft);font-weight:600;}
+.invest-card .progressbar{height:7px;margin:16px 0 6px;}
+.invest-card .rowline{display:flex;justify-content:space-between;font-size:13px;padding:10px 0;border-bottom:1px solid var(--line);}
+.invest-card .rowline:last-of-type{border-bottom:none;}
+.invest-card .rowline .v{font-family:'IBM Plex Mono',monospace;font-weight:600;}
+.amount-box{margin:18px 0;}
+.amount-box label{font-size:12px;color:var(--ink-soft);font-weight:600;}
+.amount-input{display:flex;align-items:center;border:1px solid var(--line-strong);border-radius:10px;margin-top:8px;overflow:hidden;}
+.amount-input span{padding:11px 13px;font-family:'IBM Plex Mono',monospace;color:var(--ink-soft);background:var(--bg-soft);}
+.amount-input input{border:none;padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:15px;width:100%;background:transparent;}
+.amount-input input:focus{outline:none;}
+.est-return{font-size:12.5px;color:var(--ink-soft);margin-top:10px;line-height:1.5;}
+.est-return b{color:var(--sage);font-family:'IBM Plex Mono',monospace;}
+
+.proj-tabs{display:flex;gap:2px;margin:36px 0 20px;border-bottom:1px solid var(--line);}
+.card-block{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;margin-bottom:16px;}
+.card-block h3{font-size:16px;margin-bottom:14px;}
+.bp-table{width:100%;border-collapse:collapse;font-size:13.5px;}
+.bp-table td{padding:10px 0;border-bottom:1px solid var(--line);}
+.bp-table td:last-child{text-align:right;font-family:'IBM Plex Mono',monospace;font-weight:600;}
+.bp-table tr.total td{font-weight:700;border-top:1px solid var(--line-strong);border-bottom:none;padding-top:13px;}
+
+.timeline{display:flex;flex-direction:column;}
+.tl-item{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);}
+.tl-item:last-child{border-bottom:none;}
+.tl-dot{width:11px;height:11px;border-radius:50%;background:var(--line-strong);margin-top:4px;flex:none;}
+.tl-item.done .tl-dot{background:var(--sage);}
+.tl-item.now .tl-dot{background:var(--brass);box-shadow:0 0 0 4px var(--brass-tint);}
+.tl-item h4{font-size:14px;margin:0 0 3px;}
+.tl-item .tl-date{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);}
+.tl-item p{font-size:12.5px;color:var(--ink-soft);margin:4px 0 0;}
+
+.chartwrap{display:flex;align-items:flex-end;gap:10px;height:130px;margin-top:8px;}
+.bar{flex:1;background:linear-gradient(180deg,#2E524E,var(--petrol));border-radius:6px 6px 0 0;position:relative;}
+.bar .blab{position:absolute;bottom:-20px;left:0;right:0;text-align:center;font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--ink-soft);}
+
+/* fiscal */
+.fisc-table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+.fisc-table th{text-align:left;font-size:11px;font-weight:700;color:var(--ink-soft);padding:13px 16px;background:var(--bg-soft);}
+.fisc-table td{padding:14px 16px;border-top:1px solid var(--line);}
+.fisc-table td.num{font-family:'IBM Plex Mono',monospace;text-align:right;}
+.fisc-note{font-size:11.5px;color:var(--ink-faint);margin-top:14px;line-height:1.5;}
+
+/* AI consultant */
+.ai-wrap{display:grid;grid-template-columns:280px 1fr;gap:0;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);height:600px;overflow:hidden;}
+.ai-side{border-right:1px solid var(--line);padding:20px;background:var(--bg-soft);}
+.ai-side h3{font-size:14px;margin-bottom:12px;}
+.ai-suggest{display:block;width:100%;text-align:left;font-size:12.5px;padding:11px 13px;border:1px solid var(--line);background:var(--white);margin-bottom:8px;border-radius:10px;color:var(--ink-soft);}
+.ai-suggest:hover{border-color:var(--brass);color:var(--ink);}
+.ai-main{display:flex;flex-direction:column;}
+.ai-msgs{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:14px;}
+.msg{max-width:72%;padding:12px 15px;font-size:13.5px;line-height:1.55;border-radius:14px;}
+.msg.bot{background:var(--bg-soft);align-self:flex-start;border-bottom-left-radius:4px;}
+.msg.user{background:var(--ink);color:var(--white);align-self:flex-end;border-bottom-right-radius:4px;}
+.msg.escalate{background:var(--brass-tint);align-self:flex-start;border:1px solid #EBD3AE;}
+.msg.escalate b{color:var(--brass-deep);}
+.ai-input-row{display:flex;gap:10px;padding:16px 20px;border-top:1px solid var(--line);}
+.ai-input-row input{flex:1;padding:11px 14px;border:1px solid var(--line-strong);border-radius:10px;font-size:13.5px;font-family:inherit;}
+.ai-input-row input:focus{outline:2px solid var(--brass);}
+.ai-tag{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;color:var(--petrol);background:#EAF1F0;padding:3px 9px;border-radius:20px;margin-bottom:6px;display:inline-block;}
+
+@media (max-width:920px){
+  .hero{grid-template-columns:1fr;}
+  .howgrid{grid-template-columns:1fr;}
+  .landing-projects{grid-template-columns:1fr;}
+  .kpi-row{grid-template-columns:repeat(2,1fr);}
+  #app-shell{flex-direction:column;}
+  #sidebar{width:100%;flex-direction:row;overflow-x:auto;border-bottom:1px solid var(--line);}
+  .proj-head{grid-template-columns:1fr;}
+  .ai-wrap{grid-template-columns:1fr;height:auto;}
+  .ai-side{border-right:none;border-bottom:1px solid var(--line);}
+}
+</style>
+</head>
+<body>
+
+<div id="topnav">
+  <div class="logo"><span class="mark"></span>RealFlipping</div>
+  <div class="navlinks" id="app-navlinks"></div>
+  <div class="navcta" id="navcta"></div>
+</div>
+
+<!-- ============ LANDING ============ -->
+<div id="view-landing">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Flipping &amp; crowdfunding immobiliare</div>
+      <h1>Investi nel <em>mattone</em>,<br>con i numeri in tasca.</h1>
+      <p class="lead">RealFlipping seleziona operazioni di ristrutturazione e valorizzazione immobiliare in Italia. Scegli un'operazione intera di flipping o una quota in crowdfunding, segui ogni fase con dati reali e ricevi consulenza — umana quando serve.</p>
+      <div class="hero-actions">
+        <button class="btn brass" onclick="openLogin()">Accedi alla piattaforma</button>
+        <button class="btn outline" onclick="scrollToId('landing-projects')">Guarda i progetti</button>
+      </div>
+      <div class="stat-strip">
+        <div class="s"><div class="num">€14,2M</div><div class="lab">Capitale gestito</div></div>
+        <div class="s"><div class="num">37</div><div class="lab">Operazioni chiuse</div></div>
+        <div class="s"><div class="num">15,8%</div><div class="lab">Rendimento medio</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="https://images.unsplash.com/photo-1648425731270-ebd373a19149?auto=format&fit=crop&w=1000&q=75" alt="Interno ristrutturato">
+      <div class="hero-float">
+        <div><div class="t1">Casa Alloro — Palermo</div><div class="t2">Ristrutturazione completata</div></div>
+        <div class="roiflag">+14,1%</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Come funziona</h2>
+      <p>Due modalità di accesso al mattone, un solo cruscotto per seguirle entrambe.</p>
+    </div>
+    <div class="howgrid">
+      <div class="howcard">
+        <div class="n">01 — ACCESSO</div>
+        <h3>Entri con le tue credenziali</h3>
+        <p>Un'unica dashboard personale mostra ciò in cui hai investito, categorizzato per flipping e crowdfunding, con aggiornamenti visivi e statistici in tempo reale.</p>
+      </div>
+      <div class="howcard">
+        <div class="n">02 — SCELTA</div>
+        <h3>Flipping intero o quota in crowdfunding</h3>
+        <p>Nel flipping rilevi l'intera operazione. Nel crowdfunding scegli la categoria e l'importo: vedi costi, business plan e tempistiche prima di decidere.</p>
+      </div>
+      <div class="howcard">
+        <div class="n">03 — CONTROLLO</div>
+        <h3>Segui cantiere, numeri e fisco</h3>
+        <p>Rendering prima/dopo, avanzamento lavori e una dashboard fiscale dedicata. Per tutto il resto, il consulente IA — o un consulente in carne e ossa.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="landing-projects" style="background:var(--bg-soft);border-radius:28px;max-width:1200px;">
+    <div class="section-head">
+      <h2>Operazioni in raccolta ora</h2>
+      <p>Un'anteprima. Accedi per vedere business plan, tempistiche e rendimento stimato completi.</p>
+    </div>
+    <div class="landing-projects" id="landing-projects-grid"></div>
+  </section>
+
+  <footer class="site">
+    <div>© 2026 RealFlipping S.r.l. — Piattaforma di flipping e crowdfunding immobiliare.</div>
+    <div>Il valore dell'investimento immobiliare può diminuire. Documentazione precontrattuale disponibile per ogni progetto.</div>
+  </footer>
+</div>
+
+<!-- ============ LOGIN MODAL ============ -->
+<div id="login-overlay" class="hidden">
+  <div class="login-box">
+    <button class="close" onclick="closeLogin()">✕</button>
+    <h3>Bentornato</h3>
+    <p class="sub">Accedi con le tue credenziali investitore.</p>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="login-email" placeholder="nome@esempio.it" value="investitore@realflipping.it">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="••••••••" value="••••••••">
+    </div>
+    <button class="btn brass" onclick="doLogin()">Accedi alla dashboard</button>
+    <div class="login-note">Ambiente dimostrativo — qualsiasi credenziale è accettata.</div>
+  </div>
+</div>
+
+<!-- ============ APP (post-login) ============ -->
+<div id="app-shell" class="hidden">
+  <div id="sidebar">
+    <button class="sidelink" data-view="dashboard" onclick="go('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Dashboard</button>
+    <button class="sidelink" data-view="explore" onclick="go('explore')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Investi</button>
+    <button class="sidelink" data-view="fiscal" onclick="go('fiscal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h6"/></svg>Fiscalità</button>
+    <button class="sidelink" data-view="ai" onclick="go('ai')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v1a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M6 20v-1a6 6 0 0112 0v1"/><circle cx="9" cy="7" r=".5"/><circle cx="15" cy="7" r=".5"/></svg>Consulente IA</button>
+    <div class="sidefoot">Prossimo aggiornamento cantiere<br><b class="mono" style="color:var(--ink)">04 AGO 2026</b></div>
+  </div>
+
+  <div id="main">
+
+    <!-- DASHBOARD -->
+    <div id="view-dashboard">
+      <div class="pagehead">
+        <div><h1>La tua dashboard</h1><div class="sub">Panoramica del portafoglio — aggiornata al 27 luglio 2026</div></div>
+        <button class="btn brass" onclick="go('explore')">+ Nuovo investimento</button>
+      </div>
+      <div class="kpi-row" id="kpi-row"></div>
+      <div class="tabset">
+        <button class="tabbtn active" data-cat="all" onclick="setDashFilter('all',this)">Tutti gli investimenti</button>
+        <button class="tabbtn" data-cat="flipping" onclick="setDashFilter('flipping',this)">Flipping interi</button>
+        <button class="tabbtn" data-cat="crowdfunding" onclick="setDashFilter('crowdfunding',this)">Crowdfunding</button>
+      </div>
+      <div class="inv-grid" id="dash-grid"></div>
+    </div>
+
+    <!-- EXPLORE -->
+    <div id="view-explore" class="hidden">
+      <div class="pagehead">
+        <div><h1>Investi</h1><div class="sub">Operazioni aperte alla raccolta o disponibili come flipping intero</div></div>
+      </div>
+      <div class="filterbar" id="explore-filters"></div>
+      <div class="inv-grid" id="explore-grid"></div>
+    </div>
+
+    <!-- PROJECT DETAIL -->
+    <div id="view-project" class="hidden"></div>
+
+    <!-- FISCAL -->
+    <div id="view-fiscal" class="hidden">
+      <div class="pagehead">
+        <div><h1>Fiscalità</h1><div class="sub">Situazione fiscale stimata per ciascun progetto in portafoglio</div></div>
+      </div>
+      <table class="fisc-table">
+        <thead><tr>
+          <th>Progetto</th><th>Regime</th><th>Investito</th><th>Plusvalenza stimata</th><th>Imposta stimata</th><th>Aliquota</th>
+        </tr></thead>
+        <tbody id="fiscal-body"></tbody>
+      </table>
+      <p class="fisc-note">Le stime fiscali sono indicative e calcolate sul regime di tassazione separata delle plusvalenze immobiliari (operazioni entro 5 anni dall'acquisto) o su imposta sostitutiva ove applicabile ai proventi da crowdfunding immobiliare. Per una valutazione puntuale rivolgiti al tuo commercialista o richiedi il report fiscale annuale generato dalla piattaforma.</p>
+    </div>
+
+    <!-- AI CONSULTANT -->
+    <div id="view-ai" class="hidden">
+      <div class="pagehead">
+        <div><h1>Consulente IA</h1><div class="sub">Risposte immediate sui tuoi investimenti. Se serve, ti mettiamo in contatto con un consulente fisico.</div></div>
+      </div>
+      <div class="ai-wrap">
+        <div class="ai-side">
+          <h3>Prova a chiedere</h3>
+          <button class="ai-suggest" onclick="askAi('Qual è il rendimento atteso del progetto Casa Alloro?')">Qual è il rendimento atteso del progetto Casa Alloro?</button>
+          <button class="ai-suggest" onclick="askAi('Come vengono tassate le plusvalenze da crowdfunding?')">Come vengono tassate le plusvalenze da crowdfunding?</button>
+          <button class="ai-suggest" onclick="askAi('Posso vendere la mia quota prima della fine del progetto?')">Posso vendere la mia quota prima della fine?</button>
+          <button class="ai-suggest" onclick="askAi('Qual è l\'investimento minimo nel flipping?')">Qual è l'investimento minimo nel flipping?</button>
+          <button class="ai-suggest" onclick="askAi('Voglio parlare con un consulente umano')">Voglio parlare con un consulente umano</button>
+        </div>
+        <div class="ai-main">
+          <div class="ai-msgs" id="ai-msgs"></div>
+          <div class="ai-input-row">
+            <input id="ai-input" type="text" placeholder="Scrivi una domanda sui tuoi investimenti…" onkeydown="if(event.key==='Enter')sendAi()">
+            <button class="btn brass sm" onclick="sendAi()">Invia</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   IMAGE LIBRARY (real photography, Unsplash — free license)
+   ============================================================ */
+const IMG = {
+  exterior:  'https://images.unsplash.com/photo-1757156152888-c0fba3995ea1?auto=format&fit=crop&w=1000&q=75',
+  living:    'https://images.unsplash.com/photo-1648425731270-ebd373a19149?auto=format&fit=crop&w=1000&q=75',
+  kitchen:   'https://images.unsplash.com/photo-1764526624453-db32c24eca55?auto=format&fit=crop&w=1000&q=75',
+  villa:     'https://images.unsplash.com/photo-1643558287100-e2813e352b6f?auto=format&fit=crop&w=1000&q=75',
+  before:    'https://images.unsplash.com/photo-1704742950992-9815a104820c?auto=format&fit=crop&w=1000&q=75',
+};
+
+/* ============================================================
+   MOCK DATA
+   ============================================================ */
+const PROJECTS = [
+  {
+    id:'p1', type:'flipping', title:'Palazzina Via dei Tigli', city:'Milano, Bicocca', mq:310,
+    invested:true, myAmount:180000, totalPrice:610000, status:'in corso', statusOk:false,
+    roi:17.4, duration:'11 mesi', progress:64,
+    thumb:IMG.exterior, before:IMG.before, after:IMG.kitchen,
+    costi:[['Acquisizione immobile',380000],['Ristrutturazione',165000],['Oneri e permessi',22000],['Marketing e vendita',18000],['Costi finanziari',15000]],
+    ricavoAtteso:716000,
+    timeline:[
+      {t:'Acquisizione immobile', d:'MAR 2026', done:true, note:'Rogito firmato, immobile in carico a SPV dedicata.'},
+      {t:'Progettazione e permessi', d:'APR 2026', done:true, note:'CILA approvata dal Comune di Milano.'},
+      {t:'Ristrutturazione', d:'MAG–SET 2026', done:false, now:true, note:'Demolizioni completate, impiantistica in corso.'},
+      {t:'Home staging e vendita', d:'OTT–NOV 2026', done:false, note:'Apertura trattative con 2 agenzie locali.'},
+      {t:'Rogito di vendita e riparto', d:'DIC 2026', done:false, note:'Distribuzione utili agli investitori.'},
+    ],
+    chart:[38,52,64,0,0], chartLabels:['MAR','APR','MAG','OTT','DIC']
+  },
+  {
+    id:'p2', type:'crowdfunding', category:'Residenziale', title:'Casa Alloro — Trilocale Storico', city:'Palermo, Kalsa', mq:95,
+    invested:true, myAmount:8000, target:340000, raised:261000, minTicket:500, status:'in raccolta', statusOk:true,
+    roi:14.1, duration:'9 mesi', progress:41,
+    thumb:IMG.living, before:IMG.before, after:IMG.living,
+    costi:[['Acquisizione immobile',195000],['Ristrutturazione conservativa',98000],['Oneri e permessi',14000],['Marketing e vendita',12000],['Fee di piattaforma',7000]],
+    ricavoAtteso:388000,
+    timeline:[
+      {t:'Raccolta fondi', d:'GIU–AGO 2026', done:false, now:true, note:'77% del target raggiunto.'},
+      {t:'Acquisizione immobile', d:'SET 2026', done:false, note:'Compromesso già firmato con il venditore.'},
+      {t:'Ristrutturazione conservativa', d:'OTT 2026–GEN 2027', done:false, note:'Vincolo di tutela sui soffitti affrescati.'},
+      {t:'Vendita e riparto quote', d:'MAR 2027', done:false, note:'Distribuzione proporzionale alle quote sottoscritte.'},
+    ],
+    chart:[20,41,0,0], chartLabels:['GIU','AGO','OTT','MAR']
+  },
+  {
+    id:'p3', type:'crowdfunding', category:'Turistico', title:'Baglio San Vito — Dimora B&B', city:'Alimena (PA)', mq:420,
+    invested:false, target:520000, raised:198000, minTicket:1000,
+    roi:19.8, duration:'14 mesi', statusOk:true,
+    thumb:IMG.villa, before:IMG.before, after:IMG.villa,
+    costi:[['Acquisizione baglio storico',260000],['Ristrutturazione e adeguamento',185000],['Arredi e allestimento',35000],['Oneri, permessi e vincoli',22000],['Marketing e avviamento attività',18000]],
+    ricavoAtteso:640000,
+    timeline:[
+      {t:'Raccolta fondi', d:'LUG–OTT 2026', done:false, now:true, note:'38% del target raggiunto nella prima settimana.'},
+      {t:'Acquisizione e progettazione', d:'NOV 2026', done:false, note:'Progetto con studio di architettura locale.'},
+      {t:'Ristrutturazione', d:'DIC 2026–LUG 2027', done:false, note:'Recupero di pietra a vista e volte a botte originali.'},
+      {t:'Avviamento e prima stagione', d:'AGO 2027', done:false, note:'Gestione affidata a operatore ricettivo convenzionato.'},
+    ],
+    chart:[12,38,0,0], chartLabels:['LUG','OTT','DIC','AGO']
+  },
+  {
+    id:'p4', type:'flipping', title:'Attico Via Notarbartolo', city:'Palermo, Libertà', mq:140,
+    invested:false, totalPrice:295000,
+    roi:16.2, duration:'8 mesi', statusOk:true,
+    thumb:IMG.exterior, before:IMG.before, after:IMG.kitchen,
+    costi:[['Acquisizione immobile',195000],['Ristrutturazione',58000],['Oneri e permessi',9000],['Marketing e vendita',10000],['Costi finanziari',6000]],
+    ricavoAtteso:343000,
+    timeline:[
+      {t:'Acquisizione immobile', d:'AGO 2026', done:false, now:true, note:'Trattativa in fase avanzata.'},
+      {t:'Ristrutturazione', d:'SET–DIC 2026', done:false, note:'Rifacimento impianti e riqualificazione terrazza.'},
+      {t:'Vendita', d:'GEN–MAR 2027', done:false, note:'Zona ad alta domanda, tempi di vendita stimati brevi.'},
+    ],
+    chart:[0,0,0], chartLabels:['AGO','DIC','MAR']
+  },
+  {
+    id:'p5', type:'crowdfunding', category:'Commerciale', title:'Ex Magazzino Via Volturno', city:'Torino, San Salvario', mq:260,
+    invested:true, myAmount:15000, target:410000, raised:410000, minTicket:500, status:'chiuso', statusOk:true, closed:true,
+    roi:21.3, duration:'13 mesi', progress:100,
+    thumb:IMG.kitchen, before:IMG.before, after:IMG.kitchen,
+    costi:[['Acquisizione capannone',210000],['Riconversione a uffici/retail',140000],['Oneri e permessi',26000],['Marketing e vendita',20000],['Fee di piattaforma',14000]],
+    ricavoAtteso:497000,
+    timeline:[
+      {t:'Raccolta fondi', d:'GEN 2025', done:true, note:'Target raggiunto in 11 giorni.'},
+      {t:'Acquisizione e riconversione', d:'FEB–OTT 2025', done:true, note:'Cambio di destinazione d\'uso ottenuto.'},
+      {t:'Vendita frazionata', d:'NOV 2025–GIU 2026', done:true, note:'3 unità su 3 vendute.'},
+      {t:'Riparto finale', d:'LUG 2026', done:true, note:'Utili distribuiti agli investitori il 12 luglio.'},
+    ],
+    chart:[100,100,100,100], chartLabels:['GEN','OTT','GIU','LUG']
+  },
+  {
+    id:'p6', type:'crowdfunding', category:'Residenziale', title:'Villino Anni \'30 — Via dei Mille', city:'Bari, Murat', mq:180,
+    invested:false, target:380000, raised:64000, minTicket:500,
+    roi:15.6, duration:'10 mesi', statusOk:true,
+    thumb:IMG.villa, before:IMG.before, after:IMG.living,
+    costi:[['Acquisizione immobile',230000],['Ristrutturazione',95000],['Oneri e permessi',15000],['Marketing e vendita',13000],['Fee di piattaforma',9000]],
+    ricavoAtteso:438000,
+    timeline:[
+      {t:'Raccolta fondi', d:'LUG–SET 2026', done:false, now:true, note:'Appena aperta, 17% raccolto.'},
+      {t:'Acquisizione immobile', d:'OTT 2026', done:false, note:''},
+      {t:'Ristrutturazione', d:'NOV 2026–LUG 2027', done:false, note:'Restauro di pavimenti in graniglia originali.'},
+      {t:'Vendita e riparto', d:'AGO 2027', done:false, note:''},
+    ],
+    chart:[17,0,0,0], chartLabels:['LUG','OTT','NOV','AGO']
+  },
+];
+
+const FAQ = [
+  {kw:['rendimento','roi','guadagn','ritorno'], a:()=>`In base ai progetti attivi nel tuo portafoglio, il rendimento atteso varia dal 14% al 21% sull'intera durata dell'operazione, a seconda del rischio e della categoria. Puoi vedere il dettaglio di ogni progetto nella sua scheda, alla voce "Rendimento stimato".`},
+  {kw:['tass','fisc','plusvalen','imposta'], a:()=>`Le plusvalenze da flipping, se l'immobile viene rivenduto entro 5 anni dall'acquisto, sono soggette a tassazione separata o ordinaria in base alla scelta in dichiarazione. I proventi da crowdfunding immobiliare seguono invece il regime dei proventi da partecipazione all'SPV di progetto. Trovi la stima aggiornata per ogni progetto nella sezione "Fiscalità".`},
+  {kw:['vendere','uscire','liquidit','disinvest'], a:()=>`Le quote di crowdfunding non sono normalmente liquidabili prima della chiusura dell'operazione, salvo un eventuale mercato secondario tra investitori della piattaforma, oggi non ancora attivo. Per i flipping interi, l'uscita coincide con la vendita dell'immobile a fine lavori.`},
+  {kw:['minimo','importo minimo','quanto invest'], a:()=>`L'investimento minimo nel crowdfunding parte da 500€ per progetto. Il flipping intero richiede invece la copertura per intero del capitale dell'operazione, generalmente tra 250.000€ e 650.000€: per queste operazioni ti mettiamo comunque in contatto con un consulente per definire i dettagli.`},
+  {kw:['rischio','garanz','perdita'], a:()=>`Ogni investimento immobiliare comporta un rischio, incluso quello di ritardo nei lavori o di vendita a un prezzo inferiore a quello stimato nel business plan. Non ci sono garanzie di rendimento. Trovi un'analisi di rischio dedicata nella scheda di ciascun progetto.`},
+  {kw:['tempistic','durata','quando finisce'], a:()=>`Le tempistiche variano da progetto a progetto, generalmente tra 8 e 14 mesi dall'apertura della raccolta o dall'acquisizione dell'immobile. Il cronoprogramma dettagliato è visibile nella scheda progetto, sezione "Tempistiche".`},
+];
+
+let state = {loggedIn:false, dashFilter:'all', exploreFilter:'all', currentProjectId:null, currentView:'dashboard', fromView:'dashboard'};
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const eur = n => '€' + Math.round(n).toLocaleString('it-IT');
+function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+function openLogin(){document.getElementById('login-overlay').classList.remove('hidden');}
+function closeLogin(){document.getElementById('login-overlay').classList.add('hidden');}
+function doLogin(){
+  closeLogin();
+  state.loggedIn = true;
+  document.getElementById('view-landing').classList.add('hidden');
+  document.getElementById('app-shell').classList.remove('hidden');
+  renderNav();
+  go('dashboard');
+}
+function logout(){
+  state.loggedIn = false;
+  document.getElementById('app-shell').classList.add('hidden');
+  document.getElementById('view-landing').classList.remove('hidden');
+  renderNav();
+}
+function renderNav(){
+  const links = document.getElementById('app-navlinks');
+  const cta = document.getElementById('navcta');
+  if(!state.loggedIn){
+    links.innerHTML = '';
+    cta.innerHTML = `<button class="btn outline sm" onclick="openLogin()">Accedi</button>`;
+  } else {
+    links.innerHTML = '';
+    cta.innerHTML = `
+      <div class="userchip"><div class="avatar">MV</div>Marco V.</div>
+      <button class="btn outline sm" onclick="logout()">Esci</button>`;
+  }
+}
+
+/* ============================================================
+   ROUTER
+   ============================================================ */
+function go(view, projectId){
+  if(view!=='project') state.fromView = view;
+  state.currentView = view;
+  ['dashboard','explore','project','fiscal','ai'].forEach(v=>{
+    document.getElementById('view-'+v).classList.toggle('hidden', v!==view);
+  });
+  document.querySelectorAll('.sidelink').forEach(el=>{
+    const target = view==='project' ? state.fromView : view;
+    el.classList.toggle('active', el.dataset.view===target);
+  });
+  if(view==='dashboard') renderDashboard();
+  if(view==='explore') renderExplore();
+  if(view==='fiscal') renderFiscal();
+  if(view==='ai') renderAiInit();
+  if(view==='project') renderProject(projectId);
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+/* ============================================================
+   LANDING PROJECTS PREVIEW
+   ============================================================ */
+function renderLandingPreview(){
+  const grid = document.getElementById('landing-projects-grid');
+  const featured = PROJECTS.filter(p=>!p.closed).slice(0,3);
+  grid.innerHTML = featured.map(p=>`
+    <div class="inv-card">
+      <div class="inv-thumb"><img src="${p.thumb}" alt="${p.title}">
+        <div class="inv-tag ${p.type==='flipping'?'flip':'crowd'}">${p.type==='flipping'?'Flipping':'Crowdfunding · '+p.category}</div>
+      </div>
+      <div class="inv-body">
+        <h3>${p.title}</h3>
+        <div class="inv-loc">${p.city} · ${p.mq} m²</div>
+        <div class="inv-stats"><span class="k">Rendimento stimato</span><span class="v">${p.roi}%</span></div>
+        <div class="inv-stats"><span class="k">Durata</span><span class="v">${p.duration}</span></div>
+        <button class="btn outline sm" style="width:100%;margin-top:10px;" onclick="openLogin()">Accedi per i dettagli</button>
+      </div>
+    </div>`).join('');
+}
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+function renderDashboard(){
+  const mine = PROJECTS.filter(p=>p.invested);
+  const totInvested = mine.reduce((s,p)=>s+p.myAmount,0);
+  const avgRoi = (mine.reduce((s,p)=>s+p.roi,0)/mine.length).toFixed(1);
+  const active = mine.filter(p=>!p.closed).length;
+  document.getElementById('kpi-row').innerHTML = `
+    <div class="kpi"><div class="lab">Capitale investito</div><div class="val">${eur(totInvested)}</div><div class="delta flat">${mine.length} operazioni</div></div>
+    <div class="kpi"><div class="lab">Rendimento medio stimato</div><div class="val">${avgRoi}%</div><div class="delta up">↑ su base annua</div></div>
+    <div class="kpi"><div class="lab">Operazioni attive</div><div class="val">${active}</div><div class="delta flat">in corso o in raccolta</div></div>
+    <div class="kpi"><div class="lab">Operazioni chiuse</div><div class="val">${mine.length-active}</div><div class="delta up">utili distribuiti</div></div>
+  `;
+  renderDashGrid();
+}
+function setDashFilter(cat, el){
+  state.dashFilter = cat;
+  document.querySelectorAll('#view-dashboard .tabbtn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderDashGrid();
+}
+function renderDashGrid(){
+  let mine = PROJECTS.filter(p=>p.invested);
+  if(state.dashFilter!=='all') mine = mine.filter(p=>p.type===state.dashFilter);
+  document.getElementById('dash-grid').innerHTML = mine.map(cardHtml).join('') || `<p style="color:var(--ink-soft);font-size:13.5px;">Nessun investimento in questa categoria.</p>`;
+}
+
+function cardHtml(p){
+  const pct = p.type==='crowdfunding' ? Math.round((p.raised/p.target)*100) : (p.progress||0);
+  return `
+  <div class="inv-card" onclick="go('project','${p.id}')" style="cursor:pointer;">
+    <div class="inv-thumb"><img src="${p.thumb}" alt="${p.title}">
+      <div class="inv-tag ${p.type==='flipping'?'flip':'crowd'}">${p.type==='flipping'?'Flipping':'Crowdfunding · '+p.category}</div>
+    </div>
+    <div class="inv-body">
+      <h3>${p.title}</h3>
+      <div class="inv-loc">${p.city} · ${p.mq} m²</div>
+      ${p.invested ? `<div class="inv-stats"><span class="k">Tuo investimento</span><span class="v">${eur(p.myAmount)}</span></div>` : ''}
+      <div class="inv-stats"><span class="k">Rendimento stimato</span><span class="v">${p.roi}%</span></div>
+      ${p.type==='crowdfunding' ? `<div class="progressbar"><div class="fill" style="width:${pct}%"></div></div><div class="inv-stats"><span class="k">${eur(p.raised)} raccolti</span><span class="v">${pct}%</span></div>` :
+        `<div class="progressbar"><div class="fill" style="width:${pct}%"></div></div><div class="inv-stats"><span class="k">Avanzamento cantiere</span><span class="v">${pct}%</span></div>`}
+      <div class="inv-foot">
+        <span class="pill ${p.closed?'ok':'wip'}">${p.closed?'Chiuso':(p.status||'attivo')}</span>
+        <span class="mono" style="font-size:11.5px;color:var(--ink-faint);">${p.duration}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   EXPLORE
+   ============================================================ */
+function renderExplore(){
+  const filters = [['all','Tutti'],['flipping','Flipping interi'],['crowdfunding-Residenziale','Crowdfunding · Residenziale'],['crowdfunding-Turistico','Crowdfunding · Turistico'],['crowdfunding-Commerciale','Crowdfunding · Commerciale']];
+  document.getElementById('explore-filters').innerHTML = filters.map(([k,l])=>
+    `<button class="chip ${state.exploreFilter===k?'active':''}" onclick="setExploreFilter('${k}')">${l}</button>`).join('');
+  renderExploreGrid();
+}
+function setExploreFilter(k){ state.exploreFilter=k; renderExplore(); }
+function renderExploreGrid(){
+  let list = PROJECTS.filter(p=>!p.closed && !p.invested);
+  if(state.exploreFilter==='flipping') list = list.filter(p=>p.type==='flipping');
+  else if(state.exploreFilter.startsWith('crowdfunding-')) {
+    const cat = state.exploreFilter.split('-')[1];
+    list = list.filter(p=>p.type==='crowdfunding' && p.category===cat);
+  }
+  document.getElementById('explore-grid').innerHTML = list.map(cardHtml).join('') || `<p style="color:var(--ink-soft);font-size:13.5px;">Nessun progetto disponibile in questa categoria al momento.</p>`;
+}
+
+/* ============================================================
+   PROJECT DETAIL
+   ============================================================ */
+function renderProject(id){
+  const p = PROJECTS.find(x=>x.id===id);
+  state.currentProjectId = id;
+  const el = document.getElementById('view-project');
+  const isCrowd = p.type==='crowdfunding';
+  const pct = isCrowd ? Math.round((p.raised/p.target)*100) : (p.progress||0);
+  const backLabel = state.fromView==='explore' ? 'Torna a Investi' : 'Torna alla dashboard';
+
+  el.innerHTML = `
+    <button class="backlink" onclick="go('${state.fromView}')">← ${backLabel}</button>
+    <div class="proj-head">
+      <div>
+        <div class="proj-tagline">${p.type==='flipping'?'Flipping · Operazione intera':'Crowdfunding · '+p.category}</div>
+        <div class="proj-title-row"><h1>${p.title}</h1></div>
+        <div class="proj-meta">
+          <div class="m">Località<b>${p.city}</b></div>
+          <div class="m">Superficie<b>${p.mq} m²</b></div>
+          <div class="m">Durata stimata<b>${p.duration}</b></div>
+          <div class="m">Rendimento stimato<b>${p.roi}%</b></div>
+        </div>
+
+        <div class="ba-wrap" id="ba-wrap">
+          <div class="layer before"><img src="${p.before}" alt="Prima della ristrutturazione"></div>
+          <div class="layer after" id="ba-after"><img src="${p.after}" alt="Dopo la ristrutturazione"></div>
+          <div class="ba-handle" id="ba-handle"></div>
+          <div class="ba-label before">Prima</div>
+          <div class="ba-label after">Dopo</div>
+        </div>
+        <input type="range" class="ba-slider" min="0" max="100" value="50" oninput="updateBA(this.value)">
+      </div>
+
+      <div class="invest-card">
+        ${p.invested ? `<div class="ai-tag">Già in portafoglio</div>` : ''}
+        <div class="roi">${p.roi}%</div>
+        <div class="roi-lab">Rendimento stimato sull'intera durata</div>
+        ${isCrowd ? `
+          <div class="progressbar"><div class="fill" style="width:${pct}%"></div></div>
+          <div class="rowline"><span>Raccolto</span><span class="v">${eur(p.raised)} / ${eur(p.target)}</span></div>
+          <div class="rowline"><span>Percentuale raggiunta</span><span class="v">${pct}%</span></div>
+          <div class="rowline"><span>Ticket minimo</span><span class="v">${eur(p.minTicket)}</span></div>
+          <div class="rowline"><span>Ricavo atteso operazione</span><span class="v">${eur(p.ricavoAtteso)}</span></div>
+          <div class="amount-box">
+            <label>Importo da investire</label>
+            <div class="amount-input"><span>€</span><input type="number" id="invest-amount" value="${p.minTicket}" min="${p.minTicket}" step="100" oninput="updateEstimate('${p.id}')"></div>
+          </div>
+          <div class="est-return" id="est-return"></div>
+          <button class="btn brass" style="width:100%;margin-top:14px;" onclick="confirmInvest('${p.title.replace(/'/g,"\\'")}')">Investi ora</button>
+        ` : `
+          <div class="rowline"><span>Prezzo operazione</span><span class="v">${eur(p.totalPrice)}</span></div>
+          <div class="rowline"><span>Ricavo atteso alla vendita</span><span class="v">${eur(p.ricavoAtteso)}</span></div>
+          <div class="rowline"><span>Utile atteso</span><span class="v">${eur(p.ricavoAtteso-p.totalPrice)}</span></div>
+          <div class="rowline"><span>Tipo di operazione</span><span class="v">Rilievo intero</span></div>
+          <p style="font-size:12px;color:var(--ink-soft);margin-top:14px;line-height:1.5;">Il flipping è un'operazione a copertura intera. Un consulente ti guiderà nella strutturazione dell'investimento.</p>
+          <button class="btn brass" style="width:100%;margin-top:6px;" onclick="requestFlipCall('${p.title.replace(/'/g,"\\'")}')">Richiedi rilevazione operazione</button>
+        `}
+      </div>
+    </div>
+
+    <div class="proj-tabs">
+      <button class="tabbtn active" onclick="setProjTab('plan',this)">Business plan</button>
+      <button class="tabbtn" onclick="setProjTab('time',this)">Tempistiche</button>
+      <button class="tabbtn" onclick="setProjTab('mkt',this)">Analisi di mercato</button>
+    </div>
+    <div id="proj-tab-content"></div>
+  `;
+  if(isCrowd) updateEstimate(p.id);
+  updateBA(50);
+  setProjTab('plan', document.querySelector('.proj-tabs .tabbtn'));
+}
+
+function updateBA(val){
+  document.getElementById('ba-handle').style.left = val+'%';
+  document.getElementById('ba-after').style.clipPath = `inset(0 0 0 ${val}%)`;
+}
+
+function updateEstimate(id){
+  const p = PROJECTS.find(x=>x.id===id);
+  const amt = parseFloat(document.getElementById('invest-amount').value) || 0;
+  const est = amt * (1 + p.roi/100);
+  document.getElementById('est-return').innerHTML = `Investendo ${eur(amt)} il ritorno stimato a fine operazione è di circa <b>${eur(est)}</b> (${p.duration}).`;
+}
+function confirmInvest(title){
+  alert('Richiesta di investimento in "'+title+'" registrata. Riceverai il fascicolo informativo e il contratto da firmare digitalmente via email.');
+}
+function requestFlipCall(title){
+  alert('Richiesta inviata per "'+title+'". Un consulente RealFlipping ti contatterà per strutturare l\\'operazione di flipping.');
+}
+
+function setProjTab(tab, el){
+  document.querySelectorAll('.proj-tabs .tabbtn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  const p = PROJECTS.find(x=>x.id===state.currentProjectId);
+  const c = document.getElementById('proj-tab-content');
+  if(tab==='plan'){
+    const totCosti = p.costi.reduce((s,[,v])=>s+v,0);
+    const margine = p.ricavoAtteso - totCosti;
+    c.innerHTML = `
+      <div class="card-block">
+        <h3>Costi dell'operazione</h3>
+        <table class="bp-table">
+          ${p.costi.map(([k,v])=>`<tr><td>${k}</td><td>${eur(v)}</td></tr>`).join('')}
+          <tr class="total"><td>Costo totale operazione</td><td>${eur(totCosti)}</td></tr>
+          <tr><td>Ricavo atteso alla vendita</td><td>${eur(p.ricavoAtteso)}</td></tr>
+          <tr class="total"><td>Margine operativo atteso</td><td>${eur(margine)}</td></tr>
+        </table>
+      </div>`;
+  } else if(tab==='time'){
+    c.innerHTML = `<div class="card-block"><h3>Cronoprogramma</h3><div class="timeline">
+      ${p.timeline.map(t=>`<div class="tl-item ${t.done?'done':''} ${t.now?'now':''}">
+        <div class="tl-dot"></div>
+        <div><h4>${t.t}</h4><div class="tl-date">${t.d}</div><p>${t.note||''}</p></div>
+      </div>`).join('')}
+    </div></div>`;
+  } else {
+    c.innerHTML = `<div class="card-block">
+      <h3>Andamento raccolta / avanzamento (%)</h3>
+      <div class="chartwrap">
+        ${p.chart.map((v,i)=>`<div class="bar" style="height:${Math.max(v,4)}%"><span class="blab">${p.chartLabels[i]}</span></div>`).join('')}
+      </div>
+    </div>
+    <div class="card-block" style="margin-top:34px;">
+      <h3>Nota di mercato</h3>
+      <p style="font-size:13.5px;color:var(--ink-soft);line-height:1.6;">La zona di ${p.city.split(',')[0]} registra una domanda ${p.roi>18?'in forte crescita':'stabile'} per immobili ristrutturati nella fascia di prezzo target. Il prezzo al metro quadro stimato alla vendita è coerente con le transazioni comparabili degli ultimi 12 mesi rilevate dal modulo di analisi IA di RealFlipping.</p>
+    </div>`;
+  }
+}
+
+/* ============================================================
+   FISCAL
+   ============================================================ */
+function renderFiscal(){
+  const mine = PROJECTS.filter(p=>p.invested);
+  document.getElementById('fiscal-body').innerHTML = mine.map(p=>{
+    const plusval = Math.round(p.myAmount * (p.roi/100));
+    const aliquota = p.type==='flipping' ? 26 : 12.5;
+    const imposta = Math.round(plusval * aliquota/100);
+    return `<tr>
+      <td>${p.title}</td>
+      <td>${p.type==='flipping'?'Persona fisica — plusvalenza immobiliare':'SPV di progetto — proventi da partecipazione'}</td>
+      <td class="num">${eur(p.myAmount)}</td>
+      <td class="num">${eur(plusval)}</td>
+      <td class="num">${eur(imposta)}</td>
+      <td class="num">${aliquota}%</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ============================================================
+   AI CONSULTANT
+   ============================================================ */
+let aiInited = false;
+function renderAiInit(){
+  if(aiInited) return;
+  aiInited = true;
+  addAiMsg('bot', `Ciao Marco 👋 Sono il consulente IA di RealFlipping. Posso rispondere a domande sui tuoi investimenti, sul funzionamento del flipping e del crowdfunding, e sulla fiscalità. Se non riesco a risponderti, ti metto in contatto con un consulente fisico.`);
+}
+function addAiMsg(type, text){
+  const wrap = document.getElementById('ai-msgs');
+  const div = document.createElement('div');
+  div.className = 'msg '+type;
+  div.innerHTML = text;
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+function sendAi(){
+  const input = document.getElementById('ai-input');
+  const val = input.value.trim();
+  if(!val) return;
+  input.value='';
+  askAi(val);
+}
+function askAi(text){
+  addAiMsg('user', text);
+  const lower = text.toLowerCase();
+  const escalateWords = ['umano','persona','consulente fisico','chiamare','parlare con qualcuno'];
+  if(escalateWords.some(w=>lower.includes(w))){
+    setTimeout(()=>escalate(text), 400);
+    return;
+  }
+  const match = FAQ.find(f=>f.kw.some(k=>lower.includes(k)));
+  setTimeout(()=>{
+    if(match){
+      addAiMsg('bot', match.a());
+    } else {
+      escalate(text);
+    }
+  }, 450);
+}
+function escalate(text){
+  addAiMsg('escalate', `<b>Non ho una risposta certa per questo.</b><br>Ho segnalato la tua domanda — "<i>${text}</i>" — a un consulente RealFlipping in carne e ossa, che ti risponderà entro 1 giorno lavorativo.<br><br><button class="btn brass sm" onclick="bookAdvisor()">Prenota una chiamata ora</button>`);
+}
+function bookAdvisor(){
+  addAiMsg('bot', `Fatto ✅ Ho prenotato una chiamata conoscitiva con un consulente. Riceverai la conferma via email con l'orario proposto.`);
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderLandingPreview();
+renderNav();
+</script>
+</body>
+</html>
