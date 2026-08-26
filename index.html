@@ -410,6 +410,7 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
 .fisc-note{font-size:11.5px;color:var(--ink-faint);margin-top:14px;line-height:1.5;}
 
 /* AI consultant */
+.ai-disclaimer{font-size:12px;color:var(--ink-soft);background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:18px;line-height:1.5;}
 .ai-wrap{display:grid;grid-template-columns:280px 1fr;gap:0;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);height:600px;overflow:hidden;}
 .ai-side{border-right:1px solid var(--line);padding:20px;background:var(--bg-soft);}
 .ai-side h3{font-size:14px;margin-bottom:12px;}
@@ -625,9 +626,12 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
       <div class="pagehead">
         <div><h1>Consulente IA</h1><div class="sub">Risposte immediate sui tuoi investimenti. Se serve, ti mettiamo in contatto con un consulente fisico.</div></div>
       </div>
+      <div class="ai-disclaimer">Le risposte si basano sui dati dimostrativi di questa piattaforma (i tuoi progetti e le altre operazioni pubblicate) e non su un'analisi del mercato immobiliare reale. Non costituiscono consulenza finanziaria: per decisioni reali rivolgiti a un consulente abilitato.</div>
       <div class="ai-wrap">
         <div class="ai-side">
           <h3>Prova a chiedere</h3>
+          <button class="ai-suggest" onclick="askAi('Quanto ho investito in totale e qual è il mio rendimento medio?')">Quanto ho investito e qual è il mio rendimento medio?</button>
+          <button class="ai-suggest" onclick="askAi('Come si posiziona Casa Alloro rispetto alle altre operazioni?')">Come si posiziona Casa Alloro rispetto alle altre?</button>
           <button class="ai-suggest" onclick="askAi('Qual è il rendimento atteso del progetto Casa Alloro?')">Qual è il rendimento atteso del progetto Casa Alloro?</button>
           <button class="ai-suggest" onclick="askAi('Come vengono tassate le plusvalenze da crowdfunding?')">Come vengono tassate le plusvalenze da crowdfunding?</button>
           <button class="ai-suggest" onclick="askAi('Posso vendere la mia quota prima della fine del progetto?')">Posso vendere la mia quota prima della fine?</button>
@@ -775,6 +779,8 @@ const FAQ = [
   {kw:['minimo','importo minimo','quanto invest'], a:()=>`L'investimento minimo nel crowdfunding parte da 500€ per progetto. Il flipping intero richiede invece la copertura per intero del capitale dell'operazione, generalmente tra 250.000€ e 650.000€: per queste operazioni ti mettiamo comunque in contatto con un consulente per definire i dettagli.`},
   {kw:['rischio','garanz','perdita'], a:()=>`Ogni investimento immobiliare comporta un rischio, incluso quello di ritardo nei lavori o di vendita a un prezzo inferiore a quello stimato nel business plan. Non ci sono garanzie di rendimento. Trovi un'analisi di rischio dedicata nella scheda di ciascun progetto.`},
   {kw:['tempistic','durata','quando finisce'], a:()=>`Le tempistiche variano da progetto a progetto, generalmente tra 8 e 14 mesi dall'apertura della raccolta o dall'acquisizione dell'immobile. Il cronoprogramma dettagliato è visibile nella scheda progetto, sezione "Tempistiche".`},
+  {kw:['differenza','flipping o crowdfunding','flipping e crowdfunding'], a:()=>`Nel flipping copri per intero un'operazione di ristrutturazione e vendita di un immobile: capitale più alto, ma controllo diretto sull'intera operazione. Nel crowdfunding partecipi con una quota (anche da 500€) insieme ad altri investitori tramite una SPV dedicata: capitale più basso, ma rendimento e rischio sono proporzionali alla quota sottoscritta.`},
+  {kw:['spv','societ','sicurezza dei fondi','dove vanno i miei soldi'], a:()=>`Ogni operazione di crowdfunding è veicolata da una SPV (società veicolo) dedicata al singolo progetto, separata dal patrimonio di RealFlipping: i fondi raccolti sono vincolati a quell'operazione specifica. È lo stesso meccanismo usato dalla maggior parte delle piattaforme di real estate crowdfunding regolamentate.`},
 ];
 
 let state = {loggedIn:false, dashFilter:'all', exploreFilter:'all', currentProjectId:null, currentView:'dashboard', fromView:'dashboard', language:'it', paymentMethod:'card', notifUnread:4};
@@ -1179,7 +1185,7 @@ let aiInited = false;
 function renderAiInit(){
   if(aiInited) return;
   aiInited = true;
-  addAiMsg('bot', `Ciao Marco 👋 Sono il consulente IA di RealFlipping. Posso rispondere a domande sui tuoi investimenti, sul funzionamento del flipping e del crowdfunding, e sulla fiscalità. Se non riesco a risponderti, ti metto in contatto con un consulente fisico.`);
+  addAiMsg('bot', `Ciao Marco 👋 Sono il consulente IA di RealFlipping. Posso calcolare il tuo rendimento reale sul portafoglio, darti i dati di un singolo progetto per nome, confrontarlo con le altre operazioni della piattaforma, e rispondere su fiscalità e funzionamento di flipping e crowdfunding. Se non riesco a risponderti, ti metto in contatto con un consulente fisico.`);
 }
 function addAiMsg(type, text){
   const wrap = document.getElementById('ai-msgs');
@@ -1196,6 +1202,23 @@ function sendAi(){
   input.value='';
   askAi(val);
 }
+function portfolioStats(){
+  const mine = PROJECTS.filter(p=>p.invested);
+  const totInvested = mine.reduce((s,p)=>s+p.myAmount,0);
+  const weightedRoi = totInvested ? mine.reduce((s,p)=>s+p.roi*p.myAmount,0)/totInvested : 0;
+  return {mine, totInvested, weightedRoi};
+}
+function findProjectMention(lower){
+  return PROJECTS.find(p=>{
+    const shortName = p.title.split(/[—-]/)[0].trim().toLowerCase();
+    return lower.includes(p.title.toLowerCase()) || (shortName.length>3 && lower.includes(shortName));
+  });
+}
+function categoryAverage(p){
+  const peers = PROJECTS.filter(x=>x.type===p.type && x.id!==p.id);
+  if(!peers.length) return null;
+  return peers.reduce((s,x)=>s+x.roi,0)/peers.length;
+}
 function askAi(text){
   addAiMsg('user', text);
   const lower = text.toLowerCase();
@@ -1204,8 +1227,31 @@ function askAi(text){
     setTimeout(()=>escalate(text), 400);
     return;
   }
-  const match = FAQ.find(f=>f.kw.some(k=>lower.includes(k)));
+
+  const mentioned = findProjectMention(lower);
+  const compareWords = ['confront','posizion','rispetto alle altre','media','comparabil'];
+
   setTimeout(()=>{
+    if(mentioned && compareWords.some(w=>lower.includes(w))){
+      const avg = categoryAverage(mentioned);
+      const diff = avg!=null ? (mentioned.roi-avg) : null;
+      addAiMsg('bot', `<b>${mentioned.title}</b> ha un rendimento stimato del <b>${mentioned.roi}%</b>.` +
+        (avg!=null ? ` Le altre operazioni di tipo ${mentioned.type==='flipping'?'flipping':'crowdfunding'} pubblicate sulla piattaforma hanno un rendimento medio del <b>${avg.toFixed(1)}%</b>, quindi questa operazione è ${diff>=0?'sopra':'sotto'} media di ${Math.abs(diff).toFixed(1)} punti.` : '') +
+        ` Ricorda: è un confronto tra le operazioni di esempio su questa piattaforma, non un'analisi del mercato immobiliare reale.`);
+      return;
+    }
+    if(mentioned){
+      addAiMsg('bot', `<b>${mentioned.title}</b> — ${mentioned.city}, ${mentioned.mq} m².<br>Rendimento stimato: <b>${mentioned.roi}%</b> su ${mentioned.duration}.<br>Ricavo atteso: <b>${eur(mentioned.ricavoAtteso)}</b>.` +
+        (mentioned.invested ? ` Il tuo investimento in questa operazione è di ${eur(mentioned.myAmount)}.` : ` Non hai ancora investito in questa operazione — trovi tutti i dettagli nella sua scheda.`));
+      return;
+    }
+    const personalWords = ['quanto ho investito','il mio rendimento','mio portafoglio','capitale investito','ho guadagnato'];
+    if(personalWords.some(w=>lower.includes(w))){
+      const {mine, totInvested, weightedRoi} = portfolioStats();
+      addAiMsg('bot', `Hai investito <b>${eur(totInvested)}</b> in <b>${mine.length}</b> operazioni, con un rendimento medio ponderato stimato del <b>${weightedRoi.toFixed(1)}%</b>. Trovi il dettaglio operazione per operazione nella tua Dashboard.`);
+      return;
+    }
+    const match = FAQ.find(f=>f.kw.some(k=>lower.includes(k)));
     if(match){
       addAiMsg('bot', match.a());
     } else {
