@@ -806,6 +806,20 @@ const PROJECTS = [
     ],
     chart:[17,0,0,0], chartLabels:['LUG','OTT','NOV','AGO']
   },
+  {
+    id:'p7', type:'flipping', title:'Trilocale Via Oreto', city:'Palermo, Oreto', mq:78,
+    invested:false, totalPrice:118000,
+    roi:17.8, duration:'9 mesi', statusOk:true,
+    thumb:IMG.palermo, before:IMG.demolition, after:IMG.kitchen,
+    costi:[['Acquisizione immobile',64000],['Ristrutturazione',37000],['Oneri e permessi',4000],['Marketing e vendita',3500],['Costi finanziari',2500]],
+    ricavoAtteso:132000,
+    timeline:[
+      {t:'Acquisizione immobile', d:'SET 2026', done:false, now:true, note:'Zona selezionata dal motore di scoring RealFlipping (punteggio 88.2/100, fascia Investire).'},
+      {t:'Ristrutturazione', d:'OTT 2026–FEB 2027', done:false, note:'Taglio adatto alla domanda universitaria della zona (Oreto/Guadagna).'},
+      {t:'Vendita', d:'MAR–MAG 2027', done:false, note:'Prezzo di uscita coerente con i comparabili di zona più recenti.'},
+    ],
+    chart:[0,0,0], chartLabels:['SET','FEB','MAG']
+  },
 ];
 
 /* Rigenerato ogni giorno da tools/update_index_scores.py (vedi
