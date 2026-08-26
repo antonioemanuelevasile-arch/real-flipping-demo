@@ -21,5 +21,16 @@ open index.html
 
 ## Stato del progetto
 
-Prototipo dimostrativo: il login accetta qualsiasi credenziale e i dati dei
-progetti sono di esempio, non collegati a un backend reale.
+Prototipo dimostrativo (MVP visivo/interattivo), pensato per mostrare
+l'interfaccia e i flussi principali. Limiti noti, da affrontare prima di un
+lancio reale:
+
+- **Nessun backend**: dati e login sono finti, non c'è persistenza reale né
+  autenticazione vera (il login accetta qualsiasi credenziale).
+- **L'assistente IA è regole/parole-chiave**, non un modello reale collegato
+  ai dati dell'utente.
+- **Manca tutta la parte transazionale**: pagamenti, KYC/AML, gestione SPV,
+  firma documenti.
+- **Aspetti legali/regolamentari**: il crowdfunding immobiliare in Italia è
+  un'attività regolamentata da Consob e andrebbe affrontata prima di
+  qualsiasi lancio pubblico.
