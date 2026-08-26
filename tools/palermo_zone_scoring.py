@@ -12,6 +12,17 @@ Questo script NON usa un LLM: produce i numeri verificabili su cui,
 in una versione successiva, un layer con Claude (o altro LLM) potrà
 costruire la spiegazione testuale per l'investitore.
 
+Aggiornamento giornaliero (simulato)
+-------------------------------------
+Non esiste un'API pubblica gratuita di immobiliare.it (o simili) per
+leggere prezzi aggiornati ogni giorno, e fare scraping violerebbe i loro
+termini di servizio. Per far vedere nel prototipo un backoffice che "si
+muove" nel tempo, applica_variazione_giornaliera() genera una piccola
+oscillazione casuale ma riproducibile (seed = data del giorno) sopra
+ZONE_DATA. E' chiaramente rumore di simulazione, non un dato di mercato
+reale — sostituire con un fornitore con licenza (es. OMI Agenzia delle
+Entrate) quando disponibile.
+
 Fonte dati inserita di default: quotazioni immobiliari.it, Palermo,
 luglio 2026 (prezzi di vendita e affitto medi per zona, con relative
 variazioni percentuali sul periodo precedente). Sostituisci ZONE_DATA
@@ -38,8 +49,11 @@ sempre calcolati da questo motore quantitativo.
 
 from __future__ import annotations
 import csv
+import hashlib
 import io
+import random
 from dataclasses import dataclass, asdict
+from datetime import date
 from typing import Literal
 
 # ---------------------------------------------------------------------------
@@ -72,6 +86,43 @@ ZONE_DATA = [
     ("Calatafimi Bassa, Indipendenza, Zisa, Università", 1357, 6.0, 9.66, 10.9),
     ("Cruillas, CEP, Michelangelo Alta", 1328, 12.7, 6.83, -8.2),
 ]
+
+def applica_variazione_giornaliera(
+    dati: list[tuple],
+    giorno: date | None = None,
+    ampiezza_prezzo_pct: float = 0.4,
+    ampiezza_var_punti: float = 0.3,
+) -> list[tuple]:
+    """Simula un aggiornamento giornaliero applicando una piccola oscillazione
+    casuale, ma riproducibile (seed = data del giorno), sopra ZONE_DATA.
+
+    Non e' un collegamento a un feed di mercato reale: non esiste un'API
+    pubblica gratuita di immobiliare.it o simili per leggere prezzi
+    aggiornati ogni giorno, e fare scraping violerebbe i loro termini di
+    servizio. Questo e' un rumore realistico intorno alla fonte statica di
+    luglio 2026, pensato per far vedere nel prototipo un backoffice che
+    "si muove" giorno per giorno. Sostituire con un fornitore dati reale
+    (es. OMI Agenzia delle Entrate, o un provider con licenza) quando
+    disponibile: da quel momento questa funzione non serve più.
+
+    Il seed e' derivato dalla data (non dall'ora), quindi più esecuzioni
+    nello stesso giorno danno lo stesso risultato: l'automazione giornaliera
+    (vedi .github/workflows/update-zone-scores.yml) produce un solo
+    aggiornamento reale al giorno, non un numero diverso a ogni run.
+    """
+    giorno = giorno or date.today()
+    seed = int(hashlib.sha256(giorno.isoformat().encode()).hexdigest(), 16) % (2**32)
+    rng = random.Random(seed)
+
+    risultato = []
+    for zona, vendita, var_v, affitto, var_a in dati:
+        vendita_g = round(vendita * (1 + rng.uniform(-ampiezza_prezzo_pct, ampiezza_prezzo_pct) / 100), 2)
+        affitto_g = round(affitto * (1 + rng.uniform(-ampiezza_prezzo_pct, ampiezza_prezzo_pct) / 100), 2)
+        var_v_g = round(var_v + rng.uniform(-ampiezza_var_punti, ampiezza_var_punti), 1)
+        var_a_g = round(var_a + rng.uniform(-ampiezza_var_punti, ampiezza_var_punti), 1)
+        risultato.append((zona, vendita_g, var_v_g, affitto_g, var_a_g))
+    return risultato
+
 
 # Variazioni % di affitto sopra questa soglia (assoluta) vengono considerate
 # statisticamente poco affidabili (zone a basso volume di transazioni dove
@@ -225,6 +276,7 @@ def esporta_json(risultati: list[ZoneScore], nome_file: str = "palermo_zone_scor
 
 
 if __name__ == "__main__":
-    risultati = calcola_punteggi(ZONE_DATA)
+    dati_di_oggi = applica_variazione_giornaliera(ZONE_DATA)
+    risultati = calcola_punteggi(dati_di_oggi)
     stampa_report(risultati)
     esporta_json(risultati)

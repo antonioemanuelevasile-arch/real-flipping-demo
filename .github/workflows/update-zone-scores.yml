@@ -1,0 +1,39 @@
+name: Aggiorna punteggi zone (Backoffice)
+
+# Simula un aggiornamento giornaliero dei dati del Backoffice (vedi
+# tools/palermo_zone_scoring.py per il perché è una simulazione e non
+# un feed di mercato reale). Gira una volta al giorno e, quando i
+# numeri cambiano, apre una commit diretta su main con i nuovi valori.
+
+on:
+  schedule:
+    - cron: "0 5 * * *" # ogni giorno alle 05:00 UTC
+  workflow_dispatch: {} # per lanciarlo manualmente da GitHub, se serve
+
+permissions:
+  contents: write
+
+jobs:
+  aggiorna:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Genera i punteggi del giorno e aggiorna index.html
+        run: python3 tools/update_index_scores.py
+
+      - name: Committa se ci sono modifiche
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html tools/palermo_zone_scores.json
+          if git diff --cached --quiet; then
+            echo "Nessuna modifica da committare."
+          else
+            git commit -m "chore: aggiorna punteggi zone del $(date -u +%F)"
+            git push
+          fi
