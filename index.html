@@ -303,6 +303,16 @@ footer.site{border-top:1px solid var(--line);padding:32px 32px;max-width:1200px;
 .ba-label.after{right:14px;}
 input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass);}
 
+.cantiere-photos{margin-top:26px;}
+.cantiere-photos-title{font-size:15px;margin-bottom:4px;}
+.cantiere-photos-sub{font-size:12.5px;color:var(--ink-soft);margin-bottom:14px;}
+.cantiere-photos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+.cantiere-photo{border-radius:var(--radius-sm);overflow:hidden;background:var(--bg-soft);border:1px solid var(--line);}
+.cantiere-photo img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}
+.cantiere-photo figcaption{padding:8px 10px;font-size:11.5px;line-height:1.4;}
+.cantiere-photo figcaption b{font-family:'IBM Plex Mono',monospace;color:var(--brass-deep);display:block;font-size:10.5px;letter-spacing:.02em;}
+.cantiere-photo figcaption span{color:var(--ink-soft);}
+
 .invest-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:24px;height:fit-content;box-shadow:var(--shadow-sm);}
 .invest-card .roi{font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:700;color:var(--sage);}
 .invest-card .roi-lab{font-size:12px;color:var(--ink-soft);font-weight:600;}
@@ -556,12 +566,25 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
    IMAGE LIBRARY (real photography, Unsplash — free license)
    ============================================================ */
 const IMG = {
+  // esterni
   exterior:  'https://images.unsplash.com/photo-1757156152888-c0fba3995ea1?auto=format&fit=crop&w=1000&q=75',
+  villa:     'https://images.unsplash.com/photo-1643558287100-e2813e352b6f?auto=format&fit=crop&w=1000&q=75',
+  milano:    'https://images.unsplash.com/photo-1574436950974-a8a7dd9e3e61?auto=format&fit=crop&w=1000&q=75',
+  palermo:   'https://images.unsplash.com/photo-1774244764229-0c29f5bb0f61?auto=format&fit=crop&w=1000&q=75',
+  baglio:    'https://images.unsplash.com/photo-1762926627597-033a7061024d?auto=format&fit=crop&w=1000&q=75',
+  magazzino: 'https://images.unsplash.com/photo-1693349168035-c31e78dd4965?auto=format&fit=crop&w=1000&q=75',
+  // interni "dopo"
   living:    'https://images.unsplash.com/photo-1648425731270-ebd373a19149?auto=format&fit=crop&w=1000&q=75',
   kitchen:   'https://images.unsplash.com/photo-1764526624453-db32c24eca55?auto=format&fit=crop&w=1000&q=75',
-  villa:     'https://images.unsplash.com/photo-1643558287100-e2813e352b6f?auto=format&fit=crop&w=1000&q=75',
+  bedroom:   'https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?auto=format&fit=crop&w=1000&q=75',
+  // fasi cantiere
   before:    'https://images.unsplash.com/photo-1704742950992-9815a104820c?auto=format&fit=crop&w=1000&q=75',
+  demolition:'https://images.unsplash.com/photo-1768321901750-f7b96d774456?auto=format&fit=crop&w=1000&q=75',
+  framing:   'https://images.unsplash.com/photo-1768321916980-7396c5407254?auto=format&fit=crop&w=1000&q=75',
+  wiring:    'https://images.unsplash.com/photo-1768321908749-92ba11a8693b?auto=format&fit=crop&w=1000&q=75',
+  painting:  'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=1000&q=75',
 };
+const CANTIERE_IMGS = [IMG.before, IMG.demolition, IMG.framing, IMG.wiring, IMG.painting];
 
 /* ============================================================
    MOCK DATA
@@ -571,7 +594,7 @@ const PROJECTS = [
     id:'p1', type:'flipping', title:'Palazzina Via dei Tigli', city:'Milano, Bicocca', mq:310,
     invested:true, myAmount:180000, totalPrice:610000, status:'in corso', statusOk:false,
     roi:17.4, duration:'11 mesi', progress:64,
-    thumb:IMG.exterior, before:IMG.before, after:IMG.kitchen,
+    thumb:IMG.milano, before:IMG.before, after:IMG.kitchen,
     costi:[['Acquisizione immobile',380000],['Ristrutturazione',165000],['Oneri e permessi',22000],['Marketing e vendita',18000],['Costi finanziari',15000]],
     ricavoAtteso:716000,
     timeline:[
@@ -587,7 +610,7 @@ const PROJECTS = [
     id:'p2', type:'crowdfunding', category:'Residenziale', title:'Casa Alloro — Trilocale Storico', city:'Palermo, Kalsa', mq:95,
     invested:true, myAmount:8000, target:340000, raised:261000, minTicket:500, status:'in raccolta', statusOk:true,
     roi:14.1, duration:'9 mesi', progress:41,
-    thumb:IMG.living, before:IMG.before, after:IMG.living,
+    thumb:IMG.palermo, before:IMG.demolition, after:IMG.living,
     costi:[['Acquisizione immobile',195000],['Ristrutturazione conservativa',98000],['Oneri e permessi',14000],['Marketing e vendita',12000],['Fee di piattaforma',7000]],
     ricavoAtteso:388000,
     timeline:[
@@ -602,7 +625,7 @@ const PROJECTS = [
     id:'p3', type:'crowdfunding', category:'Turistico', title:'Baglio San Vito — Dimora B&B', city:'Alimena (PA)', mq:420,
     invested:false, target:520000, raised:198000, minTicket:1000,
     roi:19.8, duration:'14 mesi', statusOk:true,
-    thumb:IMG.villa, before:IMG.before, after:IMG.villa,
+    thumb:IMG.baglio, before:IMG.framing, after:IMG.bedroom,
     costi:[['Acquisizione baglio storico',260000],['Ristrutturazione e adeguamento',185000],['Arredi e allestimento',35000],['Oneri, permessi e vincoli',22000],['Marketing e avviamento attività',18000]],
     ricavoAtteso:640000,
     timeline:[
@@ -617,7 +640,7 @@ const PROJECTS = [
     id:'p4', type:'flipping', title:'Attico Via Notarbartolo', city:'Palermo, Libertà', mq:140,
     invested:false, totalPrice:295000,
     roi:16.2, duration:'8 mesi', statusOk:true,
-    thumb:IMG.exterior, before:IMG.before, after:IMG.kitchen,
+    thumb:IMG.exterior, before:IMG.wiring, after:IMG.living,
     costi:[['Acquisizione immobile',195000],['Ristrutturazione',58000],['Oneri e permessi',9000],['Marketing e vendita',10000],['Costi finanziari',6000]],
     ricavoAtteso:343000,
     timeline:[
@@ -631,7 +654,7 @@ const PROJECTS = [
     id:'p5', type:'crowdfunding', category:'Commerciale', title:'Ex Magazzino Via Volturno', city:'Torino, San Salvario', mq:260,
     invested:true, myAmount:15000, target:410000, raised:410000, minTicket:500, status:'chiuso', statusOk:true, closed:true,
     roi:21.3, duration:'13 mesi', progress:100,
-    thumb:IMG.kitchen, before:IMG.before, after:IMG.kitchen,
+    thumb:IMG.magazzino, before:IMG.framing, after:IMG.kitchen,
     costi:[['Acquisizione capannone',210000],['Riconversione a uffici/retail',140000],['Oneri e permessi',26000],['Marketing e vendita',20000],['Fee di piattaforma',14000]],
     ricavoAtteso:497000,
     timeline:[
@@ -646,7 +669,7 @@ const PROJECTS = [
     id:'p6', type:'crowdfunding', category:'Residenziale', title:'Villino Anni \'30 — Via dei Mille', city:'Bari, Murat', mq:180,
     invested:false, target:380000, raised:64000, minTicket:500,
     roi:15.6, duration:'10 mesi', statusOk:true,
-    thumb:IMG.villa, before:IMG.before, after:IMG.living,
+    thumb:IMG.villa, before:IMG.demolition, after:IMG.bedroom,
     costi:[['Acquisizione immobile',230000],['Ristrutturazione',95000],['Oneri e permessi',15000],['Marketing e vendita',13000],['Fee di piattaforma',9000]],
     ricavoAtteso:438000,
     timeline:[
@@ -865,13 +888,40 @@ function renderProject(id){
           <div class="ba-label after">Dopo</div>
         </div>
         <input type="range" class="ba-slider" min="0" max="100" value="50" oninput="updateBA(this.value)">
+
+        ${p.invested ? `
+        <div class="cantiere-photos">
+          <h3 class="cantiere-photos-title">Foto avanzamento cantiere</h3>
+          <div class="cantiere-photos-sub">Scatti caricati dal team RealFlipping a ogni fase completata.</div>
+          <div class="cantiere-photos-grid">
+            ${p.timeline.filter(t=>t.done||t.now).map((t,i)=>`
+              <figure class="cantiere-photo">
+                <img src="${CANTIERE_IMGS[i % CANTIERE_IMGS.length]}" alt="Avanzamento cantiere — ${t.t}">
+                <figcaption><b>${t.d}</b><span>${t.t}</span></figcaption>
+              </figure>
+            `).join('')}
+          </div>
+        </div>
+        ` : ''}
       </div>
 
       <div class="invest-card">
         ${p.invested ? `<div class="ai-tag">Già in portafoglio</div>` : ''}
         <div class="roi">${p.roi}%</div>
         <div class="roi-lab">Rendimento stimato sull'intera durata</div>
-        ${isCrowd ? `
+        ${p.invested ? `
+          ${isCrowd ? `
+            <div class="progressbar"><div class="fill" style="width:${pct}%"></div></div>
+            <div class="rowline"><span>Raccolto</span><span class="v">${eur(p.raised)} / ${eur(p.target)}</span></div>
+            <div class="rowline"><span>Percentuale raggiunta</span><span class="v">${pct}%</span></div>
+          ` : `
+            <div class="rowline"><span>Prezzo operazione</span><span class="v">${eur(p.totalPrice)}</span></div>
+            <div class="rowline"><span>Avanzamento cantiere</span><span class="v">${pct}%</span></div>
+          `}
+          <div class="rowline"><span>Tuo investimento</span><span class="v">${eur(p.myAmount)}</span></div>
+          <div class="rowline"><span>Ricavo atteso operazione</span><span class="v">${eur(p.ricavoAtteso)}</span></div>
+          <p style="font-size:12px;color:var(--ink-soft);margin-top:14px;line-height:1.5;">Operazione già sottoscritta. Trovi cronoprogramma, foto del cantiere e situazione fiscale stimata qui sotto.</p>
+        ` : isCrowd ? `
           <div class="progressbar"><div class="fill" style="width:${pct}%"></div></div>
           <div class="rowline"><span>Raccolto</span><span class="v">${eur(p.raised)} / ${eur(p.target)}</span></div>
           <div class="rowline"><span>Percentuale raggiunta</span><span class="v">${pct}%</span></div>
@@ -901,7 +951,7 @@ function renderProject(id){
     </div>
     <div id="proj-tab-content"></div>
   `;
-  if(isCrowd) updateEstimate(p.id);
+  if(isCrowd && !p.invested) updateEstimate(p.id);
   updateBA(50);
   setProjTab('plan', document.querySelector('.proj-tabs .tabbtn'));
 }
