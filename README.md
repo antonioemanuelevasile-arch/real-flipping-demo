@@ -8,8 +8,18 @@ dedicata per seguire cantiere, numeri e situazione fiscale stimata.
 ## Contenuto
 
 - `index.html` — applicazione a pagina singola (HTML/CSS/JS, nessuna dipendenza
-  esterna): landing page, area di login demo, elenco progetti e dashboard
-  investitore.
+  esterna): landing page, area di login demo, elenco progetti, dashboard
+  investitore e sezione Backoffice interna.
+- `tools/palermo_zone_scoring.py` — motore quantitativo (senza LLM) che
+  calcola un punteggio di investibilità 0–100 per zona di Palermo, usato
+  dalla sezione Backoffice. Vedi i commenti nel file per la metodologia.
+- `tools/update_index_scores.py` — rigenera i dati mostrati nel Backoffice
+  dentro `index.html` a partire dallo scoring engine.
+- `.github/workflows/update-zone-scores.yml` — esegue `update_index_scores.py`
+  una volta al giorno e committa i nuovi numeri in automatico (una piccola
+  oscillazione **simulata**, non un feed di mercato reale — non esiste
+  un'API pubblica gratuita per leggere prezzi immobiliari aggiornati ogni
+  giorno, e fare scraping violerebbe i termini di servizio dei portali).
 
 ## Come vederla
 
