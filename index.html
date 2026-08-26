@@ -160,7 +160,7 @@ img{display:block;}
 footer.site{border-top:1px solid var(--line);padding:32px 32px;max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;color:var(--ink-faint);font-size:12px;flex-wrap:wrap;gap:10px;}
 
 /* login modal */
-#login-overlay{
+#login-overlay, #account-overlay{
   position:fixed;inset:0;background:rgba(15,17,15,0.45);
   display:flex;align-items:center;justify-content:center;z-index:200;
   backdrop-filter:blur(3px);
@@ -169,7 +169,7 @@ footer.site{border-top:1px solid var(--line);padding:32px 32px;max-width:1200px;
   width:380px;background:var(--white);border-radius:18px;
   padding:32px 28px 26px;position:relative;box-shadow:var(--shadow-lg);
 }
-.login-box .close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:18px;color:var(--ink-soft);}
+.login-box .close, .account-box .close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:18px;color:var(--ink-soft);}
 .login-box h3{font-size:22px;margin-bottom:6px;}
 .login-box p.sub{font-size:13px;color:var(--ink-soft);margin-bottom:22px;}
 .field{margin-bottom:14px;}
@@ -181,6 +181,57 @@ footer.site{border-top:1px solid var(--line);padding:32px 32px;max-width:1200px;
 .field input:focus{outline:2px solid var(--brass);outline-offset:1px;background:var(--white);}
 .login-box .btn{width:100%;margin-top:8px;padding:12px;}
 .login-note{font-size:11.5px;color:var(--ink-faint);margin-top:14px;text-align:center;}
+
+/* account modal */
+.account-box{
+  width:440px;max-width:calc(100vw - 32px);max-height:calc(100vh - 60px);overflow-y:auto;
+  background:var(--white);border-radius:18px;
+  padding:32px 28px 26px;position:relative;box-shadow:var(--shadow-lg);
+}
+.account-head{display:flex;align-items:center;gap:14px;margin-bottom:24px;}
+.account-head .avatar{width:44px;height:44px;font-size:15px;}
+.account-head h3{font-size:19px;}
+.account-head .sub{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+.account-section{margin-bottom:24px;}
+.account-section:last-of-type{margin-bottom:8px;}
+.account-section h4{font-size:12px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.03em;margin-bottom:12px;}
+.account-select{
+  width:100%;padding:11px 13px;border:1px solid var(--line-strong);border-radius:10px;
+  background:var(--bg-soft);font-size:14px;font-family:inherit;color:var(--ink);
+}
+.pay-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.pay-option{
+  display:flex;align-items:center;gap:10px;padding:12px 13px;border-radius:10px;
+  border:1px solid var(--line-strong);background:var(--white);font-size:13.5px;font-weight:600;
+  text-align:left;position:relative;
+}
+.pay-option .pay-ic{width:24px;height:24px;flex:none;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.pay-option.selected{border-color:var(--brass);background:var(--brass-tint);color:var(--brass-deep);}
+.pay-option .check{position:absolute;top:8px;right:8px;width:16px;height:16px;border-radius:50%;background:var(--brass);color:var(--white);display:none;align-items:center;justify-content:center;font-size:10px;}
+.pay-option.selected .check{display:flex;}
+
+/* notifications */
+.notif-btn{
+  position:relative;border:1px solid var(--line);background:var(--bg);border-radius:10px;
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--ink);
+}
+.notif-btn:hover{background:var(--bg-soft);}
+.notif-btn svg{width:17px;height:17px;}
+.notif-dot{position:absolute;top:6px;right:6px;min-width:15px;height:15px;padding:0 3px;border-radius:20px;background:var(--brick);color:var(--white);font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;}
+.notif-dropdown{
+  position:absolute;top:56px;right:32px;width:340px;max-width:calc(100vw - 32px);
+  background:var(--white);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-lg);
+  z-index:120;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .15s ease, transform .15s ease;
+}
+.notif-dropdown.open{opacity:1;transform:translateY(0);pointer-events:auto;}
+.notif-dropdown-head{padding:14px 16px;border-bottom:1px solid var(--line);font-weight:700;font-size:13.5px;}
+.notif-list{max-height:360px;overflow-y:auto;}
+.notif-item{display:flex;gap:11px;padding:12px 16px;border-bottom:1px solid var(--line);}
+.notif-item:last-child{border-bottom:none;}
+.notif-item .n-dot{width:7px;height:7px;border-radius:50%;background:var(--brass);margin-top:6px;flex:none;}
+.notif-item .n-title{font-size:13px;font-weight:600;line-height:1.35;}
+.notif-item .n-meta{font-size:11px;color:var(--ink-soft);margin-top:3px;}
 
 /* ================= APP SHELL ================= */
 #app-shell{min-height:calc(100vh - 61px);position:relative;}
@@ -480,6 +531,41 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
   </div>
 </div>
 
+<!-- ============ ACCOUNT MODAL ============ -->
+<div id="account-overlay" class="hidden">
+  <div class="account-box">
+    <button class="close" onclick="closeAccount()">✕</button>
+    <div class="account-head">
+      <div class="avatar">MV</div>
+      <div>
+        <h3>Marco V.</h3>
+        <div class="sub">investitore@realflipping.it · Piano <span class="plan-badge">Pro</span></div>
+      </div>
+    </div>
+
+    <div class="account-section">
+      <h4>Impostazioni</h4>
+      <label style="font-size:12px;color:var(--ink-soft);margin-bottom:6px;font-weight:600;display:block;">Lingua</label>
+      <select class="account-select" id="account-lang" onchange="setLanguage(this.value)">
+        <option value="it">Italiano</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+
+    <div class="account-section">
+      <h4>Metodo di pagamento predefinito</h4>
+      <div class="pay-options" id="pay-options">
+        <button class="pay-option" data-method="apple" onclick="setPaymentMethod('apple')"><span class="pay-ic">🍎</span>Apple Pay<span class="check">✓</span></button>
+        <button class="pay-option" data-method="google" onclick="setPaymentMethod('google')"><span class="pay-ic">G</span>Google Pay<span class="check">✓</span></button>
+        <button class="pay-option" data-method="card" onclick="setPaymentMethod('card')"><span class="pay-ic">💳</span>Carta<span class="check">✓</span></button>
+        <button class="pay-option" data-method="bonifico" onclick="setPaymentMethod('bonifico')"><span class="pay-ic">🏦</span>Bonifico<span class="check">✓</span></button>
+      </div>
+    </div>
+
+    <button class="btn outline" style="width:100%;" onclick="closeAccount()">Chiudi</button>
+  </div>
+</div>
+
 <!-- ============ APP (post-login) ============ -->
 <div id="app-shell" class="hidden">
   <div id="sidebar-overlay" onclick="closeSidebar()"></div>
@@ -691,7 +777,14 @@ const FAQ = [
   {kw:['tempistic','durata','quando finisce'], a:()=>`Le tempistiche variano da progetto a progetto, generalmente tra 8 e 14 mesi dall'apertura della raccolta o dall'acquisizione dell'immobile. Il cronoprogramma dettagliato è visibile nella scheda progetto, sezione "Tempistiche".`},
 ];
 
-let state = {loggedIn:false, dashFilter:'all', exploreFilter:'all', currentProjectId:null, currentView:'dashboard', fromView:'dashboard'};
+let state = {loggedIn:false, dashFilter:'all', exploreFilter:'all', currentProjectId:null, currentView:'dashboard', fromView:'dashboard', language:'it', paymentMethod:'card', notifUnread:4};
+
+const NOTIFICATIONS = [
+  {title:'Nuove foto di cantiere caricate', project:'Palazzina Via dei Tigli', date:'2 giorni fa'},
+  {title:'Raccolta al 77% del target', project:'Casa Alloro — Trilocale Storico', date:'4 giorni fa'},
+  {title:'Utili distribuiti agli investitori', project:'Ex Magazzino Via Volturno', date:'1 settimana fa'},
+  {title:'Nuova operazione disponibile in crowdfunding', project:'Villino Anni \'30 — Via dei Mille', date:'1 settimana fa'},
+];
 
 /* ============================================================
    HELPERS
@@ -704,6 +797,38 @@ function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'sm
    ============================================================ */
 function openLogin(){document.getElementById('login-overlay').classList.remove('hidden');}
 function closeLogin(){document.getElementById('login-overlay').classList.add('hidden');}
+function openAccount(){
+  closeNotifications();
+  document.getElementById('account-lang').value = state.language;
+  renderPaymentOptions();
+  document.getElementById('account-overlay').classList.remove('hidden');
+}
+function closeAccount(){document.getElementById('account-overlay').classList.add('hidden');}
+function setLanguage(lang){ state.language = lang; }
+function renderPaymentOptions(){
+  document.querySelectorAll('.pay-option').forEach(el=>{
+    el.classList.toggle('selected', el.dataset.method===state.paymentMethod);
+  });
+}
+function setPaymentMethod(method){
+  state.paymentMethod = method;
+  renderPaymentOptions();
+}
+function toggleNotifications(){
+  document.getElementById('notif-dropdown').classList.toggle('open');
+  if(state.notifUnread>0){
+    state.notifUnread = 0;
+    renderNav();
+    document.getElementById('notif-dropdown').classList.add('open');
+  }
+}
+function closeNotifications(){
+  const el = document.getElementById('notif-dropdown');
+  if(el) el.classList.remove('open');
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.notif-btn') && !e.target.closest('#notif-dropdown')) closeNotifications();
+});
 function doLogin(){
   closeLogin();
   state.loggedIn = true;
@@ -738,7 +863,21 @@ function renderNav(){
   } else {
     links.innerHTML = '';
     cta.innerHTML = `
-      <div class="userchip"><div class="avatar">MV</div>Marco V.<span class="plan-badge">Pro</span></div>
+      <div style="position:relative;">
+        <button class="notif-btn" onclick="toggleNotifications()" aria-label="Notifiche">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 4.5 1.5 6 2 7H4c.5-1 2-2.5 2-7z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+          ${state.notifUnread>0 ? `<span class="notif-dot">${state.notifUnread}</span>` : ''}
+        </button>
+        <div class="notif-dropdown" id="notif-dropdown">
+          <div class="notif-dropdown-head">Notifiche</div>
+          <div class="notif-list">
+            ${NOTIFICATIONS.map(n=>`
+              <div class="notif-item"><div class="n-dot"></div><div><div class="n-title">${n.title}</div><div class="n-meta">${n.project} · ${n.date}</div></div></div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="userchip" onclick="openAccount()" style="cursor:pointer;"><div class="avatar">MV</div>Marco V.<span class="plan-badge">Pro</span></div>
       <button class="btn outline sm" onclick="logout()">Esci</button>`;
   }
 }
