@@ -266,6 +266,7 @@ footer.site{border-top:1px solid var(--line);padding:32px 32px;max-width:1200px;
 .sidelink.active svg{opacity:1;}
 .sidelink:hover{color:var(--ink);}
 #sidebar .sidefoot{margin-top:auto;padding:14px;border-radius:12px;background:var(--bg-soft);font-size:11.5px;color:var(--ink-soft);}
+.sidedivider{font-size:10.5px;font-weight:700;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.06em;padding:16px 13px 6px;}
 
 #main{min-width:0;padding:32px 40px 80px;max-width:1260px;margin:0 auto;}
 
@@ -408,6 +409,20 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
 .fisc-table td{padding:14px 16px;border-top:1px solid var(--line);}
 .fisc-table td.num{font-family:'IBM Plex Mono',monospace;text-align:right;}
 .fisc-note{font-size:11.5px;color:var(--ink-faint);margin-top:14px;line-height:1.5;}
+
+.bo-note{font-size:12.5px;color:var(--ink-soft);background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:20px;line-height:1.55;}
+.bo-note code{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--white);border:1px solid var(--line);border-radius:5px;padding:1px 5px;}
+.bo-flag{color:var(--brass-deep);font-weight:700;}
+.bo-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--white);}
+.bo-table{width:100%;border-collapse:collapse;font-size:13px;min-width:680px;}
+.bo-table th{text-align:left;font-size:11px;font-weight:700;color:var(--ink-soft);padding:12px 16px;background:var(--bg-soft);white-space:nowrap;}
+.bo-table td{padding:12px 16px;border-top:1px solid var(--line);white-space:nowrap;}
+.bo-table td.zona{white-space:normal;font-weight:600;min-width:220px;}
+.bo-table td.num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;}
+.bo-fascia{font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.03em;}
+.bo-fascia.investire{color:var(--sage);background:var(--sage-tint);}
+.bo-fascia.monitorare{color:var(--brass-deep);background:var(--brass-tint);}
+.bo-fascia.evitare{color:var(--brick);background:#FBEAE6;}
 
 /* AI consultant */
 .ai-disclaimer{font-size:12px;color:var(--ink-soft);background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:18px;line-height:1.5;}
@@ -575,6 +590,8 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
     <button class="sidelink" data-view="explore" onclick="go('explore')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Investi</button>
     <button class="sidelink" data-view="fiscal" onclick="go('fiscal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h6"/></svg>Fiscalità</button>
     <button class="sidelink" data-view="ai" onclick="go('ai')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v1a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M6 20v-1a6 6 0 0112 0v1"/><circle cx="9" cy="7" r=".5"/><circle cx="15" cy="7" r=".5"/></svg>Consulente IA</button>
+    <div class="sidedivider">Area interna</div>
+    <button class="sidelink" data-view="backoffice" onclick="go('backoffice')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Backoffice</button>
     <div class="sidefoot">Prossimo aggiornamento cantiere<br><b class="mono" style="color:var(--ink)">04 AGO 2026</b></div>
   </div>
 
@@ -645,6 +662,24 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
             <button class="btn brass sm" onclick="sendAi()">Invia</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- BACKOFFICE -->
+    <div id="view-backoffice" class="hidden">
+      <div class="pagehead">
+        <div><h1>Backoffice — Scoring zone</h1><div class="sub">Motore quantitativo di investibilità per zona (MVP interno, non visibile agli investitori).</div></div>
+      </div>
+      <div class="bo-note">
+        Punteggio 0–100 calcolato da <code class="mono">tools/palermo_zone_scoring.py</code> su rendimento locativo lordo, trend prezzi di vendita e trend canoni d'affitto — nessun LLM coinvolto nel calcolo. Fonte dati: quotazioni immobiliari.it, Palermo, luglio 2026. Le righe segnate <span class="bo-flag">★</span> hanno una variazione affitto anomala (oltre soglia di affidabilità) da verificare con più storico prima di fidarsene.
+      </div>
+      <div class="bo-table-wrap">
+        <table class="bo-table">
+          <thead><tr>
+            <th>Zona</th><th>Punteggio</th><th>Fascia</th><th>Rend. lordo</th><th>Var. vendita</th><th>Var. affitto</th>
+          </tr></thead>
+          <tbody id="backoffice-body"></tbody>
+        </table>
       </div>
     </div>
 
@@ -772,6 +807,32 @@ const PROJECTS = [
   },
 ];
 
+/* Output di tools/palermo_zone_scoring.py — rigenerare con
+   `python3 tools/palermo_zone_scoring.py` e incollare qui se i dati
+   di input (ZONE_DATA nello script) cambiano. Numeri non toccati a mano. */
+const ZONE_SCORES = [
+  {zona:"Oreto, Perez, Montegrappa, Guadagna", vendita_mq:1204, affitto_mq:9.43, rendimento_lordo_pct:9.4, var_vendita_pct:4.8, var_affitto_pct:13.8, punteggio:88.2, fascia:"Investire", dato_da_verificare:false},
+  {zona:"Calatafimi Bassa, Indipendenza, Zisa, Università", vendita_mq:1357, affitto_mq:9.66, rendimento_lordo_pct:8.54, var_vendita_pct:6.0, var_affitto_pct:10.9, punteggio:78.1, fascia:"Investire", dato_da_verificare:false},
+  {zona:"Ciaculli, Belmonte Chiavelli", vendita_mq:900, affitto_mq:6.06, rendimento_lordo_pct:8.08, var_vendita_pct:2.5, var_affitto_pct:11.4, punteggio:69.1, fascia:"Investire", dato_da_verificare:false},
+  {zona:"Giotto Galilei, Palagonia, Noce, Malaspina", vendita_mq:1509, affitto_mq:9.69, rendimento_lordo_pct:7.71, var_vendita_pct:-0.5, var_affitto_pct:10.7, punteggio:60.5, fascia:"Monitorare", dato_da_verificare:false},
+  {zona:"Calatafimi Alta, Santicelli", vendita_mq:1418, affitto_mq:7.98, rendimento_lordo_pct:6.75, var_vendita_pct:3.7, var_affitto_pct:17.7, punteggio:60.5, fascia:"Monitorare", dato_da_verificare:true},
+  {zona:"Fiera, Montepellegrino", vendita_mq:1661, affitto_mq:9.47, rendimento_lordo_pct:6.84, var_vendita_pct:8.7, var_affitto_pct:5.0, punteggio:58.2, fascia:"Monitorare", dato_da_verificare:false},
+  {zona:"Altarello, Poggio Ridente, Boccadifalco, Baida", vendita_mq:1095, affitto_mq:6.87, rendimento_lordo_pct:7.53, var_vendita_pct:3.1, var_affitto_pct:5.4, punteggio:58.2, fascia:"Monitorare", dato_da_verificare:false},
+  {zona:"Lanza di Scalea, Olimpo, Castelforte", vendita_mq:2363, affitto_mq:14.97, rendimento_lordo_pct:7.6, var_vendita_pct:-5.1, var_affitto_pct:66.9, punteggio:57.5, fascia:"Monitorare", dato_da_verificare:true},
+  {zona:"Sant'Erasmo, Brancaccio, Sperone, Settecannoli", vendita_mq:1077, affitto_mq:6.81, rendimento_lordo_pct:7.59, var_vendita_pct:1.4, var_affitto_pct:2.1, punteggio:53.3, fascia:"Monitorare", dato_da_verificare:false},
+  {zona:"Arenella, Acquasanta, Vergine Maria", vendita_mq:1690, affitto_mq:10.79, rendimento_lordo_pct:7.66, var_vendita_pct:-9.7, var_affitto_pct:11.5, punteggio:48.5, fascia:"Monitorare", dato_da_verificare:false},
+  {zona:"Mondello, Sferracavallo, Addaura, Tommaso Natale", vendita_mq:2022, affitto_mq:10.35, rendimento_lordo_pct:6.14, var_vendita_pct:9.7, var_affitto_pct:-1.2, punteggio:46.1, fascia:"Monitorare", dato_da_verificare:false},
+  {zona:"Centro Storico", vendita_mq:1911, affitto_mq:11.35, rendimento_lordo_pct:7.13, var_vendita_pct:-1.6, var_affitto_pct:2.3, punteggio:44.7, fascia:"Monitorare", dato_da_verificare:false},
+  {zona:"Villagrazia, Olio di Lino", vendita_mq:1105, affitto_mq:6.29, rendimento_lordo_pct:6.83, var_vendita_pct:1.7, var_affitto_pct:0.5, punteggio:44.2, fascia:"Monitorare", dato_da_verificare:false},
+  {zona:"Cruillas, CEP, Michelangelo Alta", vendita_mq:1328, affitto_mq:6.83, rendimento_lordo_pct:6.17, var_vendita_pct:12.7, var_affitto_pct:-8.2, punteggio:43.5, fascia:"Monitorare", dato_da_verificare:false},
+  {zona:"Porto, Borgo Vecchio, Roma, Cavour", vendita_mq:1927, affitto_mq:10.97, rendimento_lordo_pct:6.83, var_vendita_pct:2.8, var_affitto_pct:-3.2, punteggio:42.0, fascia:"Monitorare", dato_da_verificare:false},
+  {zona:"Pallavicino, Villaggio Ruffini, Cardillo, Inserra", vendita_mq:1684, affitto_mq:8.32, rendimento_lordo_pct:5.93, var_vendita_pct:-1.9, var_affitto_pct:11.2, punteggio:40.7, fascia:"Monitorare", dato_da_verificare:false},
+  {zona:"Uditore, Leonardo Da Vinci Alta, Borgo Nuovo", vendita_mq:1383, affitto_mq:7.21, rendimento_lordo_pct:6.26, var_vendita_pct:4.4, var_affitto_pct:-2.3, punteggio:39.1, fascia:"Evitare", dato_da_verificare:false},
+  {zona:"Libertà, Villabianca, De Gasperi, Croce Rossa, Sciuti, Politeama", vendita_mq:2322, affitto_mq:10.06, rendimento_lordo_pct:5.2, var_vendita_pct:2.3, var_affitto_pct:4.1, punteggio:31.7, fascia:"Evitare", dato_da_verificare:false},
+  {zona:"Strasburgo, Belgio, San Lorenzo, Resuttana", vendita_mq:1849, affitto_mq:8.6, rendimento_lordo_pct:5.58, var_vendita_pct:5.8, var_affitto_pct:-9.8, punteggio:26.5, fascia:"Evitare", dato_da_verificare:false},
+  {zona:"Bonagia, Falsomiele", vendita_mq:1192, affitto_mq:5.03, rendimento_lordo_pct:5.06, var_vendita_pct:4.6, var_affitto_pct:-10.2, punteggio:19.2, fascia:"Evitare", dato_da_verificare:false},
+];
+
 const FAQ = [
   {kw:['rendimento','roi','guadagn','ritorno'], a:()=>`In base ai progetti attivi nel tuo portafoglio, il rendimento atteso varia dal 14% al 21% sull'intera durata dell'operazione, a seconda del rischio e della categoria. Puoi vedere il dettaglio di ogni progetto nella sua scheda, alla voce "Rendimento stimato".`},
   {kw:['tass','fisc','plusvalen','imposta'], a:()=>`Le plusvalenze da flipping, se l'immobile viene rivenduto entro 5 anni dall'acquisto, sono soggette a tassazione separata o ordinaria in base alla scelta in dichiarazione. I proventi da crowdfunding immobiliare seguono invece il regime dei proventi da partecipazione all'SPV di progetto. Trovi la stima aggiornata per ogni progetto nella sezione "Fiscalità".`},
@@ -895,7 +956,7 @@ function go(view, projectId){
   closeSidebar();
   if(view!=='project') state.fromView = view;
   state.currentView = view;
-  ['dashboard','explore','project','fiscal','ai'].forEach(v=>{
+  ['dashboard','explore','project','fiscal','ai','backoffice'].forEach(v=>{
     document.getElementById('view-'+v).classList.toggle('hidden', v!==view);
   });
   document.querySelectorAll('.sidelink').forEach(el=>{
@@ -906,6 +967,7 @@ function go(view, projectId){
   if(view==='explore') renderExplore();
   if(view==='fiscal') renderFiscal();
   if(view==='ai') renderAiInit();
+  if(view==='backoffice') renderBackoffice();
   if(view==='project') renderProject(projectId);
   window.scrollTo({top:0,behavior:'instant'});
 }
@@ -1176,6 +1238,20 @@ function renderFiscal(){
       <td class="num">${aliquota}%</td>
     </tr>`;
   }).join('');
+}
+
+/* ============================================================
+   BACKOFFICE — scoring zone (output di tools/palermo_zone_scoring.py)
+   ============================================================ */
+function renderBackoffice(){
+  document.getElementById('backoffice-body').innerHTML = ZONE_SCORES.map(z=>`<tr>
+    <td class="zona">${z.zona}${z.dato_da_verificare?' <span class="bo-flag">★</span>':''}</td>
+    <td class="num">${z.punteggio.toFixed(1)}</td>
+    <td><span class="bo-fascia ${z.fascia.toLowerCase()}">${z.fascia}</span></td>
+    <td class="num">${z.rendimento_lordo_pct.toFixed(2)}%</td>
+    <td class="num">${z.var_vendita_pct>0?'+':''}${z.var_vendita_pct.toFixed(1)}%</td>
+    <td class="num">${z.var_affitto_pct>0?'+':''}${z.var_affitto_pct.toFixed(1)}%</td>
+  </tr>`).join('');
 }
 
 /* ============================================================
