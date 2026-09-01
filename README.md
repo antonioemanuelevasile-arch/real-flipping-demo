@@ -9,10 +9,16 @@ dedicata per seguire cantiere, numeri e situazione fiscale stimata.
 
 - `index.html` — applicazione a pagina singola (HTML/CSS/JS, nessuna dipendenza
   esterna): landing page, area di login demo, elenco progetti, dashboard
-  investitore e sezione Backoffice interna.
+  investitore (con grafici di composizione portafoglio e rendimento per
+  operazione) e sezione Backoffice interna (con classifica a barre delle
+  zone e spiegazioni per zona).
 - `tools/palermo_zone_scoring.py` — motore quantitativo (senza LLM) che
-  calcola un punteggio di investibilità 0–100 per zona di Palermo, usato
-  dalla sezione Backoffice. Vedi i commenti nel file per la metodologia.
+  calcola un punteggio di investibilità 0–100 per zona di Palermo, con
+  rendimento netto stimato, indice di affidabilità del dato (penalizza le
+  variazioni statisticamente poco solide invece di limitarsi a segnalarle)
+  e un generatore di spiegazioni testuali per zona (template deterministico,
+  pensato per essere sostituito 1:1 da una vera chiamata LLM — vedi i
+  commenti nel file per la metodologia completa).
 - `tools/update_index_scores.py` — rigenera i dati mostrati nel Backoffice
   dentro `index.html` a partire dallo scoring engine.
 - `.github/workflows/update-zone-scores.yml` — esegue `update_index_scores.py`
@@ -38,7 +44,14 @@ lancio reale:
 - **Nessun backend**: dati e login sono finti, non c'è persistenza reale né
   autenticazione vera (il login accetta qualsiasi credenziale).
 - **L'assistente IA è regole/parole-chiave**, non un modello reale collegato
-  ai dati dell'utente.
+  ai dati dell'utente — ora copre più intenti (simulazione di importo su un
+  progetto, classifica delle operazioni per rendimento, diversificazione
+  del portafoglio, campagne aperte) ma resta un motore a regole, non un LLM.
+- **Le "spiegazioni IA" del Backoffice sono un template**, non un LLM: usano
+  gli stessi numeri calcolati dal motore quantitativo per generare 2-3 frasi
+  leggibili. Pensate per essere sostituite da una vera chiamata a un LLM
+  (es. Claude) mantenendo i numeri invariati — vedi i commenti in
+  `tools/palermo_zone_scoring.py`.
 - **Manca tutta la parte transazionale**: pagamenti, KYC/AML, gestione SPV,
   firma documenti.
 - **Aspetti legali/regolamentari**: il crowdfunding immobiliare in Italia è

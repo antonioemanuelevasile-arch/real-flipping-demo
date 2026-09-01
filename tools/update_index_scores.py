@@ -55,11 +55,12 @@ def _js_bool(b: bool) -> str:
 def costruisci_blocco_js(oggi: date, risultati: list[ZoneScore]) -> str:
     righe = "\n".join(
         "  {zona:%s, vendita_mq:%s, affitto_mq:%s, rendimento_lordo_pct:%s, "
-        "var_vendita_pct:%s, var_affitto_pct:%s, punteggio:%s, fascia:%s, "
-        "dato_da_verificare:%s}," % (
+        "rendimento_netto_pct:%s, var_vendita_pct:%s, var_affitto_pct:%s, punteggio:%s, "
+        "fascia:%s, indice_affidabilita_pct:%s, dato_da_verificare:%s, spiegazione:%s}," % (
             _js_stringa(r.zona), r.vendita_mq, r.affitto_mq, r.rendimento_lordo_pct,
-            r.var_vendita_pct, r.var_affitto_pct, r.punteggio, _js_stringa(r.fascia),
-            _js_bool(r.dato_da_verificare),
+            r.rendimento_netto_pct, r.var_vendita_pct, r.var_affitto_pct, r.punteggio,
+            _js_stringa(r.fascia), r.indice_affidabilita_pct, _js_bool(r.dato_da_verificare),
+            _js_stringa(r.spiegazione),
         )
         for r in risultati
     )

@@ -437,11 +437,54 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
 .bo-fascia.investire{color:var(--sage);background:var(--sage-tint);}
 .bo-fascia.monitorare{color:var(--brass-deep);background:var(--brass-tint);}
 .bo-fascia.evitare{color:var(--brick);background:#FBEAE6;}
+.bo-affid{font-family:'IBM Plex Mono',monospace;}
+.bo-affid.low{color:var(--brick);font-weight:700;}
+.bo-row{cursor:pointer;}
+.bo-row:hover{background:var(--bg-soft);}
+.bo-row .chev{display:inline-block;margin-left:6px;font-size:10px;color:var(--ink-faint);transition:transform .15s ease;}
+.bo-row.open .chev{transform:rotate(90deg);}
+.bo-detail td{background:var(--bg-soft);padding:14px 16px 16px 40px;border-top:none;font-size:12.5px;color:var(--ink-soft);line-height:1.6;white-space:normal;}
+.bo-detail .ai-tag{margin-bottom:8px;}
+
+/* backoffice ranking chart */
+.rank-legend{display:flex;gap:18px;margin-bottom:14px;flex-wrap:wrap;}
+.rank-legend .li{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft);font-weight:600;}
+.rank-legend .dot{width:9px;height:9px;border-radius:50%;flex:none;}
+.rank-legend .dot.investire{background:var(--sage);}
+.rank-legend .dot.monitorare{background:var(--brass);}
+.rank-legend .dot.evitare{background:var(--brick);}
+.rank-chart{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px 8px;margin-bottom:24px;}
+.rank-chart h3{font-size:14.5px;margin-bottom:4px;}
+.rank-chart .rank-sub{font-size:12px;color:var(--ink-soft);margin-bottom:18px;}
+.rank-row{display:grid;grid-template-columns:230px 1fr 52px;align-items:center;gap:12px;margin-bottom:14px;}
+.rank-row .rlabel{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rank-row .rtrack{height:10px;background:var(--bg-soft);border-radius:6px;overflow:hidden;}
+.rank-row .rfill{height:100%;border-radius:6px;min-width:4px;}
+.rank-row .rfill.investire{background:var(--sage);}
+.rank-row .rfill.monitorare{background:var(--brass);}
+.rank-row .rfill.evitare{background:var(--brick);}
+.rank-row .rfill.mine{background:var(--petrol);}
+.rank-row .rval{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;text-align:right;}
+
+/* dashboard charts */
+.dash-charts{display:grid;grid-template-columns:1fr 1.35fr;gap:16px;margin-bottom:32px;}
+.chart-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;}
+.chart-card h3{font-size:14px;margin-bottom:2px;}
+.chart-card .csub{font-size:11.5px;color:var(--ink-soft);margin-bottom:16px;}
+.donut-wrap{display:flex;align-items:center;gap:22px;}
+.donut-legend{display:flex;flex-direction:column;gap:10px;}
+.donut-legend .li{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink);font-weight:600;}
+.donut-legend .li .sub{color:var(--ink-soft);font-weight:500;font-size:11.5px;}
+.donut-legend .dot{width:10px;height:10px;border-radius:3px;flex:none;}
+.donut-legend .dot.flip{background:var(--brick);}
+.donut-legend .dot.crowd{background:var(--petrol);}
+.dash-empty{font-size:13px;color:var(--ink-soft);}
+@media (max-width:920px){ .dash-charts{grid-template-columns:1fr;} }
 
 /* AI consultant */
 .ai-disclaimer{font-size:12px;color:var(--ink-soft);background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:18px;line-height:1.5;}
 .ai-wrap{display:grid;grid-template-columns:280px 1fr;gap:0;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);height:600px;overflow:hidden;}
-.ai-side{border-right:1px solid var(--line);padding:20px;background:var(--bg-soft);}
+.ai-side{border-right:1px solid var(--line);padding:20px;background:var(--bg-soft);overflow-y:auto;}
 .ai-side h3{font-size:14px;margin-bottom:12px;}
 .ai-suggest{display:block;width:100%;text-align:left;font-size:12.5px;padding:11px 13px;border:1px solid var(--line);background:var(--white);margin-bottom:8px;border-radius:10px;color:var(--ink-soft);}
 .ai-suggest:hover{border-color:var(--brass);color:var(--ink);}
@@ -648,6 +691,7 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
         <button class="btn brass" onclick="go('explore')">+ Nuovo investimento</button>
       </div>
       <div class="kpi-row" id="kpi-row"></div>
+      <div class="dash-charts" id="dash-charts"></div>
       <div class="tabset">
         <button class="tabbtn active" data-cat="all" onclick="setDashFilter('all',this)">Tutti gli investimenti</button>
         <button class="tabbtn" data-cat="flipping" onclick="setDashFilter('flipping',this)">Flipping interi</button>
@@ -697,6 +741,10 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
           <button class="ai-suggest" onclick="askAi('Come vengono tassate le plusvalenze da crowdfunding?')">Come vengono tassate le plusvalenze da crowdfunding?</button>
           <button class="ai-suggest" onclick="askAi('Posso vendere la mia quota prima della fine del progetto?')">Posso vendere la mia quota prima della fine?</button>
           <button class="ai-suggest" onclick="askAi('Qual è l\'investimento minimo nel flipping?')">Qual è l'investimento minimo nel flipping?</button>
+          <button class="ai-suggest" onclick="askAi('Quale operazione ha il rendimento più alto disponibile ora?')">Quale operazione ha il rendimento più alto ora?</button>
+          <button class="ai-suggest" onclick="askAi('Quanto guadagnerei investendo 5000€ in Baglio San Vito?')">Quanto guadagnerei investendo 5.000€ in Baglio San Vito?</button>
+          <button class="ai-suggest" onclick="askAi('Il mio portafoglio è diversificato?')">Il mio portafoglio è diversificato?</button>
+          <button class="ai-suggest" onclick="askAi('Quali campagne di crowdfunding sono aperte ora?')">Quali campagne sono aperte ora?</button>
           <button class="ai-suggest" onclick="askAi('Voglio parlare con un consulente umano')">Voglio parlare con un consulente umano</button>
         </div>
         <div class="ai-main">
@@ -715,16 +763,29 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
         <div><h1>Backoffice — Scoring zone</h1><div class="sub">Motore quantitativo di investibilità per zona (MVP interno, non visibile agli investitori). <span id="bo-updated" class="bo-updated"></span></div></div>
       </div>
       <div class="bo-note">
-        Punteggio 0–100 calcolato da <code class="mono">tools/palermo_zone_scoring.py</code> su rendimento locativo lordo, trend prezzi di vendita e trend canoni d'affitto — nessun LLM coinvolto nel calcolo. Base dati: quotazioni immobiliari.it, Palermo, luglio 2026, con una piccola oscillazione <b>simulata</b> generata ogni giorno da <code class="mono">.github/workflows/update-zone-scores.yml</code> per demo — non è un feed di mercato reale. Le righe segnate <span class="bo-flag">★</span> hanno una variazione affitto anomala (oltre soglia di affidabilità) da verificare con più storico prima di fidarsene.
+        Punteggio 0–100 calcolato da <code class="mono">tools/palermo_zone_scoring.py</code> su rendimento locativo, trend prezzi di vendita e trend canoni d'affitto, con una penalità quando il dato affitto è statisticamente poco affidabile — nessun LLM coinvolto nel calcolo dei numeri. Le spiegazioni testuali per zona sono generate da un template deterministico che legge quegli stessi numeri (v1.5 del layer "IA racconta i dati", pronto per essere sostituito da una vera chiamata LLM). Base dati: quotazioni immobiliari.it, Palermo, luglio 2026, con una piccola oscillazione <b>simulata</b> generata ogni giorno da <code class="mono">.github/workflows/update-zone-scores.yml</code> per demo — non è un feed di mercato reale. Le righe segnate <span class="bo-flag">★</span> hanno una variazione affitto anomala da verificare con più storico prima di fidarsene. Clicca su una zona per leggere la spiegazione.
       </div>
+
+      <div class="rank-chart">
+        <h3>Classifica zone per punteggio di investibilità</h3>
+        <div class="rank-sub">Le 8 zone con il punteggio più alto tra quelle analizzate.</div>
+        <div class="rank-legend">
+          <span class="li"><span class="dot investire"></span>Investire</span>
+          <span class="li"><span class="dot monitorare"></span>Monitorare</span>
+          <span class="li"><span class="dot evitare"></span>Evitare</span>
+        </div>
+        <div id="rank-chart-body"></div>
+      </div>
+
       <div class="bo-table-wrap">
         <table class="bo-table">
           <thead><tr>
-            <th>Zona</th><th>Punteggio</th><th>Fascia</th><th>Rend. lordo</th><th>Var. vendita</th><th>Var. affitto</th>
+            <th>Zona</th><th>Punteggio</th><th>Fascia</th><th>Rend. lordo</th><th>Rend. netto*</th><th>Affidabilità</th><th>Var. vendita</th><th>Var. affitto</th>
           </tr></thead>
           <tbody id="backoffice-body"></tbody>
         </table>
       </div>
+      <p class="fisc-note">* Rendimento netto: stima di massima al netto di una quota forfettaria di costi ricorrenti (IMU, condominio, manutenzione, gestione) uguale per tutte le zone — non sostituisce un business plan puntuale sul singolo immobile.</p>
     </div>
 
   </div>
@@ -870,26 +931,26 @@ const PROJECTS = [
    verrebbe sovrascritto al prossimo aggiornamento automatico. */
 const ZONE_SCORES_UPDATED = "2026-09-01";
 const ZONE_SCORES = [
-  {zona:"Oreto, Perez, Montegrappa, Guadagna", vendita_mq:1207.71, affitto_mq:9.45, rendimento_lordo_pct:9.39, var_vendita_pct:4.6, var_affitto_pct:13.5, punteggio:87.8, fascia:"Investire", dato_da_verificare:false},
-  {zona:"Calatafimi Bassa, Indipendenza, Zisa, Università", vendita_mq:1357.34, affitto_mq:9.64, rendimento_lordo_pct:8.52, var_vendita_pct:5.9, var_affitto_pct:11.1, punteggio:78.1, fascia:"Investire", dato_da_verificare:false},
-  {zona:"Ciaculli, Belmonte Chiavelli", vendita_mq:897.55, affitto_mq:6.06, rendimento_lordo_pct:8.1, var_vendita_pct:2.6, var_affitto_pct:11.7, punteggio:69.8, fascia:"Investire", dato_da_verificare:false},
-  {zona:"Giotto Galilei, Palagonia, Noce, Malaspina", vendita_mq:1507.71, affitto_mq:9.69, rendimento_lordo_pct:7.71, var_vendita_pct:-0.3, var_affitto_pct:10.8, punteggio:60.9, fascia:"Monitorare", dato_da_verificare:false},
-  {zona:"Calatafimi Alta, Santicelli", vendita_mq:1418.51, affitto_mq:7.97, rendimento_lordo_pct:6.74, var_vendita_pct:3.7, var_affitto_pct:17.5, punteggio:60.3, fascia:"Monitorare", dato_da_verificare:true},
-  {zona:"Altarello, Poggio Ridente, Boccadifalco, Baida", vendita_mq:1095.0, affitto_mq:6.86, rendimento_lordo_pct:7.52, var_vendita_pct:3.2, var_affitto_pct:5.5, punteggio:58.4, fascia:"Monitorare", dato_da_verificare:false},
-  {zona:"Fiera, Montepellegrino", vendita_mq:1661.05, affitto_mq:9.45, rendimento_lordo_pct:6.83, var_vendita_pct:8.7, var_affitto_pct:4.9, punteggio:58.0, fascia:"Monitorare", dato_da_verificare:false},
-  {zona:"Lanza di Scalea, Olimpo, Castelforte", vendita_mq:2359.79, affitto_mq:14.92, rendimento_lordo_pct:7.59, var_vendita_pct:-4.9, var_affitto_pct:66.7, punteggio:57.5, fascia:"Monitorare", dato_da_verificare:true},
-  {zona:"Sant'Erasmo, Brancaccio, Sperone, Settecannoli", vendita_mq:1079.41, affitto_mq:6.82, rendimento_lordo_pct:7.58, var_vendita_pct:1.2, var_affitto_pct:2.2, punteggio:53.1, fascia:"Monitorare", dato_da_verificare:false},
-  {zona:"Arenella, Acquasanta, Vergine Maria", vendita_mq:1691.58, affitto_mq:10.79, rendimento_lordo_pct:7.65, var_vendita_pct:-9.6, var_affitto_pct:11.5, punteggio:48.4, fascia:"Monitorare", dato_da_verificare:false},
-  {zona:"Mondello, Sferracavallo, Addaura, Tommaso Natale", vendita_mq:2017.61, affitto_mq:10.38, rendimento_lordo_pct:6.17, var_vendita_pct:9.8, var_affitto_pct:-0.9, punteggio:46.9, fascia:"Monitorare", dato_da_verificare:false},
-  {zona:"Centro Storico", vendita_mq:1905.21, affitto_mq:11.31, rendimento_lordo_pct:7.12, var_vendita_pct:-1.6, var_affitto_pct:2.6, punteggio:44.9, fascia:"Monitorare", dato_da_verificare:false},
-  {zona:"Villagrazia, Olio di Lino", vendita_mq:1108.82, affitto_mq:6.27, rendimento_lordo_pct:6.79, var_vendita_pct:1.5, var_affitto_pct:0.6, punteggio:43.5, fascia:"Monitorare", dato_da_verificare:false},
-  {zona:"Cruillas, CEP, Michelangelo Alta", vendita_mq:1323.33, affitto_mq:6.83, rendimento_lordo_pct:6.19, var_vendita_pct:12.5, var_affitto_pct:-8.4, punteggio:43.4, fascia:"Monitorare", dato_da_verificare:false},
-  {zona:"Porto, Borgo Vecchio, Roma, Cavour", vendita_mq:1934.46, affitto_mq:11.0, rendimento_lordo_pct:6.82, var_vendita_pct:3.0, var_affitto_pct:-3.2, punteggio:42.2, fascia:"Monitorare", dato_da_verificare:false},
-  {zona:"Pallavicino, Villaggio Ruffini, Cardillo, Inserra", vendita_mq:1681.32, affitto_mq:8.31, rendimento_lordo_pct:5.93, var_vendita_pct:-2.0, var_affitto_pct:11.4, punteggio:40.5, fascia:"Monitorare", dato_da_verificare:false},
-  {zona:"Uditore, Leonardo Da Vinci Alta, Borgo Nuovo", vendita_mq:1385.82, affitto_mq:7.2, rendimento_lordo_pct:6.23, var_vendita_pct:4.6, var_affitto_pct:-2.3, punteggio:39.1, fascia:"Evitare", dato_da_verificare:false},
-  {zona:"Libertà, Villabianca, De Gasperi, Croce Rossa, Sciuti, Politeama", vendita_mq:2316.27, affitto_mq:10.06, rendimento_lordo_pct:5.21, var_vendita_pct:2.5, var_affitto_pct:3.9, punteggio:31.7, fascia:"Evitare", dato_da_verificare:false},
-  {zona:"Strasburgo, Belgio, San Lorenzo, Resuttana", vendita_mq:1845.66, affitto_mq:8.62, rendimento_lordo_pct:5.6, var_vendita_pct:5.8, var_affitto_pct:-9.7, punteggio:26.8, fascia:"Evitare", dato_da_verificare:false},
-  {zona:"Bonagia, Falsomiele", vendita_mq:1188.99, affitto_mq:5.05, rendimento_lordo_pct:5.1, var_vendita_pct:4.8, var_affitto_pct:-10.3, punteggio:19.5, fascia:"Evitare", dato_da_verificare:false},
+  {zona:"Oreto, Perez, Montegrappa, Guadagna", vendita_mq:1207.71, affitto_mq:9.45, rendimento_lordo_pct:9.39, rendimento_netto_pct:6.76, var_vendita_pct:4.6, var_affitto_pct:13.5, punteggio:87.8, fascia:"Investire", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Oreto, Perez, Montegrappa, Guadagna è in fascia Investire con punteggio 87.8/100: il rendimento locativo lordo stimato (9.39%, circa 6.76% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +4.6%, sopra la media."},
+  {zona:"Calatafimi Bassa, Indipendenza, Zisa, Università", vendita_mq:1357.34, affitto_mq:9.64, rendimento_lordo_pct:8.52, rendimento_netto_pct:6.13, var_vendita_pct:5.9, var_affitto_pct:11.1, punteggio:78.1, fascia:"Investire", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Calatafimi Bassa, Indipendenza, Zisa, Università è in fascia Investire con punteggio 78.1/100: il rendimento locativo lordo stimato (8.52%, circa 6.13% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +5.9%, sopra la media."},
+  {zona:"Ciaculli, Belmonte Chiavelli", vendita_mq:897.55, affitto_mq:6.06, rendimento_lordo_pct:8.1, rendimento_netto_pct:5.83, var_vendita_pct:2.6, var_affitto_pct:11.7, punteggio:69.8, fascia:"Investire", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Ciaculli, Belmonte Chiavelli è in fascia Investire con punteggio 69.8/100: il rendimento locativo lordo stimato (8.1%, circa 5.83% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +2.6%, sotto la media."},
+  {zona:"Giotto Galilei, Palagonia, Noce, Malaspina", vendita_mq:1507.71, affitto_mq:9.69, rendimento_lordo_pct:7.71, rendimento_netto_pct:5.55, var_vendita_pct:-0.3, var_affitto_pct:10.8, punteggio:60.9, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Giotto Galilei, Palagonia, Noce, Malaspina è in fascia Monitorare con punteggio 60.9/100: il rendimento locativo lordo stimato (7.71%, circa 5.55% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di -0.3%, sotto la media."},
+  {zona:"Calatafimi Alta, Santicelli", vendita_mq:1418.51, affitto_mq:7.97, rendimento_lordo_pct:6.74, rendimento_netto_pct:4.85, var_vendita_pct:3.7, var_affitto_pct:17.5, punteggio:58.8, fascia:"Monitorare", indice_affidabilita_pct:90.0, dato_da_verificare:true, spiegazione:"Calatafimi Alta, Santicelli è in fascia Monitorare con punteggio 58.8/100: il rendimento locativo lordo stimato (6.74%, circa 4.85% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +3.7%, sopra la media. Attenzione: la variazione dei canoni d'affitto rilevata (+17.5%) supera la soglia di affidabilità statistica (indice di affidabilità stimato 90.0/100) — probabile bassa liquidità del mercato degli affitti in questa zona: verificare con più storico prima di darle peso."},
+  {zona:"Altarello, Poggio Ridente, Boccadifalco, Baida", vendita_mq:1095.0, affitto_mq:6.86, rendimento_lordo_pct:7.52, rendimento_netto_pct:5.41, var_vendita_pct:3.2, var_affitto_pct:5.5, punteggio:58.4, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Altarello, Poggio Ridente, Boccadifalco, Baida è in fascia Monitorare con punteggio 58.4/100: il rendimento locativo lordo stimato (7.52%, circa 5.41% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +3.2%, sopra la media."},
+  {zona:"Fiera, Montepellegrino", vendita_mq:1661.05, affitto_mq:9.45, rendimento_lordo_pct:6.83, rendimento_netto_pct:4.92, var_vendita_pct:8.7, var_affitto_pct:4.9, punteggio:58.0, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Fiera, Montepellegrino è in fascia Monitorare con punteggio 58.0/100: il rendimento locativo lordo stimato (6.83%, circa 4.92% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +8.7%, sopra la media."},
+  {zona:"Sant'Erasmo, Brancaccio, Sperone, Settecannoli", vendita_mq:1079.41, affitto_mq:6.82, rendimento_lordo_pct:7.58, rendimento_netto_pct:5.46, var_vendita_pct:1.2, var_affitto_pct:2.2, punteggio:53.1, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Sant'Erasmo, Brancaccio, Sperone, Settecannoli è in fascia Monitorare con punteggio 53.1/100: il rendimento locativo lordo stimato (7.58%, circa 5.46% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +1.2%, sotto la media."},
+  {zona:"Arenella, Acquasanta, Vergine Maria", vendita_mq:1691.58, affitto_mq:10.79, rendimento_lordo_pct:7.65, rendimento_netto_pct:5.51, var_vendita_pct:-9.6, var_affitto_pct:11.5, punteggio:48.4, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Arenella, Acquasanta, Vergine Maria è in fascia Monitorare con punteggio 48.4/100: il rendimento locativo lordo stimato (7.65%, circa 5.51% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di -9.6%, sotto la media."},
+  {zona:"Mondello, Sferracavallo, Addaura, Tommaso Natale", vendita_mq:2017.61, affitto_mq:10.38, rendimento_lordo_pct:6.17, rendimento_netto_pct:4.44, var_vendita_pct:9.8, var_affitto_pct:-0.9, punteggio:46.9, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Mondello, Sferracavallo, Addaura, Tommaso Natale è in fascia Monitorare con punteggio 46.9/100: il rendimento locativo lordo stimato (6.17%, circa 4.44% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +9.8%, sopra la media."},
+  {zona:"Lanza di Scalea, Olimpo, Castelforte", vendita_mq:2359.79, affitto_mq:14.92, rendimento_lordo_pct:7.59, rendimento_netto_pct:5.46, var_vendita_pct:-4.9, var_affitto_pct:66.7, punteggio:45.5, fascia:"Monitorare", indice_affidabilita_pct:0.0, dato_da_verificare:true, spiegazione:"Lanza di Scalea, Olimpo, Castelforte è in fascia Monitorare con punteggio 45.5/100: il rendimento locativo lordo stimato (7.59%, circa 5.46% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di -4.9%, sotto la media. Attenzione: la variazione dei canoni d'affitto rilevata (+66.7%) supera la soglia di affidabilità statistica (indice di affidabilità stimato 0.0/100) — probabile bassa liquidità del mercato degli affitti in questa zona: verificare con più storico prima di darle peso."},
+  {zona:"Centro Storico", vendita_mq:1905.21, affitto_mq:11.31, rendimento_lordo_pct:7.12, rendimento_netto_pct:5.13, var_vendita_pct:-1.6, var_affitto_pct:2.6, punteggio:44.9, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Centro Storico è in fascia Monitorare con punteggio 44.9/100: il rendimento locativo lordo stimato (7.12%, circa 5.13% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di -1.6%, sotto la media."},
+  {zona:"Villagrazia, Olio di Lino", vendita_mq:1108.82, affitto_mq:6.27, rendimento_lordo_pct:6.79, rendimento_netto_pct:4.89, var_vendita_pct:1.5, var_affitto_pct:0.6, punteggio:43.5, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Villagrazia, Olio di Lino è in fascia Monitorare con punteggio 43.5/100: il rendimento locativo lordo stimato (6.79%, circa 4.89% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +1.5%, sotto la media."},
+  {zona:"Cruillas, CEP, Michelangelo Alta", vendita_mq:1323.33, affitto_mq:6.83, rendimento_lordo_pct:6.19, rendimento_netto_pct:4.46, var_vendita_pct:12.5, var_affitto_pct:-8.4, punteggio:43.4, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Cruillas, CEP, Michelangelo Alta è in fascia Monitorare con punteggio 43.4/100: il rendimento locativo lordo stimato (6.19%, circa 4.46% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +12.5%, sopra la media."},
+  {zona:"Porto, Borgo Vecchio, Roma, Cavour", vendita_mq:1934.46, affitto_mq:11.0, rendimento_lordo_pct:6.82, rendimento_netto_pct:4.91, var_vendita_pct:3.0, var_affitto_pct:-3.2, punteggio:42.2, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Porto, Borgo Vecchio, Roma, Cavour è in fascia Monitorare con punteggio 42.2/100: il rendimento locativo lordo stimato (6.82%, circa 4.91% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +3.0%, sopra la media."},
+  {zona:"Pallavicino, Villaggio Ruffini, Cardillo, Inserra", vendita_mq:1681.32, affitto_mq:8.31, rendimento_lordo_pct:5.93, rendimento_netto_pct:4.27, var_vendita_pct:-2.0, var_affitto_pct:11.4, punteggio:40.5, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Pallavicino, Villaggio Ruffini, Cardillo, Inserra è in fascia Monitorare con punteggio 40.5/100: il rendimento locativo lordo stimato (5.93%, circa 4.27% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di -2.0%, sotto la media."},
+  {zona:"Uditore, Leonardo Da Vinci Alta, Borgo Nuovo", vendita_mq:1385.82, affitto_mq:7.2, rendimento_lordo_pct:6.23, rendimento_netto_pct:4.49, var_vendita_pct:4.6, var_affitto_pct:-2.3, punteggio:39.1, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Uditore, Leonardo Da Vinci Alta, Borgo Nuovo è in fascia Evitare con punteggio 39.1/100: il rendimento locativo lordo stimato (6.23%, circa 4.49% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +4.6%, sopra la media."},
+  {zona:"Libertà, Villabianca, De Gasperi, Croce Rossa, Sciuti, Politeama", vendita_mq:2316.27, affitto_mq:10.06, rendimento_lordo_pct:5.21, rendimento_netto_pct:3.75, var_vendita_pct:2.5, var_affitto_pct:3.9, punteggio:31.7, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Libertà, Villabianca, De Gasperi, Croce Rossa, Sciuti, Politeama è in fascia Evitare con punteggio 31.7/100: il rendimento locativo lordo stimato (5.21%, circa 3.75% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +2.5%, sotto la media."},
+  {zona:"Strasburgo, Belgio, San Lorenzo, Resuttana", vendita_mq:1845.66, affitto_mq:8.62, rendimento_lordo_pct:5.6, rendimento_netto_pct:4.03, var_vendita_pct:5.8, var_affitto_pct:-9.7, punteggio:26.8, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Strasburgo, Belgio, San Lorenzo, Resuttana è in fascia Evitare con punteggio 26.8/100: il rendimento locativo lordo stimato (5.6%, circa 4.03% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +5.8%, sopra la media."},
+  {zona:"Bonagia, Falsomiele", vendita_mq:1188.99, affitto_mq:5.05, rendimento_lordo_pct:5.1, rendimento_netto_pct:3.67, var_vendita_pct:4.8, var_affitto_pct:-10.3, punteggio:19.5, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Bonagia, Falsomiele è in fascia Evitare con punteggio 19.5/100: il rendimento locativo lordo stimato (5.1%, circa 3.67% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +4.8%, sopra la media."},
 ];
 
 const FAQ = [
@@ -1078,7 +1139,64 @@ function renderDashboard(){
     <div class="kpi"><div class="lab">Operazioni attive</div><div class="val">${active}</div><div class="delta flat">in corso o in raccolta</div></div>
     <div class="kpi"><div class="lab">Operazioni chiuse</div><div class="val">${mine.length-active}</div><div class="delta up">utili distribuiti</div></div>
   `;
+  renderDashCharts(mine, totInvested);
   renderDashGrid();
+}
+
+function donutSvg(segments, size, stroke){
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  let offset = 0;
+  const arcs = segments.filter(s=>s.value>0).map(s=>{
+    const frac = s.value / segments.reduce((a,b)=>a+b.value,0);
+    const len = frac * c;
+    const circle = `<circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${s.color}" stroke-width="${stroke}" stroke-dasharray="${len} ${c-len}" stroke-dashoffset="${-offset}" stroke-linecap="butt" transform="rotate(-90 ${size/2} ${size/2})"><title>${s.label}: ${Math.round(frac*100)}%</title></circle>`;
+    offset += len;
+    return circle;
+  }).join('');
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="Allocazione capitale">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--bg-soft)" stroke-width="${stroke}"></circle>
+    ${arcs}
+  </svg>`;
+}
+
+function renderDashCharts(mine, totInvested){
+  const wrap = document.getElementById('dash-charts');
+  if(!mine.length){
+    wrap.innerHTML = `<div class="chart-card"><h3>Composizione del portafoglio</h3><p class="dash-empty">Non hai ancora investimenti da mostrare qui. Vai su "Investi" per iniziare.</p></div>`;
+    return;
+  }
+  const flipAmt = mine.filter(p=>p.type==='flipping').reduce((s,p)=>s+p.myAmount,0);
+  const crowdAmt = mine.filter(p=>p.type==='crowdfunding').reduce((s,p)=>s+p.myAmount,0);
+  const flipPct = totInvested ? Math.round(flipAmt/totInvested*100) : 0;
+  const crowdPct = totInvested ? 100-flipPct : 0;
+
+  const maxRoi = Math.max(...mine.map(p=>p.roi));
+  const roiRows = [...mine].sort((a,b)=>b.roi-a.roi).map(p=>`
+    <div class="rank-row" title="${p.title}">
+      <div class="rlabel">${p.title}</div>
+      <div class="rtrack"><div class="rfill mine" style="width:${Math.max(p.roi/maxRoi*100,3)}%"></div></div>
+      <div class="rval">${p.roi}%</div>
+    </div>`).join('');
+
+  wrap.innerHTML = `
+    <div class="chart-card">
+      <h3>Composizione del portafoglio</h3>
+      <div class="csub">Capitale investito per tipo di operazione</div>
+      <div class="donut-wrap">
+        ${donutSvg([{value:flipAmt,color:'var(--brick)',label:'Flipping'},{value:crowdAmt,color:'var(--petrol)',label:'Crowdfunding'}], 116, 20)}
+        <div class="donut-legend">
+          <div class="li"><span class="dot flip"></span><div><div>Flipping</div><div class="sub">${eur(flipAmt)} · ${flipPct}%</div></div></div>
+          <div class="li"><span class="dot crowd"></span><div><div>Crowdfunding</div><div class="sub">${eur(crowdAmt)} · ${crowdPct}%</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Rendimento stimato per operazione</h3>
+      <div class="csub">Confronto tra le operazioni che hai in portafoglio</div>
+      ${roiRows}
+    </div>
+  `;
 }
 function setDashFilter(cat, el){
   state.dashFilter = cat;
@@ -1316,14 +1434,36 @@ function renderFiscal(){
    ============================================================ */
 function renderBackoffice(){
   document.getElementById('bo-updated').textContent = `Ultimo aggiornamento: ${ZONE_SCORES_UPDATED}`;
-  document.getElementById('backoffice-body').innerHTML = ZONE_SCORES.map(z=>`<tr>
-    <td class="zona">${z.zona}${z.dato_da_verificare?' <span class="bo-flag">★</span>':''}</td>
+
+  const top = ZONE_SCORES.slice(0, 8);
+  document.getElementById('rank-chart-body').innerHTML = top.map(z=>{
+    const short = z.zona.split(',')[0].trim();
+    const cls = z.fascia.toLowerCase();
+    return `
+    <div class="rank-row" title="${z.zona}">
+      <div class="rlabel">${short}</div>
+      <div class="rtrack"><div class="rfill ${cls}" style="width:${Math.max(z.punteggio,2)}%"></div></div>
+      <div class="rval">${z.punteggio.toFixed(1)}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('backoffice-body').innerHTML = ZONE_SCORES.map((z,i)=>`<tr class="bo-row" onclick="toggleBoDetail(${i})" id="bo-row-${i}">
+    <td class="zona">${z.zona}${z.dato_da_verificare?' <span class="bo-flag">★</span>':''}<span class="chev">▶</span></td>
     <td class="num">${z.punteggio.toFixed(1)}</td>
     <td><span class="bo-fascia ${z.fascia.toLowerCase()}">${z.fascia}</span></td>
     <td class="num">${z.rendimento_lordo_pct.toFixed(2)}%</td>
+    <td class="num">${z.rendimento_netto_pct.toFixed(2)}%</td>
+    <td class="num bo-affid ${z.indice_affidabilita_pct<70?'low':''}">${z.indice_affidabilita_pct.toFixed(0)}/100</td>
     <td class="num">${z.var_vendita_pct>0?'+':''}${z.var_vendita_pct.toFixed(1)}%</td>
     <td class="num">${z.var_affitto_pct>0?'+':''}${z.var_affitto_pct.toFixed(1)}%</td>
-  </tr>`).join('');
+  </tr>
+  <tr class="bo-detail hidden" id="bo-detail-${i}"><td colspan="8">
+    <span class="ai-tag">Spiegazione generata dai dati</span><br>${z.spiegazione}
+  </td></tr>`).join('');
+}
+function toggleBoDetail(i){
+  document.getElementById('bo-row-'+i).classList.toggle('open');
+  document.getElementById('bo-detail-'+i).classList.toggle('hidden');
 }
 
 /* ============================================================
@@ -1333,7 +1473,7 @@ let aiInited = false;
 function renderAiInit(){
   if(aiInited) return;
   aiInited = true;
-  addAiMsg('bot', `Ciao Marco 👋 Sono il consulente IA di RealFlipping. Posso calcolare il tuo rendimento reale sul portafoglio, darti i dati di un singolo progetto per nome, confrontarlo con le altre operazioni della piattaforma, e rispondere su fiscalità e funzionamento di flipping e crowdfunding. Se non riesco a risponderti, ti metto in contatto con un consulente fisico.`);
+  addAiMsg('bot', `Ciao Marco 👋 Sono il consulente IA di RealFlipping. Posso calcolare il tuo rendimento reale sul portafoglio, simulare un importo su un progetto specifico, confrontarlo o classificarlo rispetto alle altre operazioni, darti un'analisi descrittiva della diversificazione del tuo portafoglio e rispondere su fiscalità e funzionamento di flipping e crowdfunding. Se non riesco a risponderti, ti metto in contatto con un consulente fisico.`);
 }
 function addAiMsg(type, text){
   const wrap = document.getElementById('ai-msgs');
@@ -1367,6 +1507,32 @@ function categoryAverage(p){
   if(!peers.length) return null;
   return peers.reduce((s,x)=>s+x.roi,0)/peers.length;
 }
+/* Estrae un importo in euro da un testo libero, gestendo formati italiani
+   comuni (1.500 / 1500 / 1.500,50 / 5k / 5 mila). Ritorna null se non trova
+   nulla che assomigli a un importo. */
+function parseAmount(text){
+  const m = text.match(/(\d[\d.,]*)\s*(k|mila)?/i);
+  if(!m) return null;
+  let raw = m[1];
+  if(raw.includes('.') && raw.includes(',')){
+    raw = raw.replace(/\./g,'').replace(',', '.');
+  } else if(raw.includes(',')){
+    const dec = raw.split(',')[1] || '';
+    raw = dec.length===3 ? raw.replace(/,/g,'') : raw.replace(',', '.');
+  } else if(raw.includes('.')){
+    const parts = raw.split('.');
+    if(parts.length>1 && parts[parts.length-1].length===3) raw = raw.replace(/\./g,'');
+  }
+  let val = parseFloat(raw);
+  if(isNaN(val)) return null;
+  if(m[2]) val *= 1000;
+  return val;
+}
+function rankOpenProjects(){
+  return PROJECTS.filter(p=>!p.closed && !p.invested).slice().sort((a,b)=>b.roi-a.roi);
+}
+function estimateReturn(p, amt){ return amt * (1 + p.roi/100); }
+
 function askAi(text){
   addAiMsg('user', text);
   const lower = text.toLowerCase();
@@ -1378,8 +1544,54 @@ function askAi(text){
 
   const mentioned = findProjectMention(lower);
   const compareWords = ['confront','posizion','rispetto alle altre','media','comparabil'];
+  const simWords = ['se investissi','se investo','quanto guadagn','simula','simulazione','ritorno se'];
+  const bestWords = ['rendimento più alto','miglior rendimento','migliore operazione','miglior operazione','quale operazione conviene','top operazione','operazione migliore'];
+  const openWords = ['campagn','in raccolta','raccolta fondi aperte','operazioni aperte','cosa posso finanziare'];
+  const diversifyWords = ['diversificat','diversificaz','troppo concentrato','equilibrat','distribuzione del portafoglio','distribuzione portafoglio'];
+  const amt = parseAmount(text);
 
   setTimeout(()=>{
+    if(simWords.some(w=>lower.includes(w))){
+      if(mentioned && amt){
+        const est = estimateReturn(mentioned, amt);
+        addAiMsg('bot', `Investendo <b>${eur(amt)}</b> in <b>${mentioned.title}</b> (rendimento stimato ${mentioned.roi}%, durata ${mentioned.duration}), il ritorno stimato a fine operazione è di circa <b>${eur(est)}</b> — cioè un guadagno stimato di <b>${eur(est-amt)}</b>. È una proiezione sul business plan del progetto, non una garanzia di rendimento.`);
+      } else if(amt && !mentioned){
+        addAiMsg('bot', `Per simulare un importo mi serve sapere su quale operazione — dimmi il nome del progetto (es. "quanto guadagnerei investendo ${eur(amt)} in Casa Alloro?") oppure guarda la scheda del progetto in "Investi": trovi la stessa simulazione con il campo importo.`);
+      } else if(mentioned && !amt){
+        addAiMsg('bot', `Dimmi anche un importo — es. "quanto guadagnerei investendo 5.000€ in ${mentioned.title}?" — e ti calcolo la stima.`);
+      } else {
+        escalate(text);
+      }
+      return;
+    }
+    if(bestWords.some(w=>lower.includes(w))){
+      const top = rankOpenProjects().slice(0,3);
+      if(!top.length){ addAiMsg('bot', `Al momento non ci sono operazioni aperte disponibili su cui investire.`); return; }
+      const list = top.map((p,i)=>`${i+1}. <b>${p.title}</b> — ${p.type==='flipping'?'Flipping':'Crowdfunding · '+p.category}, rendimento stimato <b>${p.roi}%</b>, durata ${p.duration}`).join('<br>');
+      addAiMsg('bot', `Le operazioni disponibili con il rendimento stimato più alto in questo momento sono:<br>${list}<br><br>Rendimento più alto non significa automaticamente scelta migliore per te: durata, rischio e categoria contano quanto il numero. Trovi il dettaglio di ognuna nella sezione "Investi".`);
+      return;
+    }
+    if(openWords.some(w=>lower.includes(w))){
+      const open = PROJECTS.filter(p=>p.type==='crowdfunding' && !p.closed && p.target);
+      if(!open.length){ addAiMsg('bot', `Non ci sono campagne di crowdfunding in raccolta al momento.`); return; }
+      const list = open.map(p=>`<b>${p.title}</b> (${p.city}) — ${Math.round(p.raised/p.target*100)}% raccolto, ticket minimo ${eur(p.minTicket)}${p.invested?' · già in portafoglio':''}`).join('<br>');
+      addAiMsg('bot', `Campagne di crowdfunding attualmente in raccolta:<br>${list}`);
+      return;
+    }
+    if(diversifyWords.some(w=>lower.includes(w))){
+      const {mine, totInvested} = portfolioStats();
+      if(!mine.length){ addAiMsg('bot', `Non hai ancora investimenti in portafoglio, quindi non c'è ancora una composizione da analizzare — trovi le operazioni aperte in "Investi".`); return; }
+      const flipPct = totInvested ? Math.round(mine.filter(p=>p.type==='flipping').reduce((s,p)=>s+p.myAmount,0)/totInvested*100) : 0;
+      const crowdPct = 100-flipPct;
+      const cats = {};
+      mine.filter(p=>p.type==='crowdfunding').forEach(p=>{ cats[p.category]=(cats[p.category]||0)+p.myAmount; });
+      const catTxt = Object.keys(cats).length ? Object.entries(cats).map(([k,v])=>`${k} ${Math.round(v/totInvested*100)}%`).join(', ') : null;
+      const maxSingle = Math.max(...mine.map(p=>p.myAmount/totInvested*100));
+      addAiMsg('bot', `Il tuo portafoglio è per <b>${flipPct}%</b> in flipping e <b>${crowdPct}%</b> in crowdfunding${catTxt?` (crowdfunding per categoria: ${catTxt})`:''}. La singola operazione più pesante vale il <b>${Math.round(maxSingle)}%</b> del tuo capitale investito.` +
+        (maxSingle>40 ? ` È una concentrazione piuttosto alta su un'unica operazione: molti investitori preferiscono restare sotto il 30-40% per singola operazione, per limitare l'impatto se un singolo progetto va peggio del previsto.` : ` Non risultano concentrazioni eccessive su una singola operazione.`) +
+        ` Questa è un'osservazione descrittiva sui tuoi dati, non una raccomandazione personalizzata: per una valutazione sul tuo caso specifico rivolgiti a un consulente abilitato.`);
+      return;
+    }
     if(mentioned && compareWords.some(w=>lower.includes(w))){
       const avg = categoryAverage(mentioned);
       const diff = avg!=null ? (mentioned.roi-avg) : null;
