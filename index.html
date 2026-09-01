@@ -131,6 +131,7 @@ img{display:block;}
 .stat-strip{display:flex;gap:34px;margin-top:44px;padding-top:24px;border-top:1px solid var(--line);}
 .stat-strip .num{font-family:'IBM Plex Mono',monospace;font-size:21px;font-weight:600;}
 .stat-strip .lab{font-size:11.5px;color:var(--ink-soft);margin-top:4px;}
+.stat-strip-note{font-size:11px;color:var(--ink-faint);margin-top:10px;max-width:46ch;}
 
 .hero-visual{position:relative;border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg);aspect-ratio:1/1.02;}
 .hero-visual img{width:100%;height:100%;object-fit:cover;}
@@ -339,11 +340,11 @@ footer.site{border-top:1px solid var(--line);padding:32px 32px;max-width:1200px;
 .chip.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
 
 /* project detail */
-#view-project .backlink{
+.backlink{
   font-size:13px;font-weight:600;color:var(--ink-soft);display:inline-flex;gap:6px;align-items:center;
-  margin-bottom:18px;border:none;background:none;padding:0;
+  margin-bottom:18px;border:none;background:none;padding:0;cursor:pointer;
 }
-#view-project .backlink:hover{color:var(--ink);}
+.backlink:hover{color:var(--ink);}
 .proj-head{display:grid;grid-template-columns:1.3fr 0.9fr;gap:32px;margin-bottom:10px;}
 .proj-title-row h1{font-size:29px;}
 .proj-meta{display:flex;gap:22px;margin-top:12px;flex-wrap:wrap;}
@@ -427,6 +428,8 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
 .bo-updated{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--sage);font-weight:600;}
 .bo-note code{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--white);border:1px solid var(--line);border-radius:5px;padding:1px 5px;}
 .bo-flag{color:var(--brass-deep);font-weight:700;}
+.bo-city-note{font-size:12px;color:var(--brass-deep);background:var(--brass-tint);border:1px solid #EBD3AE;border-radius:10px;padding:10px 14px;margin-bottom:16px;line-height:1.5;}
+.bo-city-note.hidden{display:none;}
 .bo-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--white);}
 .bo-table{width:100%;border-collapse:collapse;font-size:13px;min-width:680px;}
 .bo-table th{text-align:left;font-size:11px;font-weight:700;color:var(--ink-soft);padding:12px 16px;background:var(--bg-soft);white-space:nowrap;}
@@ -520,7 +523,7 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
 <body>
 
 <div id="topnav">
-  <button id="sidebar-toggle" class="hidden" onclick="toggleSidebar()" aria-label="Apri il menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  <button id="sidebar-toggle" class="hidden" onclick="toggleSidebar()" aria-label="Apri il menu" data-i18n-aria="sidebar_toggle_aria"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
   <div class="logo"><span class="mark"></span>RealFlipping</div>
   <div class="navlinks" id="app-navlinks"></div>
   <div class="navcta" id="navcta"></div>
@@ -530,23 +533,24 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
 <div id="view-landing">
   <section class="hero">
     <div>
-      <div class="eyebrow">Flipping &amp; crowdfunding immobiliare</div>
-      <h1>Investi nel <em>mattone</em>,<br>con i numeri in tasca.</h1>
-      <p class="lead">RealFlipping seleziona operazioni di ristrutturazione e valorizzazione immobiliare in Italia. Scegli un'operazione intera di flipping o una quota in crowdfunding, segui ogni fase con dati reali e ricevi consulenza — umana quando serve.</p>
+      <div class="eyebrow" data-i18n="landing_eyebrow">Flipping &amp; crowdfunding immobiliare</div>
+      <h1 data-i18n="landing_h1">Investi nel <em>mattone</em>,<br>con i numeri in tasca.</h1>
+      <p class="lead" data-i18n="landing_lead">RealFlipping seleziona operazioni di ristrutturazione e valorizzazione immobiliare in Italia. Scegli un'operazione intera di flipping o una quota in crowdfunding, segui ogni fase con dati reali e ricevi consulenza — umana quando serve.</p>
       <div class="hero-actions">
-        <button class="btn brass" onclick="openLogin()">Accedi alla piattaforma</button>
-        <button class="btn outline" onclick="scrollToId('landing-projects')">Guarda i progetti</button>
+        <button class="btn brass" onclick="openLogin()" data-i18n="landing_btn_accedi">Accedi alla piattaforma</button>
+        <button class="btn outline" onclick="scrollToId('landing-projects')" data-i18n="landing_btn_progetti">Guarda i progetti</button>
       </div>
       <div class="stat-strip">
-        <div class="s"><div class="num">€14,2M</div><div class="lab">Capitale gestito</div></div>
-        <div class="s"><div class="num">37</div><div class="lab">Operazioni chiuse</div></div>
-        <div class="s"><div class="num">15,8%</div><div class="lab">Rendimento medio</div></div>
+        <div class="s"><div class="num">€14,2M</div><div class="lab" data-i18n="stat_capitale">Capitale gestito</div></div>
+        <div class="s"><div class="num">37</div><div class="lab" data-i18n="stat_operazioni">Operazioni chiuse</div></div>
+        <div class="s"><div class="num">15,8%</div><div class="lab" data-i18n="stat_rendimento">Rendimento medio</div></div>
       </div>
+      <div class="stat-strip-note" data-i18n="stat_note">Numeri dimostrativi di questo prototipo, non risultati reali — nessuna operazione è ancora stata chiusa sulla piattaforma.</div>
     </div>
     <div class="hero-visual">
-      <img src="https://images.unsplash.com/photo-1648425731270-ebd373a19149?auto=format&fit=crop&w=1000&q=75" alt="Interno ristrutturato">
+      <img src="https://images.unsplash.com/photo-1648425731270-ebd373a19149?auto=format&fit=crop&w=1000&q=75" alt="Interno ristrutturato" data-i18n-alt="landing_hero_alt">
       <div class="hero-float">
-        <div><div class="t1">Casa Alloro — Palermo</div><div class="t2">Ristrutturazione completata</div></div>
+        <div><div class="t1">Casa Alloro — Palermo</div><div class="t2" data-i18n="hero_float_t2">Ristrutturazione completata</div></div>
         <div class="roiflag">+14,1%</div>
       </div>
     </div>
@@ -554,58 +558,118 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
 
   <section class="section">
     <div class="section-head">
-      <h2>Come funziona</h2>
-      <p>Due modalità di accesso al mattone, un solo cruscotto per seguirle entrambe.</p>
+      <h2 data-i18n="how_h2">Come funziona</h2>
+      <p data-i18n="how_p">Due modalità di accesso al mattone, un solo cruscotto per seguirle entrambe.</p>
     </div>
     <div class="howgrid">
       <div class="howcard">
-        <div class="n">01 — ACCESSO</div>
-        <h3>Entri con le tue credenziali</h3>
-        <p>Un'unica dashboard personale mostra ciò in cui hai investito, categorizzato per flipping e crowdfunding, con aggiornamenti visivi e statistici in tempo reale.</p>
+        <div class="n" data-i18n="how1_n">01 — ACCESSO</div>
+        <h3 data-i18n="how1_h3">Entri con le tue credenziali</h3>
+        <p data-i18n="how1_p">Un'unica dashboard personale mostra ciò in cui hai investito, categorizzato per flipping e crowdfunding, con aggiornamenti visivi e statistici in tempo reale.</p>
       </div>
       <div class="howcard">
-        <div class="n">02 — SCELTA</div>
-        <h3>Flipping intero o quota in crowdfunding</h3>
-        <p>Nel flipping rilevi l'intera operazione. Nel crowdfunding scegli la categoria e l'importo: vedi costi, business plan e tempistiche prima di decidere.</p>
+        <div class="n" data-i18n="how2_n">02 — SCELTA</div>
+        <h3 data-i18n="how2_h3">Flipping intero o quota in crowdfunding</h3>
+        <p data-i18n="how2_p">Nel flipping rilevi l'intera operazione. Nel crowdfunding scegli la categoria e l'importo: vedi costi, business plan e tempistiche prima di decidere.</p>
       </div>
       <div class="howcard">
-        <div class="n">03 — CONTROLLO</div>
-        <h3>Segui cantiere, numeri e fisco</h3>
-        <p>Rendering prima/dopo, avanzamento lavori e una dashboard fiscale dedicata. Per tutto il resto, il consulente IA — o un consulente in carne e ossa.</p>
+        <div class="n" data-i18n="how3_n">03 — CONTROLLO</div>
+        <h3 data-i18n="how3_h3">Segui cantiere, numeri e fisco</h3>
+        <p data-i18n="how3_p">Rendering prima/dopo, avanzamento lavori e una dashboard fiscale dedicata. Per tutto il resto, il consulente IA — o un consulente in carne e ossa.</p>
       </div>
     </div>
   </section>
 
   <section class="section" id="landing-projects" style="background:var(--bg-soft);border-radius:28px;max-width:1200px;">
     <div class="section-head">
-      <h2>Operazioni in raccolta ora</h2>
-      <p>Un'anteprima. Accedi per vedere business plan, tempistiche e rendimento stimato completi.</p>
+      <h2 data-i18n="projects_h2">Operazioni in raccolta ora</h2>
+      <p data-i18n="projects_p">Un'anteprima. Accedi per vedere business plan, tempistiche e rendimento stimato completi.</p>
     </div>
     <div class="landing-projects" id="landing-projects-grid"></div>
   </section>
 
   <footer class="site">
-    <div>© 2026 RealFlipping S.r.l. — Piattaforma di flipping e crowdfunding immobiliare.</div>
-    <div>Il valore dell'investimento immobiliare può diminuire. Documentazione precontrattuale disponibile per ogni progetto.</div>
+    <div data-i18n="footer_copy">© 2026 RealFlipping S.r.l. — Piattaforma di flipping e crowdfunding immobiliare.</div>
+    <div data-i18n="footer_risk">Il valore dell'investimento immobiliare può diminuire. Documentazione precontrattuale disponibile per ogni progetto.</div>
+    <div><a href="#" onclick="showAbout();return false;" style="text-decoration:underline;" data-i18n="footer_about_link">Chi siamo &amp; round Pre-Seed</a></div>
   </footer>
+</div>
+
+<!-- ============ CHI SIAMO / PRE-SEED (pagina pubblica, non richiede login) ============ -->
+<div id="view-about" class="hidden">
+  <section class="section" style="max-width:900px;">
+    <button class="backlink" onclick="hideAbout()" style="margin-bottom:18px;" data-i18n="about_back">← Torna al sito</button>
+    <div class="eyebrow" data-i18n="about_eyebrow">RealFlipping, l'azienda</div>
+    <h1 style="font-size:clamp(30px,4vw,42px);line-height:1.1;margin-bottom:16px;" data-i18n="about_h1">Chi siamo, cosa cerchiamo, dove andiamo.</h1>
+    <p class="lead" style="max-width:62ch;" data-i18n="about_lead">Questa pagina non riguarda gli investimenti immobiliari sulla piattaforma — è per chi vuole saperne di più su RealFlipping come startup: round Pre-Seed, team che stiamo costruendo e metodo dietro il prodotto.</p>
+
+    <div class="card-block" style="margin-top:36px;">
+      <h3 data-i18n="about_mission_h3">La missione</h3>
+      <p style="font-size:14px;color:var(--ink-soft);line-height:1.7;" data-i18n="about_mission_p">RealFlipping vuole rendere l'investimento immobiliare — oggi riservato a chi ha molto capitale o molto tempo — accessibile a investitori grandi e piccoli, con un motore di analisi che stima il rendimento delle operazioni prima ancora di visitarle. Partiamo dal mercato italiano, con Palermo come primo laboratorio per il motore di scoring di zona.</p>
+    </div>
+
+    <div class="card-block">
+      <h3 data-i18n="about_method_h3">Il metodo, in breve</h3>
+      <p style="font-size:14px;color:var(--ink-soft);line-height:1.7;" data-i18n="about_method_p">Ogni operazione proposta su RealFlipping nasce da un motore quantitativo che analizza rendimento locativo, trend dei prezzi di vendita e degli affitti per singola zona, penalizzando i dati statisticamente poco affidabili invece di ignorarli. Il risultato è un punteggio di investibilità 0–100 — non un'opinione, un numero verificabile e ricalcolabile. I dettagli tecnici del motore sono nel nostro repository pubblico.</p>
+    </div>
+
+    <div class="card-block">
+      <h3 data-i18n="about_roadmap_h3">Roadmap</h3>
+      <div class="timeline">
+        <div class="tl-item done"><div class="tl-dot"></div><div><h4 data-i18n="rm1_h4">MVP — Dashboard IA di analisi di mercato</h4><div class="tl-date" data-i18n="rm1_date">In corso</div><p data-i18n="rm1_p">Motore di scoring zona, consulente IA, dashboard investitore — quello che vedi in questa demo.</p></div></div>
+        <div class="tl-item now"><div class="tl-dot"></div><div><h4 data-i18n="rm2_h4">Prime operazioni reali e round Pre-Seed</h4><div class="tl-date" data-i18n="rm2_date">Prossimo passo</div><p data-i18n="rm2_p">Strutturazione delle prime operazioni di flipping/crowdfunding a Palermo, raccolta di un round Pre-Seed per finanziare team e primo capitale operativo.</p></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div><h4 data-i18n="rm3_h4">App per cercare, comprare e affittare casa</h4><div class="tl-date" data-i18n="rm3_date">Dopo il lancio investitori</div><p data-i18n="rm3_p">Estensione oltre gli investitori: un'app per chi cerca casa, con commissioni più basse delle agenzie tradizionali.</p></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div><h4 data-i18n="rm4_h4">Agenzia di compravendita e mercato secondario</h4><div class="tl-date" data-i18n="rm4_date">Fase successiva</div><p data-i18n="rm4_p">Seconda società per la compravendita immobiliare; per il crowdfunding, un mercato secondario che permetta di rivendere le proprie quote invece di restare vincolati a fine operazione.</p></div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div><h4 data-i18n="rm5_h4">Espansione oltre l'Italia</h4><div class="tl-date" data-i18n="rm5_date">Lungo termine</div><p data-i18n="rm5_p">Stessa metodologia di scoring applicata ad altri mercati dove il flipping immobiliare è forte — Europa, poi oltre.</p></div></div>
+      </div>
+    </div>
+
+    <div class="card-block">
+      <h3 data-i18n="about_team_h3">Cosa cerchiamo ora</h3>
+      <div class="howgrid" style="grid-template-columns:repeat(3,1fr);gap:16px;">
+        <div class="howcard" style="background:var(--white);border:1px solid var(--line);">
+          <div class="n" data-i18n="team_tag">TEAM</div>
+          <h3 style="font-size:15.5px;" data-i18n="team1_h3">Laureando/a in Intelligenza Artificiale</h3>
+          <p data-i18n="team1_p">Per far evolvere il motore di scoring e il consulente IA oltre il prototipo.</p>
+        </div>
+        <div class="howcard" style="background:var(--white);border:1px solid var(--line);">
+          <div class="n" data-i18n="team_tag">TEAM</div>
+          <h3 style="font-size:15.5px;" data-i18n="team2_h3">Ingegnere informatico</h3>
+          <p data-i18n="team2_p">Per costruire il prodotto oltre la demo: backend, dati reali, sicurezza.</p>
+        </div>
+        <div class="howcard" style="background:var(--white);border:1px solid var(--line);">
+          <div class="n" data-i18n="team_tag">TEAM</div>
+          <h3 style="font-size:15.5px;" data-i18n="team3_h3">Esperto immobiliare / acquisitions</h3>
+          <p data-i18n="team3_p">Con esperienza operativa sul mercato di Palermo, per le prime operazioni reali.</p>
+        </div>
+      </div>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-top:16px;line-height:1.6;" data-i18n="about_preseed_note">Round Pre-Seed in corso — cerchiamo un business angel o investitore privato che creda nel metodo. Dettagli su importo, quota ed exit su richiesta.</p>
+    </div>
+
+    <div class="card-block" style="text-align:center;">
+      <h3 data-i18n="about_talk_h3">Parliamone</h3>
+      <p style="font-size:14px;color:var(--ink-soft);margin-bottom:16px;" data-i18n="about_talk_p">Scrivici per il round, per unirti al team o per una demo del motore di scoring.</p>
+      <a class="btn brass" href="mailto:team@realflipping.it" data-i18n="about_talk_btn">Scrivi a team@realflipping.it</a>
+    </div>
+  </section>
 </div>
 
 <!-- ============ LOGIN MODAL ============ -->
 <div id="login-overlay" class="hidden">
   <div class="login-box">
     <button class="close" onclick="closeLogin()">✕</button>
-    <h3>Bentornato</h3>
-    <p class="sub">Accedi con le tue credenziali investitore.</p>
+    <h3 data-i18n="login_h3">Bentornato</h3>
+    <p class="sub" data-i18n="login_sub">Accedi con le tue credenziali investitore.</p>
     <div class="field">
-      <label>Email</label>
-      <input type="email" id="login-email" placeholder="nome@esempio.it" value="investitore@realflipping.it">
+      <label data-i18n="login_email_label">Email</label>
+      <input type="email" id="login-email" placeholder="nome@esempio.it" value="investitore@realflipping.it" data-i18n-placeholder="login_email_placeholder">
     </div>
     <div class="field">
-      <label>Password</label>
+      <label data-i18n="login_pass_label">Password</label>
       <input type="password" id="login-pass" placeholder="••••••••" value="••••••••">
     </div>
-    <button class="btn brass" onclick="doLogin()">Accedi alla dashboard</button>
-    <div class="login-note">Ambiente dimostrativo — qualsiasi credenziale è accettata.</div>
+    <button class="btn brass" onclick="doLogin()" data-i18n="login_btn">Accedi alla dashboard</button>
+    <div class="login-note" data-i18n="login_note">Ambiente dimostrativo — qualsiasi credenziale è accettata.</div>
   </div>
 </div>
 
@@ -617,43 +681,43 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
       <div class="avatar">MV</div>
       <div>
         <h3>Marco V.</h3>
-        <div class="sub">investitore@realflipping.it · Piano <span class="plan-badge" id="account-plan-badge">Pro</span></div>
+        <div class="sub">investitore@realflipping.it · <span data-i18n="account_plan_word">Piano</span> <span class="plan-badge" id="account-plan-badge">Pro</span></div>
       </div>
     </div>
 
     <div class="account-section">
-      <h4>Piano di abbonamento</h4>
+      <h4 data-i18n="account_plan_h4">Piano di abbonamento</h4>
       <div class="plan-options" id="plan-options">
         <button class="plan-option" data-plan="Basic" onclick="setPlan('Basic')">
           <div class="plan-option-name">Basic</div>
-          <div class="plan-option-price">Gratis</div>
-          <div class="plan-option-desc">Dashboard, elenco operazioni, fiscalità stimata.</div>
+          <div class="plan-option-price" data-i18n="plan_free">Gratis</div>
+          <div class="plan-option-desc" data-i18n="plan_basic_desc">Dashboard, elenco operazioni, fiscalità stimata.</div>
           <span class="check">✓</span>
         </button>
         <button class="plan-option" data-plan="Standard" onclick="setPlan('Standard')">
           <div class="plan-option-name">Standard</div>
           <div class="plan-option-price">€9/mese</div>
-          <div class="plan-option-desc">+ Consulente IA senza limiti, notifiche in tempo reale.</div>
+          <div class="plan-option-desc" data-i18n="plan_standard_desc">+ Consulente IA senza limiti, notifiche in tempo reale.</div>
           <span class="check">✓</span>
         </button>
         <button class="plan-option" data-plan="Pro" onclick="setPlan('Pro')">
           <div class="plan-option-name">Pro</div>
           <div class="plan-option-price">€29/mese</div>
-          <div class="plan-option-desc">+ Accesso prioritario alle nuove operazioni, report fiscale annuale.</div>
+          <div class="plan-option-desc" data-i18n="plan_pro_desc">+ Accesso prioritario alle nuove operazioni, report fiscale annuale.</div>
           <span class="check">✓</span>
         </button>
         <button class="plan-option" data-plan="Elite" onclick="setPlan('Elite')">
           <div class="plan-option-name">Elite</div>
           <div class="plan-option-price">€79/mese</div>
-          <div class="plan-option-desc">+ Consulente dedicato, ticket minimo ridotto, anteprima esclusiva.</div>
+          <div class="plan-option-desc" data-i18n="plan_elite_desc">+ Consulente dedicato, ticket minimo ridotto, anteprima esclusiva.</div>
           <span class="check">✓</span>
         </button>
       </div>
     </div>
 
     <div class="account-section">
-      <h4>Impostazioni</h4>
-      <label style="font-size:12px;color:var(--ink-soft);margin-bottom:6px;font-weight:600;display:block;">Lingua</label>
+      <h4 data-i18n="account_settings_h4">Impostazioni</h4>
+      <label style="font-size:12px;color:var(--ink-soft);margin-bottom:6px;font-weight:600;display:block;" data-i18n="account_lang_label">Lingua</label>
       <select class="account-select" id="account-lang" onchange="setLanguage(this.value)">
         <option value="it">Italiano</option>
         <option value="en">English</option>
@@ -661,16 +725,16 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
     </div>
 
     <div class="account-section">
-      <h4>Metodo di pagamento predefinito</h4>
+      <h4 data-i18n="account_pay_h4">Metodo di pagamento predefinito</h4>
       <div class="pay-options" id="pay-options">
         <button class="pay-option" data-method="apple" onclick="setPaymentMethod('apple')"><span class="pay-ic">🍎</span>Apple Pay<span class="check">✓</span></button>
         <button class="pay-option" data-method="google" onclick="setPaymentMethod('google')"><span class="pay-ic">G</span>Google Pay<span class="check">✓</span></button>
-        <button class="pay-option" data-method="card" onclick="setPaymentMethod('card')"><span class="pay-ic">💳</span>Carta<span class="check">✓</span></button>
-        <button class="pay-option" data-method="bonifico" onclick="setPaymentMethod('bonifico')"><span class="pay-ic">🏦</span>Bonifico<span class="check">✓</span></button>
+        <button class="pay-option" data-method="card" onclick="setPaymentMethod('card')"><span class="pay-ic">💳</span><span data-i18n="pay_card">Carta</span><span class="check">✓</span></button>
+        <button class="pay-option" data-method="bonifico" onclick="setPaymentMethod('bonifico')"><span class="pay-ic">🏦</span><span data-i18n="pay_bonifico">Bonifico</span><span class="check">✓</span></button>
       </div>
     </div>
 
-    <button class="btn outline" style="width:100%;" onclick="closeAccount()">Chiudi</button>
+    <button class="btn outline" style="width:100%;" onclick="closeAccount()" data-i18n="account_close_btn">Chiudi</button>
   </div>
 </div>
 
@@ -678,13 +742,13 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
 <div id="app-shell" class="hidden">
   <div id="sidebar-overlay" onclick="closeSidebar()"></div>
   <div id="sidebar">
-    <button class="sidelink" data-view="dashboard" onclick="go('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Dashboard</button>
-    <button class="sidelink" data-view="explore" onclick="go('explore')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Investi</button>
-    <button class="sidelink" data-view="fiscal" onclick="go('fiscal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h6"/></svg>Fiscalità</button>
-    <button class="sidelink" data-view="ai" onclick="go('ai')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v1a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M6 20v-1a6 6 0 0112 0v1"/><circle cx="9" cy="7" r=".5"/><circle cx="15" cy="7" r=".5"/></svg>Consulente IA</button>
+    <button class="sidelink" data-view="dashboard" onclick="go('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span data-i18n="side_dashboard">Dashboard</span></button>
+    <button class="sidelink" data-view="explore" onclick="go('explore')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span data-i18n="side_investi">Investi</span></button>
+    <button class="sidelink" data-view="fiscal" onclick="go('fiscal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h6"/></svg><span data-i18n="side_fiscalita">Fiscalità</span></button>
+    <button class="sidelink" data-view="ai" onclick="go('ai')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 014 4v1a4 4 0 01-8 0V6a4 4 0 014-4z"/><path d="M6 20v-1a6 6 0 0112 0v1"/><circle cx="9" cy="7" r=".5"/><circle cx="15" cy="7" r=".5"/></svg><span data-i18n="side_consulente">Consulente IA</span></button>
     <div class="sidedivider">Area interna</div>
-    <button class="sidelink" data-view="backoffice" onclick="go('backoffice')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Backoffice</button>
-    <div class="sidefoot">Prossimo aggiornamento cantiere<br><b class="mono" style="color:var(--ink)">04 AGO 2026</b></div>
+    <button class="sidelink" data-view="backoffice" onclick="go('backoffice')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg><span data-i18n="side_backoffice">Backoffice</span></button>
+    <div class="sidefoot"><span data-i18n="side_next_update">Prossimo aggiornamento cantiere</span><br><b class="mono" style="color:var(--ink)" data-i18n="side_next_update_date">04 AGO 2026</b></div>
   </div>
 
   <div id="main">
@@ -692,15 +756,15 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
     <!-- DASHBOARD -->
     <div id="view-dashboard">
       <div class="pagehead">
-        <div><h1>La tua dashboard</h1><div class="sub">Panoramica del portafoglio — aggiornata al 27 luglio 2026</div></div>
-        <button class="btn brass" onclick="go('explore')">+ Nuovo investimento</button>
+        <div><h1 data-i18n="dash_h1">La tua dashboard</h1><div class="sub" data-i18n="dash_sub">Panoramica del portafoglio — aggiornata al 27 luglio 2026</div></div>
+        <button class="btn brass" onclick="go('explore')" data-i18n="dash_new_btn">+ Nuovo investimento</button>
       </div>
       <div class="kpi-row" id="kpi-row"></div>
       <div class="dash-charts" id="dash-charts"></div>
       <div class="tabset">
-        <button class="tabbtn active" data-cat="all" onclick="setDashFilter('all',this)">Tutti gli investimenti</button>
-        <button class="tabbtn" data-cat="flipping" onclick="setDashFilter('flipping',this)">Flipping interi</button>
-        <button class="tabbtn" data-cat="crowdfunding" onclick="setDashFilter('crowdfunding',this)">Crowdfunding</button>
+        <button class="tabbtn active" data-cat="all" onclick="setDashFilter('all',this)" data-i18n="tab_all">Tutti gli investimenti</button>
+        <button class="tabbtn" data-cat="flipping" onclick="setDashFilter('flipping',this)" data-i18n="tab_flipping">Flipping interi</button>
+        <button class="tabbtn" data-cat="crowdfunding" onclick="setDashFilter('crowdfunding',this)" data-i18n="tab_crowdfunding">Crowdfunding</button>
       </div>
       <div class="inv-grid" id="dash-grid"></div>
     </div>
@@ -708,7 +772,7 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
     <!-- EXPLORE -->
     <div id="view-explore" class="hidden">
       <div class="pagehead">
-        <div><h1>Investi</h1><div class="sub">Operazioni aperte alla raccolta o disponibili come flipping intero</div></div>
+        <div><h1 data-i18n="explore_h1">Investi</h1><div class="sub" data-i18n="explore_sub">Operazioni aperte alla raccolta o disponibili come flipping intero</div></div>
       </div>
       <div class="filterbar" id="explore-filters"></div>
       <div class="inv-grid" id="explore-grid"></div>
@@ -720,43 +784,33 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
     <!-- FISCAL -->
     <div id="view-fiscal" class="hidden">
       <div class="pagehead">
-        <div><h1>Fiscalità</h1><div class="sub">Situazione fiscale stimata per ciascun progetto in portafoglio</div></div>
+        <div><h1 data-i18n="fiscal_h1">Fiscalità</h1><div class="sub" data-i18n="fiscal_sub">Situazione fiscale stimata per ciascun progetto in portafoglio</div></div>
       </div>
       <table class="fisc-table">
         <thead><tr>
-          <th>Progetto</th><th>Regime</th><th>Investito</th><th>Plusvalenza stimata</th><th>Imposta stimata</th><th>Aliquota</th>
+          <th data-i18n="fiscal_th_progetto">Progetto</th><th data-i18n="fiscal_th_regime">Regime</th><th data-i18n="fiscal_th_investito">Investito</th><th data-i18n="fiscal_th_plusvalenza">Plusvalenza stimata</th><th data-i18n="fiscal_th_imposta">Imposta stimata</th><th data-i18n="fiscal_th_aliquota">Aliquota</th>
         </tr></thead>
         <tbody id="fiscal-body"></tbody>
       </table>
-      <p class="fisc-note">Le stime fiscali sono indicative e calcolate sul regime di tassazione separata delle plusvalenze immobiliari (operazioni entro 5 anni dall'acquisto) o su imposta sostitutiva ove applicabile ai proventi da crowdfunding immobiliare. Per una valutazione puntuale rivolgiti al tuo commercialista o richiedi il report fiscale annuale generato dalla piattaforma.</p>
+      <p class="fisc-note" data-i18n="fiscal_note">Le stime fiscali sono indicative e calcolate sul regime di tassazione separata delle plusvalenze immobiliari (operazioni entro 5 anni dall'acquisto) o su imposta sostitutiva ove applicabile ai proventi da crowdfunding immobiliare. Per una valutazione puntuale rivolgiti al tuo commercialista o richiedi il report fiscale annuale generato dalla piattaforma.</p>
     </div>
 
     <!-- AI CONSULTANT -->
     <div id="view-ai" class="hidden">
       <div class="pagehead">
-        <div><h1>Consulente IA</h1><div class="sub">Risposte immediate sui tuoi investimenti. Se serve, ti mettiamo in contatto con un consulente fisico.</div></div>
+        <div><h1 data-i18n="ai_h1">Consulente IA</h1><div class="sub" data-i18n="ai_sub">Risposte immediate sui tuoi investimenti. Se serve, ti mettiamo in contatto con un consulente fisico.</div></div>
       </div>
-      <div class="ai-disclaimer">Le risposte si basano sui dati dimostrativi di questa piattaforma (i tuoi progetti e le altre operazioni pubblicate) e non su un'analisi del mercato immobiliare reale. Non costituiscono consulenza finanziaria: per decisioni reali rivolgiti a un consulente abilitato.</div>
+      <div class="ai-disclaimer" data-i18n="ai_disclaimer">Le risposte si basano sui dati dimostrativi di questa piattaforma (i tuoi progetti e le altre operazioni pubblicate) e non su un'analisi del mercato immobiliare reale. Non costituiscono consulenza finanziaria: per decisioni reali rivolgiti a un consulente abilitato.</div>
       <div class="ai-wrap">
         <div class="ai-side">
-          <h3>Prova a chiedere</h3>
-          <button class="ai-suggest" onclick="askAi('Quanto ho investito in totale e qual è il mio rendimento medio?')">Quanto ho investito e qual è il mio rendimento medio?</button>
-          <button class="ai-suggest" onclick="askAi('Come si posiziona Casa Alloro rispetto alle altre operazioni?')">Come si posiziona Casa Alloro rispetto alle altre?</button>
-          <button class="ai-suggest" onclick="askAi('Qual è il rendimento atteso del progetto Casa Alloro?')">Qual è il rendimento atteso del progetto Casa Alloro?</button>
-          <button class="ai-suggest" onclick="askAi('Come vengono tassate le plusvalenze da crowdfunding?')">Come vengono tassate le plusvalenze da crowdfunding?</button>
-          <button class="ai-suggest" onclick="askAi('Posso vendere la mia quota prima della fine del progetto?')">Posso vendere la mia quota prima della fine?</button>
-          <button class="ai-suggest" onclick="askAi('Qual è l\'investimento minimo nel flipping?')">Qual è l'investimento minimo nel flipping?</button>
-          <button class="ai-suggest" onclick="askAi('Quale operazione ha il rendimento più alto disponibile ora?')">Quale operazione ha il rendimento più alto ora?</button>
-          <button class="ai-suggest" onclick="askAi('Quanto guadagnerei investendo 5000€ in Baglio San Vito?')">Quanto guadagnerei investendo 5.000€ in Baglio San Vito?</button>
-          <button class="ai-suggest" onclick="askAi('Il mio portafoglio è diversificato?')">Il mio portafoglio è diversificato?</button>
-          <button class="ai-suggest" onclick="askAi('Quali campagne di crowdfunding sono aperte ora?')">Quali campagne sono aperte ora?</button>
-          <button class="ai-suggest" onclick="askAi('Voglio parlare con un consulente umano')">Voglio parlare con un consulente umano</button>
+          <h3 data-i18n="ai_side_h3">Prova a chiedere</h3>
+          <div id="ai-suggest-list"></div>
         </div>
         <div class="ai-main">
           <div class="ai-msgs" id="ai-msgs"></div>
           <div class="ai-input-row">
-            <input id="ai-input" type="text" placeholder="Scrivi una domanda sui tuoi investimenti…" onkeydown="if(event.key==='Enter')sendAi()">
-            <button class="btn brass sm" onclick="sendAi()">Invia</button>
+            <input id="ai-input" type="text" placeholder="Scrivi una domanda sui tuoi investimenti…" onkeydown="if(event.key==='Enter')sendAi()" data-i18n-placeholder="ai_input_placeholder">
+            <button class="btn brass sm" onclick="sendAi()" data-i18n="ai_send_btn">Invia</button>
           </div>
         </div>
       </div>
@@ -765,19 +819,22 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
     <!-- BACKOFFICE -->
     <div id="view-backoffice" class="hidden">
       <div class="pagehead">
-        <div><h1>Backoffice — Scoring zone</h1><div class="sub">Motore quantitativo di investibilità per zona (MVP interno, non visibile agli investitori). <span id="bo-updated" class="bo-updated"></span></div></div>
+        <div><h1 data-i18n="bo_h1">Backoffice — Scoring zone</h1><div class="sub"><span data-i18n="bo_sub">Motore quantitativo di investibilità per zona (MVP interno, non visibile agli investitori).</span> <span id="bo-updated" class="bo-updated"></span></div></div>
       </div>
-      <div class="bo-note">
-        Punteggio 0–100 calcolato da <code class="mono">tools/palermo_zone_scoring.py</code> su rendimento locativo, trend prezzi di vendita e trend canoni d'affitto, con una penalità quando il dato affitto è statisticamente poco affidabile — nessun LLM coinvolto nel calcolo dei numeri. Le spiegazioni testuali per zona sono generate da un template deterministico che legge quegli stessi numeri (v1.5 del layer "IA racconta i dati", pronto per essere sostituito da una vera chiamata LLM). Base dati: quotazioni immobiliari.it, Palermo, luglio 2026, con una piccola oscillazione <b>simulata</b> generata ogni giorno da <code class="mono">.github/workflows/update-zone-scores.yml</code> per demo — non è un feed di mercato reale. Le righe segnate <span class="bo-flag">★</span> hanno una variazione affitto anomala da verificare con più storico prima di fidarsene. Clicca su una zona per leggere la spiegazione.
+      <div class="bo-note" data-i18n="bo_note">
+        Punteggio 0–100 calcolato da <code class="mono">tools/scoring_engine.py</code> su rendimento locativo, trend prezzi di vendita e trend canoni d'affitto, con una penalità quando il dato affitto è statisticamente poco affidabile — nessun LLM coinvolto nel calcolo dei numeri. Le spiegazioni testuali per zona sono generate da un template deterministico che legge quegli stessi numeri (v1.5 del layer "IA racconta i dati", pronto per essere sostituito da una vera chiamata LLM). I punteggi sono un ranking relativo alle zone della <b>stessa</b> città: non sono comparabili 1:1 tra città diverse. Le righe segnate <span class="bo-flag">★</span> hanno una variazione affitto anomala da verificare con più storico prima di fidarsene. Clicca su una zona per leggere la spiegazione.
       </div>
+      <div class="bo-city-note" id="bo-city-note"></div>
+
+      <div class="tabset" id="bo-city-tabs"></div>
 
       <div class="rank-chart">
-        <h3>Classifica zone per punteggio di investibilità</h3>
-        <div class="rank-sub">Le 8 zone con il punteggio più alto tra quelle analizzate.</div>
+        <h3 data-i18n="rank_h3">Classifica zone per punteggio di investibilità</h3>
+        <div class="rank-sub" data-i18n="rank_sub">Le 8 zone con il punteggio più alto tra quelle analizzate.</div>
         <div class="rank-legend">
-          <span class="li"><span class="dot investire"></span>Investire</span>
-          <span class="li"><span class="dot monitorare"></span>Monitorare</span>
-          <span class="li"><span class="dot evitare"></span>Evitare</span>
+          <span class="li"><span class="dot investire"></span><span data-i18n="fascia_investire">Investire</span></span>
+          <span class="li"><span class="dot monitorare"></span><span data-i18n="fascia_monitorare">Monitorare</span></span>
+          <span class="li"><span class="dot evitare"></span><span data-i18n="fascia_evitare">Evitare</span></span>
         </div>
         <div id="rank-chart-body"></div>
       </div>
@@ -785,12 +842,12 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
       <div class="bo-table-wrap">
         <table class="bo-table">
           <thead><tr>
-            <th>Zona</th><th>Punteggio</th><th>Fascia</th><th>Rend. lordo</th><th>Rend. netto*</th><th>Affidabilità</th><th>Var. vendita</th><th>Var. affitto</th>
+            <th data-i18n="bo_th_zona">Zona</th><th data-i18n="bo_th_punteggio">Punteggio</th><th data-i18n="bo_th_fascia">Fascia</th><th data-i18n="bo_th_rend_lordo">Rend. lordo</th><th data-i18n="bo_th_rend_netto">Rend. netto*</th><th data-i18n="bo_th_affidabilita">Affidabilità</th><th data-i18n="bo_th_var_vendita">Var. vendita</th><th data-i18n="bo_th_var_affitto">Var. affitto</th>
           </tr></thead>
           <tbody id="backoffice-body"></tbody>
         </table>
       </div>
-      <p class="fisc-note">* Rendimento netto: stima di massima al netto di una quota forfettaria di costi ricorrenti (IMU, condominio, manutenzione, gestione) uguale per tutte le zone — non sostituisce un business plan puntuale sul singolo immobile.</p>
+      <p class="fisc-note" data-i18n="bo_footnote">* Rendimento netto: stima di massima al netto di una quota forfettaria di costi ricorrenti (IMU, condominio, manutenzione, gestione) uguale per tutte le zone — non sostituisce un business plan puntuale sul singolo immobile.</p>
     </div>
 
   </div>
@@ -820,6 +877,31 @@ const IMG = {
   painting:  'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=1000&q=75',
 };
 const CANTIERE_IMGS = [IMG.before, IMG.demolition, IMG.framing, IMG.wiring, IMG.painting];
+
+/* Le foto sono ospitate su Unsplash: se la rete dell'utente le blocca o
+   un URL smette di funzionare, mostriamo un placeholder brandizzato
+   invece di un'icona di immagine rotta — un dettaglio che conta quando
+   il sito viene mostrato a un investitore. 'error' non fa bubbling sugli
+   <img>, quindi il listener va registrato in fase di cattura. */
+const PLACEHOLDER_IMG = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#1F3A38"/><stop offset="1" stop-color="#12211f"/>
+  </linearGradient></defs>
+  <rect width="400" height="300" fill="url(#g)"/>
+  <g transform="translate(200,138)" stroke="#FBF2E7" stroke-width="3" fill="none" opacity="0.85" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-32 8 L0 -24 L32 8"/>
+    <rect x="-21" y="8" width="42" height="27" rx="2"/>
+  </g>
+  <text x="200" y="204" font-family="Georgia, 'Times New Roman', serif" font-size="15" fill="#FBF2E7" text-anchor="middle" opacity="0.75">RealFlipping</text>
+</svg>`.trim());
+document.addEventListener('error', function(e){
+  const el = e.target;
+  if(el.tagName === 'IMG' && !el.dataset.fallbackApplied){
+    el.dataset.fallbackApplied = '1';
+    el.src = PLACEHOLDER_IMG;
+  }
+}, true);
 
 /* ============================================================
    MOCK DATA
@@ -933,40 +1015,65 @@ const PROJECTS = [
 
 /* Rigenerato ogni giorno da tools/update_index_scores.py (vedi
    .github/workflows/update-zone-scores.yml) — non modificare a mano,
-   verrebbe sovrascritto al prossimo aggiornamento automatico. */
+   verrebbe sovrascritto al prossimo aggiornamento automatico.
+   ZONE_SCORES_BY_CITY: una città in più = un'altra chiave con lo stesso
+   motore (tools/scoring_engine.py) — vedi tools/milano_zone_scoring.py per
+   com'è fatto un nuovo file città. */
 const ZONE_SCORES_UPDATED = "2026-09-01";
-const ZONE_SCORES = [
-  {zona:"Oreto, Perez, Montegrappa, Guadagna", vendita_mq:1207.71, affitto_mq:9.45, rendimento_lordo_pct:9.39, rendimento_netto_pct:6.76, var_vendita_pct:4.6, var_affitto_pct:13.5, punteggio:87.8, fascia:"Investire", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Oreto, Perez, Montegrappa, Guadagna è in fascia Investire con punteggio 87.8/100: il rendimento locativo lordo stimato (9.39%, circa 6.76% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +4.6%, sopra la media."},
-  {zona:"Calatafimi Bassa, Indipendenza, Zisa, Università", vendita_mq:1357.34, affitto_mq:9.64, rendimento_lordo_pct:8.52, rendimento_netto_pct:6.13, var_vendita_pct:5.9, var_affitto_pct:11.1, punteggio:78.1, fascia:"Investire", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Calatafimi Bassa, Indipendenza, Zisa, Università è in fascia Investire con punteggio 78.1/100: il rendimento locativo lordo stimato (8.52%, circa 6.13% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +5.9%, sopra la media."},
-  {zona:"Ciaculli, Belmonte Chiavelli", vendita_mq:897.55, affitto_mq:6.06, rendimento_lordo_pct:8.1, rendimento_netto_pct:5.83, var_vendita_pct:2.6, var_affitto_pct:11.7, punteggio:69.8, fascia:"Investire", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Ciaculli, Belmonte Chiavelli è in fascia Investire con punteggio 69.8/100: il rendimento locativo lordo stimato (8.1%, circa 5.83% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +2.6%, sotto la media."},
-  {zona:"Giotto Galilei, Palagonia, Noce, Malaspina", vendita_mq:1507.71, affitto_mq:9.69, rendimento_lordo_pct:7.71, rendimento_netto_pct:5.55, var_vendita_pct:-0.3, var_affitto_pct:10.8, punteggio:60.9, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Giotto Galilei, Palagonia, Noce, Malaspina è in fascia Monitorare con punteggio 60.9/100: il rendimento locativo lordo stimato (7.71%, circa 5.55% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di -0.3%, sotto la media."},
-  {zona:"Calatafimi Alta, Santicelli", vendita_mq:1418.51, affitto_mq:7.97, rendimento_lordo_pct:6.74, rendimento_netto_pct:4.85, var_vendita_pct:3.7, var_affitto_pct:17.5, punteggio:58.8, fascia:"Monitorare", indice_affidabilita_pct:90.0, dato_da_verificare:true, spiegazione:"Calatafimi Alta, Santicelli è in fascia Monitorare con punteggio 58.8/100: il rendimento locativo lordo stimato (6.74%, circa 4.85% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +3.7%, sopra la media. Attenzione: la variazione dei canoni d'affitto rilevata (+17.5%) supera la soglia di affidabilità statistica (indice di affidabilità stimato 90.0/100) — probabile bassa liquidità del mercato degli affitti in questa zona: verificare con più storico prima di darle peso."},
-  {zona:"Altarello, Poggio Ridente, Boccadifalco, Baida", vendita_mq:1095.0, affitto_mq:6.86, rendimento_lordo_pct:7.52, rendimento_netto_pct:5.41, var_vendita_pct:3.2, var_affitto_pct:5.5, punteggio:58.4, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Altarello, Poggio Ridente, Boccadifalco, Baida è in fascia Monitorare con punteggio 58.4/100: il rendimento locativo lordo stimato (7.52%, circa 5.41% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +3.2%, sopra la media."},
-  {zona:"Fiera, Montepellegrino", vendita_mq:1661.05, affitto_mq:9.45, rendimento_lordo_pct:6.83, rendimento_netto_pct:4.92, var_vendita_pct:8.7, var_affitto_pct:4.9, punteggio:58.0, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Fiera, Montepellegrino è in fascia Monitorare con punteggio 58.0/100: il rendimento locativo lordo stimato (6.83%, circa 4.92% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +8.7%, sopra la media."},
-  {zona:"Sant'Erasmo, Brancaccio, Sperone, Settecannoli", vendita_mq:1079.41, affitto_mq:6.82, rendimento_lordo_pct:7.58, rendimento_netto_pct:5.46, var_vendita_pct:1.2, var_affitto_pct:2.2, punteggio:53.1, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Sant'Erasmo, Brancaccio, Sperone, Settecannoli è in fascia Monitorare con punteggio 53.1/100: il rendimento locativo lordo stimato (7.58%, circa 5.46% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +1.2%, sotto la media."},
-  {zona:"Arenella, Acquasanta, Vergine Maria", vendita_mq:1691.58, affitto_mq:10.79, rendimento_lordo_pct:7.65, rendimento_netto_pct:5.51, var_vendita_pct:-9.6, var_affitto_pct:11.5, punteggio:48.4, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Arenella, Acquasanta, Vergine Maria è in fascia Monitorare con punteggio 48.4/100: il rendimento locativo lordo stimato (7.65%, circa 5.51% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di -9.6%, sotto la media."},
-  {zona:"Mondello, Sferracavallo, Addaura, Tommaso Natale", vendita_mq:2017.61, affitto_mq:10.38, rendimento_lordo_pct:6.17, rendimento_netto_pct:4.44, var_vendita_pct:9.8, var_affitto_pct:-0.9, punteggio:46.9, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Mondello, Sferracavallo, Addaura, Tommaso Natale è in fascia Monitorare con punteggio 46.9/100: il rendimento locativo lordo stimato (6.17%, circa 4.44% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +9.8%, sopra la media."},
-  {zona:"Lanza di Scalea, Olimpo, Castelforte", vendita_mq:2359.79, affitto_mq:14.92, rendimento_lordo_pct:7.59, rendimento_netto_pct:5.46, var_vendita_pct:-4.9, var_affitto_pct:66.7, punteggio:45.5, fascia:"Monitorare", indice_affidabilita_pct:0.0, dato_da_verificare:true, spiegazione:"Lanza di Scalea, Olimpo, Castelforte è in fascia Monitorare con punteggio 45.5/100: il rendimento locativo lordo stimato (7.59%, circa 5.46% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di -4.9%, sotto la media. Attenzione: la variazione dei canoni d'affitto rilevata (+66.7%) supera la soglia di affidabilità statistica (indice di affidabilità stimato 0.0/100) — probabile bassa liquidità del mercato degli affitti in questa zona: verificare con più storico prima di darle peso."},
-  {zona:"Centro Storico", vendita_mq:1905.21, affitto_mq:11.31, rendimento_lordo_pct:7.12, rendimento_netto_pct:5.13, var_vendita_pct:-1.6, var_affitto_pct:2.6, punteggio:44.9, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Centro Storico è in fascia Monitorare con punteggio 44.9/100: il rendimento locativo lordo stimato (7.12%, circa 5.13% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di -1.6%, sotto la media."},
-  {zona:"Villagrazia, Olio di Lino", vendita_mq:1108.82, affitto_mq:6.27, rendimento_lordo_pct:6.79, rendimento_netto_pct:4.89, var_vendita_pct:1.5, var_affitto_pct:0.6, punteggio:43.5, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Villagrazia, Olio di Lino è in fascia Monitorare con punteggio 43.5/100: il rendimento locativo lordo stimato (6.79%, circa 4.89% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +1.5%, sotto la media."},
-  {zona:"Cruillas, CEP, Michelangelo Alta", vendita_mq:1323.33, affitto_mq:6.83, rendimento_lordo_pct:6.19, rendimento_netto_pct:4.46, var_vendita_pct:12.5, var_affitto_pct:-8.4, punteggio:43.4, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Cruillas, CEP, Michelangelo Alta è in fascia Monitorare con punteggio 43.4/100: il rendimento locativo lordo stimato (6.19%, circa 4.46% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +12.5%, sopra la media."},
-  {zona:"Porto, Borgo Vecchio, Roma, Cavour", vendita_mq:1934.46, affitto_mq:11.0, rendimento_lordo_pct:6.82, rendimento_netto_pct:4.91, var_vendita_pct:3.0, var_affitto_pct:-3.2, punteggio:42.2, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Porto, Borgo Vecchio, Roma, Cavour è in fascia Monitorare con punteggio 42.2/100: il rendimento locativo lordo stimato (6.82%, circa 4.91% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +3.0%, sopra la media."},
-  {zona:"Pallavicino, Villaggio Ruffini, Cardillo, Inserra", vendita_mq:1681.32, affitto_mq:8.31, rendimento_lordo_pct:5.93, rendimento_netto_pct:4.27, var_vendita_pct:-2.0, var_affitto_pct:11.4, punteggio:40.5, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Pallavicino, Villaggio Ruffini, Cardillo, Inserra è in fascia Monitorare con punteggio 40.5/100: il rendimento locativo lordo stimato (5.93%, circa 4.27% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di -2.0%, sotto la media."},
-  {zona:"Uditore, Leonardo Da Vinci Alta, Borgo Nuovo", vendita_mq:1385.82, affitto_mq:7.2, rendimento_lordo_pct:6.23, rendimento_netto_pct:4.49, var_vendita_pct:4.6, var_affitto_pct:-2.3, punteggio:39.1, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Uditore, Leonardo Da Vinci Alta, Borgo Nuovo è in fascia Evitare con punteggio 39.1/100: il rendimento locativo lordo stimato (6.23%, circa 4.49% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +4.6%, sopra la media."},
-  {zona:"Libertà, Villabianca, De Gasperi, Croce Rossa, Sciuti, Politeama", vendita_mq:2316.27, affitto_mq:10.06, rendimento_lordo_pct:5.21, rendimento_netto_pct:3.75, var_vendita_pct:2.5, var_affitto_pct:3.9, punteggio:31.7, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Libertà, Villabianca, De Gasperi, Croce Rossa, Sciuti, Politeama è in fascia Evitare con punteggio 31.7/100: il rendimento locativo lordo stimato (5.21%, circa 3.75% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +2.5%, sotto la media."},
-  {zona:"Strasburgo, Belgio, San Lorenzo, Resuttana", vendita_mq:1845.66, affitto_mq:8.62, rendimento_lordo_pct:5.6, rendimento_netto_pct:4.03, var_vendita_pct:5.8, var_affitto_pct:-9.7, punteggio:26.8, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Strasburgo, Belgio, San Lorenzo, Resuttana è in fascia Evitare con punteggio 26.8/100: il rendimento locativo lordo stimato (5.6%, circa 4.03% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +5.8%, sopra la media."},
-  {zona:"Bonagia, Falsomiele", vendita_mq:1188.99, affitto_mq:5.05, rendimento_lordo_pct:5.1, rendimento_netto_pct:3.67, var_vendita_pct:4.8, var_affitto_pct:-10.3, punteggio:19.5, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Bonagia, Falsomiele è in fascia Evitare con punteggio 19.5/100: il rendimento locativo lordo stimato (5.1%, circa 3.67% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +4.8%, sopra la media."},
-];
+const ZONE_SCORES_BY_CITY = {
+  "Palermo": [
+    {zona:"Oreto, Perez, Montegrappa, Guadagna", vendita_mq:1207.44, affitto_mq:9.43, rendimento_lordo_pct:9.37, rendimento_netto_pct:6.75, var_vendita_pct:5.0, var_affitto_pct:13.7, punteggio:88.4, fascia:"Investire", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Oreto, Perez, Montegrappa, Guadagna è in fascia Investire con punteggio 88.4/100: il rendimento locativo lordo stimato (9.37%, circa 6.75% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +5.0%, sopra la media."},
+    {zona:"Calatafimi Bassa, Indipendenza, Zisa, Università", vendita_mq:1361.47, affitto_mq:9.66, rendimento_lordo_pct:8.51, rendimento_netto_pct:6.13, var_vendita_pct:6.2, var_affitto_pct:10.6, punteggio:78.0, fascia:"Investire", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Calatafimi Bassa, Indipendenza, Zisa, Università è in fascia Investire con punteggio 78.0/100: il rendimento locativo lordo stimato (8.51%, circa 6.13% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +6.2%, sopra la media."},
+    {zona:"Ciaculli, Belmonte Chiavelli", vendita_mq:896.91, affitto_mq:6.06, rendimento_lordo_pct:8.11, rendimento_netto_pct:5.84, var_vendita_pct:2.4, var_affitto_pct:11.5, punteggio:69.6, fascia:"Investire", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Ciaculli, Belmonte Chiavelli è in fascia Investire con punteggio 69.6/100: il rendimento locativo lordo stimato (8.11%, circa 5.84% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +2.4%, sotto la media."},
+    {zona:"Giotto Galilei, Palagonia, Noce, Malaspina", vendita_mq:1506.74, affitto_mq:9.66, rendimento_lordo_pct:7.69, rendimento_netto_pct:5.54, var_vendita_pct:-0.7, var_affitto_pct:10.4, punteggio:60.1, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Giotto Galilei, Palagonia, Noce, Malaspina è in fascia Monitorare con punteggio 60.1/100: il rendimento locativo lordo stimato (7.69%, circa 5.54% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di -0.7%, sotto la media."},
+    {zona:"Altarello, Poggio Ridente, Boccadifalco, Baida", vendita_mq:1093.22, affitto_mq:6.87, rendimento_lordo_pct:7.54, rendimento_netto_pct:5.43, var_vendita_pct:3.4, var_affitto_pct:5.3, punteggio:58.9, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Altarello, Poggio Ridente, Boccadifalco, Baida è in fascia Monitorare con punteggio 58.9/100: il rendimento locativo lordo stimato (7.54%, circa 5.43% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +3.4%, sopra la media."},
+    {zona:"Fiera, Montepellegrino", vendita_mq:1663.31, affitto_mq:9.45, rendimento_lordo_pct:6.82, rendimento_netto_pct:4.91, var_vendita_pct:8.8, var_affitto_pct:5.3, punteggio:58.6, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Fiera, Montepellegrino è in fascia Monitorare con punteggio 58.6/100: il rendimento locativo lordo stimato (6.82%, circa 4.91% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +8.8%, sopra la media."},
+    {zona:"Calatafimi Alta, Santicelli", vendita_mq:1420.86, affitto_mq:7.96, rendimento_lordo_pct:6.72, rendimento_netto_pct:4.84, var_vendita_pct:3.4, var_affitto_pct:17.7, punteggio:58.5, fascia:"Monitorare", indice_affidabilita_pct:89.2, dato_da_verificare:true, spiegazione:"Calatafimi Alta, Santicelli è in fascia Monitorare con punteggio 58.5/100: il rendimento locativo lordo stimato (6.72%, circa 4.84% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +3.4%, sopra la media. Attenzione: la variazione dei canoni d'affitto rilevata (+17.7%) supera la soglia di affidabilità statistica (indice di affidabilità stimato 89.2/100) — probabile bassa liquidità del mercato degli affitti in questa zona: verificare con più storico prima di darle peso."},
+    {zona:"Sant'Erasmo, Brancaccio, Sperone, Settecannoli", vendita_mq:1080.9, affitto_mq:6.82, rendimento_lordo_pct:7.57, rendimento_netto_pct:5.45, var_vendita_pct:1.5, var_affitto_pct:2.0, punteggio:53.5, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Sant'Erasmo, Brancaccio, Sperone, Settecannoli è in fascia Monitorare con punteggio 53.5/100: il rendimento locativo lordo stimato (7.57%, circa 5.45% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +1.5%, sotto la media."},
+    {zona:"Arenella, Acquasanta, Vergine Maria", vendita_mq:1694.19, affitto_mq:10.79, rendimento_lordo_pct:7.64, rendimento_netto_pct:5.5, var_vendita_pct:-9.8, var_affitto_pct:11.4, punteggio:48.5, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Arenella, Acquasanta, Vergine Maria è in fascia Monitorare con punteggio 48.5/100: il rendimento locativo lordo stimato (7.64%, circa 5.5% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di -9.8%, sotto la media."},
+    {zona:"Mondello, Sferracavallo, Addaura, Tommaso Natale", vendita_mq:2022.02, affitto_mq:10.38, rendimento_lordo_pct:6.16, rendimento_netto_pct:4.44, var_vendita_pct:9.8, var_affitto_pct:-1.2, punteggio:46.7, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Mondello, Sferracavallo, Addaura, Tommaso Natale è in fascia Monitorare con punteggio 46.7/100: il rendimento locativo lordo stimato (6.16%, circa 4.44% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +9.8%, sopra la media."},
+    {zona:"Lanza di Scalea, Olimpo, Castelforte", vendita_mq:2362.75, affitto_mq:14.91, rendimento_lordo_pct:7.57, rendimento_netto_pct:5.45, var_vendita_pct:-4.8, var_affitto_pct:67.0, punteggio:46.0, fascia:"Monitorare", indice_affidabilita_pct:0.0, dato_da_verificare:true, spiegazione:"Lanza di Scalea, Olimpo, Castelforte è in fascia Monitorare con punteggio 46.0/100: il rendimento locativo lordo stimato (7.57%, circa 5.45% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di -4.8%, sotto la media. Attenzione: la variazione dei canoni d'affitto rilevata (+67.0%) supera la soglia di affidabilità statistica (indice di affidabilità stimato 0.0/100) — probabile bassa liquidità del mercato degli affitti in questa zona: verificare con più storico prima di darle peso."},
+    {zona:"Centro Storico", vendita_mq:1903.9, affitto_mq:11.35, rendimento_lordo_pct:7.15, rendimento_netto_pct:5.15, var_vendita_pct:-1.8, var_affitto_pct:2.3, punteggio:45.1, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Centro Storico è in fascia Monitorare con punteggio 45.1/100: il rendimento locativo lordo stimato (7.15%, circa 5.15% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di -1.8%, sotto la media."},
+    {zona:"Villagrazia, Olio di Lino", vendita_mq:1107.68, affitto_mq:6.31, rendimento_lordo_pct:6.84, rendimento_netto_pct:4.92, var_vendita_pct:1.4, var_affitto_pct:0.7, punteggio:44.4, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Villagrazia, Olio di Lino è in fascia Monitorare con punteggio 44.4/100: il rendimento locativo lordo stimato (6.84%, circa 4.92% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +1.4%, sotto la media."},
+    {zona:"Cruillas, CEP, Michelangelo Alta", vendita_mq:1329.56, affitto_mq:6.84, rendimento_lordo_pct:6.17, rendimento_netto_pct:4.44, var_vendita_pct:12.8, var_affitto_pct:-8.4, punteggio:43.7, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Cruillas, CEP, Michelangelo Alta è in fascia Monitorare con punteggio 43.7/100: il rendimento locativo lordo stimato (6.17%, circa 4.44% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +12.8%, sopra la media."},
+    {zona:"Porto, Borgo Vecchio, Roma, Cavour", vendita_mq:1924.23, affitto_mq:10.96, rendimento_lordo_pct:6.83, rendimento_netto_pct:4.92, var_vendita_pct:3.0, var_affitto_pct:-3.3, punteggio:42.6, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Porto, Borgo Vecchio, Roma, Cavour è in fascia Monitorare con punteggio 42.6/100: il rendimento locativo lordo stimato (6.83%, circa 4.92% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +3.0%, sopra la media."},
+    {zona:"Pallavicino, Villaggio Ruffini, Cardillo, Inserra", vendita_mq:1683.09, affitto_mq:8.29, rendimento_lordo_pct:5.91, rendimento_netto_pct:4.26, var_vendita_pct:-1.8, var_affitto_pct:11.4, punteggio:41.2, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Pallavicino, Villaggio Ruffini, Cardillo, Inserra è in fascia Monitorare con punteggio 41.2/100: il rendimento locativo lordo stimato (5.91%, circa 4.26% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di -1.8%, sotto la media."},
+    {zona:"Uditore, Leonardo Da Vinci Alta, Borgo Nuovo", vendita_mq:1387.92, affitto_mq:7.19, rendimento_lordo_pct:6.22, rendimento_netto_pct:4.48, var_vendita_pct:4.6, var_affitto_pct:-2.5, punteggio:39.1, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Uditore, Leonardo Da Vinci Alta, Borgo Nuovo è in fascia Evitare con punteggio 39.1/100: il rendimento locativo lordo stimato (6.22%, circa 4.48% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +4.6%, sopra la media."},
+    {zona:"Libertà, Villabianca, De Gasperi, Croce Rossa, Sciuti, Politeama", vendita_mq:2319.24, affitto_mq:10.03, rendimento_lordo_pct:5.19, rendimento_netto_pct:3.74, var_vendita_pct:2.4, var_affitto_pct:4.3, punteggio:32.3, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Libertà, Villabianca, De Gasperi, Croce Rossa, Sciuti, Politeama è in fascia Evitare con punteggio 32.3/100: il rendimento locativo lordo stimato (5.19%, circa 3.74% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +2.4%, sotto la media."},
+    {zona:"Strasburgo, Belgio, San Lorenzo, Resuttana", vendita_mq:1852.38, affitto_mq:8.57, rendimento_lordo_pct:5.55, rendimento_netto_pct:4.0, var_vendita_pct:5.9, var_affitto_pct:-10.1, punteggio:26.4, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Strasburgo, Belgio, San Lorenzo, Resuttana è in fascia Evitare con punteggio 26.4/100: il rendimento locativo lordo stimato (5.55%, circa 4.0% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +5.9%, sopra la media."},
+    {zona:"Bonagia, Falsomiele", vendita_mq:1196.32, affitto_mq:5.01, rendimento_lordo_pct:5.03, rendimento_netto_pct:3.62, var_vendita_pct:4.9, var_affitto_pct:-10.2, punteggio:19.5, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Bonagia, Falsomiele è in fascia Evitare con punteggio 19.5/100: il rendimento locativo lordo stimato (5.03%, circa 3.62% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +4.9%, sopra la media."},
+  ],
+  "Milano": [
+    {zona:"City Life", vendita_mq:7452.84, affitto_mq:27.27, rendimento_lordo_pct:4.39, rendimento_netto_pct:3.16, var_vendita_pct:3.4, var_affitto_pct:6.7, punteggio:74.4, fascia:"Investire", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"City Life è in fascia Investire con punteggio 74.4/100: il rendimento locativo lordo stimato (4.39%, circa 3.16% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +3.4%, sotto la media."},
+    {zona:"Bicocca, Sarca", vendita_mq:2221.53, affitto_mq:7.14, rendimento_lordo_pct:3.86, rendimento_netto_pct:2.78, var_vendita_pct:8.2, var_affitto_pct:6.4, punteggio:68.0, fascia:"Investire", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Bicocca, Sarca è in fascia Investire con punteggio 68.0/100: il rendimento locativo lordo stimato (3.86%, circa 2.78% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +8.2%, sopra la media."},
+    {zona:"Quarto Oggiaro, Sacco", vendita_mq:1613.03, affitto_mq:5.4, rendimento_lordo_pct:4.02, rendimento_netto_pct:2.89, var_vendita_pct:7.5, var_affitto_pct:3.8, punteggio:63.5, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Quarto Oggiaro, Sacco è in fascia Monitorare con punteggio 63.5/100: il rendimento locativo lordo stimato (4.02%, circa 2.89% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +7.5%, sopra la media."},
+    {zona:"Parco Sempione, Arco della Pace", vendita_mq:4869.4, affitto_mq:15.26, rendimento_lordo_pct:3.76, rendimento_netto_pct:2.71, var_vendita_pct:6.4, var_affitto_pct:6.5, punteggio:55.9, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Parco Sempione, Arco della Pace è in fascia Monitorare con punteggio 55.9/100: il rendimento locativo lordo stimato (3.76%, circa 2.71% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +6.4%, sopra la media."},
+    {zona:"Sempione, Pagano, Washington", vendita_mq:3382.54, affitto_mq:10.7, rendimento_lordo_pct:3.8, rendimento_netto_pct:2.74, var_vendita_pct:7.9, var_affitto_pct:3.4, punteggio:53.0, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Sempione, Pagano, Washington è in fascia Monitorare con punteggio 53.0/100: il rendimento locativo lordo stimato (3.8%, circa 2.74% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +7.9%, sopra la media."},
+    {zona:"Niguarda, Bignami, Parco Nord", vendita_mq:2112.34, affitto_mq:6.95, rendimento_lordo_pct:3.95, rendimento_netto_pct:2.84, var_vendita_pct:7.7, var_affitto_pct:1.4, punteggio:52.4, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Niguarda, Bignami, Parco Nord è in fascia Monitorare con punteggio 52.4/100: il rendimento locativo lordo stimato (3.95%, circa 2.84% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +7.7%, sopra la media."},
+    {zona:"Cenisio, Farini, Sarpi", vendita_mq:2820.12, affitto_mq:8.32, rendimento_lordo_pct:3.54, rendimento_netto_pct:2.55, var_vendita_pct:6.7, var_affitto_pct:8.1, punteggio:52.2, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Cenisio, Farini, Sarpi è in fascia Monitorare con punteggio 52.2/100: il rendimento locativo lordo stimato (3.54%, circa 2.55% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +6.7%, sopra la media."},
+    {zona:"Turati, Moscova, Corso Venezia", vendita_mq:5434.78, affitto_mq:17.84, rendimento_lordo_pct:3.94, rendimento_netto_pct:2.84, var_vendita_pct:2.6, var_affitto_pct:7.4, punteggio:51.5, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Turati, Moscova, Corso Venezia è in fascia Monitorare con punteggio 51.5/100: il rendimento locativo lordo stimato (3.94%, circa 2.84% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +2.6%, sotto la media."},
+    {zona:"Missaglia, Gratosoglio", vendita_mq:1531.95, affitto_mq:5.1, rendimento_lordo_pct:3.99, rendimento_netto_pct:2.87, var_vendita_pct:6.0, var_affitto_pct:2.4, punteggio:51.0, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Missaglia, Gratosoglio è in fascia Monitorare con punteggio 51.0/100: il rendimento locativo lordo stimato (3.99%, circa 2.87% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +6.0%, sopra la media."},
+    {zona:"Buenos Aires, Regina Giovanna", vendita_mq:3869.61, affitto_mq:13.16, rendimento_lordo_pct:4.08, rendimento_netto_pct:2.94, var_vendita_pct:4.9, var_affitto_pct:2.0, punteggio:49.0, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Buenos Aires, Regina Giovanna è in fascia Monitorare con punteggio 49.0/100: il rendimento locativo lordo stimato (4.08%, circa 2.94% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +4.9%, sotto la media."},
+    {zona:"Università Statale, San Lorenzo", vendita_mq:5781.98, affitto_mq:17.53, rendimento_lordo_pct:3.64, rendimento_netto_pct:2.62, var_vendita_pct:6.1, var_affitto_pct:6.0, punteggio:46.9, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Università Statale, San Lorenzo è in fascia Monitorare con punteggio 46.9/100: il rendimento locativo lordo stimato (3.64%, circa 2.62% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +6.1%, sopra la media."},
+    {zona:"Centro Storico Brera", vendita_mq:6409.18, affitto_mq:18.51, rendimento_lordo_pct:3.47, rendimento_netto_pct:2.5, var_vendita_pct:6.7, var_affitto_pct:6.8, punteggio:43.9, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Centro Storico Brera è in fascia Monitorare con punteggio 43.9/100: il rendimento locativo lordo stimato (3.47%, circa 2.5% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +6.7%, sopra la media."},
+    {zona:"Forlanini, Mecenate, Ortomercato", vendita_mq:1896.83, affitto_mq:5.97, rendimento_lordo_pct:3.78, rendimento_netto_pct:2.72, var_vendita_pct:5.0, var_affitto_pct:3.9, punteggio:41.4, fascia:"Monitorare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Forlanini, Mecenate, Ortomercato è in fascia Monitorare con punteggio 41.4/100: il rendimento locativo lordo stimato (3.78%, circa 2.72% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +5.0%, sotto la media."},
+    {zona:"Porta Vittoria, Porta Romana", vendita_mq:5653.2, affitto_mq:17.36, rendimento_lordo_pct:3.68, rendimento_netto_pct:2.65, var_vendita_pct:5.7, var_affitto_pct:2.4, punteggio:34.6, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Porta Vittoria, Porta Romana è in fascia Evitare con punteggio 34.6/100: il rendimento locativo lordo stimato (3.68%, circa 2.65% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +5.7%, sopra la media."},
+    {zona:"Sant'Ambrogio, Cadorna", vendita_mq:6709.13, affitto_mq:20.32, rendimento_lordo_pct:3.63, rendimento_netto_pct:2.61, var_vendita_pct:1.2, var_affitto_pct:7.0, punteggio:29.3, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Sant'Ambrogio, Cadorna è in fascia Evitare con punteggio 29.3/100: il rendimento locativo lordo stimato (3.63%, circa 2.61% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +1.2%, sotto la media."},
+    {zona:"Centro Storico Duomo, San Babila, Montenapoleone", vendita_mq:7388.06, affitto_mq:24.08, rendimento_lordo_pct:3.91, rendimento_netto_pct:2.82, var_vendita_pct:1.3, var_affitto_pct:1.1, punteggio:22.1, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Centro Storico Duomo, San Babila, Montenapoleone è in fascia Evitare con punteggio 22.1/100: il rendimento locativo lordo stimato (3.91%, circa 2.82% al netto di costi ricorrenti stimati) è sopra la media delle zone analizzate e i prezzi di vendita mostrano un trend di +1.3%, sotto la media."},
+    {zona:"Lambrate, Rubattino, Rombon", vendita_mq:1772.65, affitto_mq:5.38, rendimento_lordo_pct:3.64, rendimento_netto_pct:2.62, var_vendita_pct:1.3, var_affitto_pct:4.3, punteggio:20.4, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Lambrate, Rubattino, Rombon è in fascia Evitare con punteggio 20.4/100: il rendimento locativo lordo stimato (3.64%, circa 2.62% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +1.3%, sotto la media."},
+    {zona:"Porta Ticinese, Porta Genova", vendita_mq:4527.46, affitto_mq:13.23, rendimento_lordo_pct:3.51, rendimento_netto_pct:2.53, var_vendita_pct:2.3, var_affitto_pct:2.4, punteggio:11.3, fascia:"Evitare", indice_affidabilita_pct:100.0, dato_da_verificare:false, spiegazione:"Porta Ticinese, Porta Genova è in fascia Evitare con punteggio 11.3/100: il rendimento locativo lordo stimato (3.51%, circa 2.53% al netto di costi ricorrenti stimati) è sotto la media delle zone analizzate e i prezzi di vendita mostrano un trend di +2.3%, sotto la media."},
+  ]
+};
 
 const FAQ = [
-  {kw:['rendimento','roi','guadagn','ritorno'], a:()=>`In base ai progetti attivi nel tuo portafoglio, il rendimento atteso varia dal 14% al 21% sull'intera durata dell'operazione, a seconda del rischio e della categoria. Puoi vedere il dettaglio di ogni progetto nella sua scheda, alla voce "Rendimento stimato".`},
-  {kw:['tass','fisc','plusvalen','imposta'], a:()=>`Le plusvalenze da flipping, se l'immobile viene rivenduto entro 5 anni dall'acquisto, sono soggette a tassazione separata o ordinaria in base alla scelta in dichiarazione. I proventi da crowdfunding immobiliare seguono invece il regime dei proventi da partecipazione all'SPV di progetto. Trovi la stima aggiornata per ogni progetto nella sezione "Fiscalità".`},
-  {kw:['vendere','uscire','liquidit','disinvest'], a:()=>`Le quote di crowdfunding non sono normalmente liquidabili prima della chiusura dell'operazione, salvo un eventuale mercato secondario tra investitori della piattaforma, oggi non ancora attivo. Per i flipping interi, l'uscita coincide con la vendita dell'immobile a fine lavori.`},
-  {kw:['minimo','importo minimo','quanto invest'], a:()=>`L'investimento minimo nel crowdfunding parte da 500€ per progetto. Il flipping intero richiede invece la copertura per intero del capitale dell'operazione, generalmente tra 250.000€ e 650.000€: per queste operazioni ti mettiamo comunque in contatto con un consulente per definire i dettagli.`},
-  {kw:['rischio','garanz','perdita'], a:()=>`Ogni investimento immobiliare comporta un rischio, incluso quello di ritardo nei lavori o di vendita a un prezzo inferiore a quello stimato nel business plan. Non ci sono garanzie di rendimento. Trovi un'analisi di rischio dedicata nella scheda di ciascun progetto.`},
-  {kw:['tempistic','durata','quando finisce'], a:()=>`Le tempistiche variano da progetto a progetto, generalmente tra 8 e 14 mesi dall'apertura della raccolta o dall'acquisizione dell'immobile. Il cronoprogramma dettagliato è visibile nella scheda progetto, sezione "Tempistiche".`},
-  {kw:['differenza','flipping o crowdfunding','flipping e crowdfunding'], a:()=>`Nel flipping copri per intero un'operazione di ristrutturazione e vendita di un immobile: capitale più alto, ma controllo diretto sull'intera operazione. Nel crowdfunding partecipi con una quota (anche da 500€) insieme ad altri investitori tramite una SPV dedicata: capitale più basso, ma rendimento e rischio sono proporzionali alla quota sottoscritta.`},
-  {kw:['spv','societ','sicurezza dei fondi','dove vanno i miei soldi'], a:()=>`Ogni operazione di crowdfunding è veicolata da una SPV (società veicolo) dedicata al singolo progetto, separata dal patrimonio di RealFlipping: i fondi raccolti sono vincolati a quell'operazione specifica. È lo stesso meccanismo usato dalla maggior parte delle piattaforme di real estate crowdfunding regolamentate.`},
+  {kw:['rendimento','roi','guadagn','ritorno','return','earn','profit'], a:()=>t('faq_1')},
+  {kw:['tass','fisc','plusvalen','imposta','tax','capital gain'], a:()=>t('faq_2')},
+  {kw:['vendere','uscire','liquidit','disinvest','sell','exit','liquidity','divest'], a:()=>t('faq_3')},
+  {kw:['minimo','importo minimo','quanto invest','minimum','how much to invest'], a:()=>t('faq_4')},
+  {kw:['rischio','garanz','perdita','risk','guarantee','loss'], a:()=>t('faq_5')},
+  {kw:['tempistic','durata','quando finisce','timeline','duration','when does it end'], a:()=>t('faq_6')},
+  {kw:['differenza','flipping o crowdfunding','flipping e crowdfunding','difference','flipping vs crowdfunding','flipping or crowdfunding'], a:()=>t('faq_7')},
+  {kw:['spv','societ','sicurezza dei fondi','dove vanno i miei soldi','company','fund safety','where does my money go'], a:()=>t('faq_8')},
 ];
 
 /* ============================================================
@@ -995,7 +1102,345 @@ const PLATFORM_FACTS = {
   durata_tipica_operazioni_mesi: [8, 14],
 };
 
-let state = {loggedIn:false, dashFilter:'all', exploreFilter:'all', currentProjectId:null, currentView:'dashboard', fromView:'dashboard', language:'it', paymentMethod:'card', plan:'Pro', notifUnread:4};
+/* ============================================================
+   I18N — dizionario IT/EN e switching reale
+   ============================================================
+   Copre navigazione, landing, modali, dashboard, investi, fiscalità,
+   backoffice (testo statico) e la chrome del Consulente IA (compresi i
+   template delle risposte del motore locale). NON tradotti, per scelta
+   di scope condivisa con l'utente: i dati specifici dei singoli progetti
+   demo (titoli, città, note di cronoprogramma, voci di costo) e i dati
+   generati dal motore di scoring (nomi zona, spiegazioni testuali per
+   zona, la nota su Milano) — sono contenuti dati/generati automaticamente
+   dagli script Python, non testo di interfaccia, e tradurli uno per uno
+   sarebbe uno sforzo sproporzionato per una demo. Se in futuro serve,
+   vanno tradotti alla fonte (tools/*.py) o con una traduzione automatica
+   lato server, non hardcoded qui. */
+const I18N = {
+  it: {
+    nav_chi_siamo:"Chi siamo", nav_accedi:"Accedi", nav_esci:"Esci", nav_notifiche:"Notifiche",
+    sidebar_toggle_aria:"Apri il menu",
+    landing_eyebrow:"Flipping & crowdfunding immobiliare",
+    landing_h1:`Investi nel <em>mattone</em>,<br>con i numeri in tasca.`,
+    landing_lead:"RealFlipping seleziona operazioni di ristrutturazione e valorizzazione immobiliare in Italia. Scegli un'operazione intera di flipping o una quota in crowdfunding, segui ogni fase con dati reali e ricevi consulenza — umana quando serve.",
+    landing_btn_accedi:"Accedi alla piattaforma", landing_btn_progetti:"Guarda i progetti",
+    landing_hero_alt:"Interno ristrutturato",
+    stat_capitale:"Capitale gestito", stat_operazioni:"Operazioni chiuse", stat_rendimento:"Rendimento medio",
+    stat_note:"Numeri dimostrativi di questo prototipo, non risultati reali — nessuna operazione è ancora stata chiusa sulla piattaforma.",
+    hero_float_t2:"Ristrutturazione completata",
+    how_h2:"Come funziona", how_p:"Due modalità di accesso al mattone, un solo cruscotto per seguirle entrambe.",
+    how1_n:"01 — ACCESSO", how1_h3:"Entri con le tue credenziali", how1_p:"Un'unica dashboard personale mostra ciò in cui hai investito, categorizzato per flipping e crowdfunding, con aggiornamenti visivi e statistici in tempo reale.",
+    how2_n:"02 — SCELTA", how2_h3:"Flipping intero o quota in crowdfunding", how2_p:"Nel flipping rilevi l'intera operazione. Nel crowdfunding scegli la categoria e l'importo: vedi costi, business plan e tempistiche prima di decidere.",
+    how3_n:"03 — CONTROLLO", how3_h3:"Segui cantiere, numeri e fisco", how3_p:"Rendering prima/dopo, avanzamento lavori e una dashboard fiscale dedicata. Per tutto il resto, il consulente IA — o un consulente in carne e ossa.",
+    projects_h2:"Operazioni in raccolta ora", projects_p:"Un'anteprima. Accedi per vedere business plan, tempistiche e rendimento stimato completi.",
+    footer_copy:"© 2026 RealFlipping S.r.l. — Piattaforma di flipping e crowdfunding immobiliare.",
+    footer_risk:"Il valore dell'investimento immobiliare può diminuire. Documentazione precontrattuale disponibile per ogni progetto.",
+    footer_about_link:"Chi siamo & round Pre-Seed",
+    about_back:"← Torna al sito", about_eyebrow:"RealFlipping, l'azienda", about_h1:"Chi siamo, cosa cerchiamo, dove andiamo.",
+    about_lead:"Questa pagina non riguarda gli investimenti immobiliari sulla piattaforma — è per chi vuole saperne di più su RealFlipping come startup: round Pre-Seed, team che stiamo costruendo e metodo dietro il prodotto.",
+    about_mission_h3:"La missione",
+    about_mission_p:"RealFlipping vuole rendere l'investimento immobiliare — oggi riservato a chi ha molto capitale o molto tempo — accessibile a investitori grandi e piccoli, con un motore di analisi che stima il rendimento delle operazioni prima ancora di visitarle. Partiamo dal mercato italiano, con Palermo come primo laboratorio per il motore di scoring di zona.",
+    about_method_h3:"Il metodo, in breve",
+    about_method_p:"Ogni operazione proposta su RealFlipping nasce da un motore quantitativo che analizza rendimento locativo, trend dei prezzi di vendita e degli affitti per singola zona, penalizzando i dati statisticamente poco affidabili invece di ignorarli. Il risultato è un punteggio di investibilità 0–100 — non un'opinione, un numero verificabile e ricalcolabile. I dettagli tecnici del motore sono nel nostro repository pubblico.",
+    about_roadmap_h3:"Roadmap",
+    rm1_h4:"MVP — Dashboard IA di analisi di mercato", rm1_date:"In corso", rm1_p:"Motore di scoring zona, consulente IA, dashboard investitore — quello che vedi in questa demo.",
+    rm2_h4:"Prime operazioni reali e round Pre-Seed", rm2_date:"Prossimo passo", rm2_p:"Strutturazione delle prime operazioni di flipping/crowdfunding a Palermo, raccolta di un round Pre-Seed per finanziare team e primo capitale operativo.",
+    rm3_h4:"App per cercare, comprare e affittare casa", rm3_date:"Dopo il lancio investitori", rm3_p:"Estensione oltre gli investitori: un'app per chi cerca casa, con commissioni più basse delle agenzie tradizionali.",
+    rm4_h4:"Agenzia di compravendita e mercato secondario", rm4_date:"Fase successiva", rm4_p:"Seconda società per la compravendita immobiliare; per il crowdfunding, un mercato secondario che permetta di rivendere le proprie quote invece di restare vincolati a fine operazione.",
+    rm5_h4:"Espansione oltre l'Italia", rm5_date:"Lungo termine", rm5_p:"Stessa metodologia di scoring applicata ad altri mercati dove il flipping immobiliare è forte — Europa, poi oltre.",
+    about_team_h3:"Cosa cerchiamo ora",
+    team_tag:"TEAM",
+    team1_h3:"Laureando/a in Intelligenza Artificiale", team1_p:"Per far evolvere il motore di scoring e il consulente IA oltre il prototipo.",
+    team2_h3:"Ingegnere informatico", team2_p:"Per costruire il prodotto oltre la demo: backend, dati reali, sicurezza.",
+    team3_h3:"Esperto immobiliare / acquisitions", team3_p:"Con esperienza operativa sul mercato di Palermo, per le prime operazioni reali.",
+    about_preseed_note:"Round Pre-Seed in corso — cerchiamo un business angel o investitore privato che creda nel metodo. Dettagli su importo, quota ed exit su richiesta.",
+    about_talk_h3:"Parliamone", about_talk_p:"Scrivici per il round, per unirti al team o per una demo del motore di scoring.", about_talk_btn:"Scrivi a team@realflipping.it",
+    login_h3:"Bentornato", login_sub:"Accedi con le tue credenziali investitore.",
+    login_email_label:"Email", login_email_placeholder:"nome@esempio.it", login_pass_label:"Password",
+    login_btn:"Accedi alla dashboard", login_note:"Ambiente dimostrativo — qualsiasi credenziale è accettata.",
+    account_plan_h4:"Piano di abbonamento", plan_free:"Gratis",
+    plan_basic_desc:"Dashboard, elenco operazioni, fiscalità stimata.",
+    plan_standard_desc:"+ Consulente IA senza limiti, notifiche in tempo reale.",
+    plan_pro_desc:"+ Accesso prioritario alle nuove operazioni, report fiscale annuale.",
+    plan_elite_desc:"+ Consulente dedicato, ticket minimo ridotto, anteprima esclusiva.",
+    account_settings_h4:"Impostazioni", account_lang_label:"Lingua",
+    account_pay_h4:"Metodo di pagamento predefinito", pay_card:"Carta", pay_bonifico:"Bonifico",
+    account_close_btn:"Chiudi", account_plan_word:"Piano",
+    side_dashboard:"Dashboard", side_investi:"Investi", side_fiscalita:"Fiscalità", side_consulente:"Consulente IA", side_backoffice:"Backoffice",
+    side_next_update:"Prossimo aggiornamento cantiere", side_next_update_date:"04 AGO 2026",
+    dash_h1:"La tua dashboard", dash_sub:"Panoramica del portafoglio — aggiornata al 27 luglio 2026", dash_new_btn:"+ Nuovo investimento",
+    kpi_capitale:"Capitale investito", kpi_ops_suffix:"operazioni",
+    kpi_rendimento:"Rendimento medio stimato", kpi_rendimento_delta:"↑ su base annua",
+    kpi_attive:"Operazioni attive", kpi_attive_delta:"in corso o in raccolta",
+    kpi_chiuse:"Operazioni chiuse", kpi_chiuse_delta:"utili distribuiti",
+    chart_composizione_h3:"Composizione del portafoglio", chart_composizione_csub:"Capitale investito per tipo di operazione",
+    chart_empty:'Non hai ancora investimenti da mostrare qui. Vai su "Investi" per iniziare.',
+    label_flipping:"Flipping", label_crowdfunding:"Crowdfunding",
+    chart_rendimento_h3:"Rendimento stimato per operazione", chart_rendimento_csub:"Confronto tra le operazioni che hai in portafoglio",
+    tab_all:"Tutti gli investimenti", tab_flipping:"Flipping interi", tab_crowdfunding:"Crowdfunding",
+    dash_empty_cat:"Nessun investimento in questa categoria.",
+    card_rendimento:"Rendimento stimato", card_durata:"Durata", card_tuo_investimento:"Tuo investimento",
+    card_raccolti_suffix:"raccolti", card_avanzamento:"Avanzamento cantiere",
+    card_chiuso:"Chiuso", card_attivo:"attivo", card_accedi_dettagli:"Accedi per i dettagli",
+    explore_empty:"Nessun progetto disponibile in questa categoria al momento.",
+    filter_all:"Tutti", filter_flipping:"Flipping interi",
+    filter_res:"Crowdfunding · Residenziale", filter_tur:"Crowdfunding · Turistico", filter_com:"Crowdfunding · Commerciale",
+    cat_residenziale:"Residenziale", cat_turistico:"Turistico", cat_commerciale:"Commerciale",
+    explore_h1:"Investi", explore_sub:"Operazioni aperte alla raccolta o disponibili come flipping intero",
+    project_back_explore:"Torna a Investi", project_back_dashboard:"Torna alla dashboard",
+    proj_tagline_flip:"Flipping · Operazione intera",
+    proj_meta_localita:"Località", proj_meta_superficie:"Superficie", proj_meta_durata:"Durata stimata", proj_meta_rendimento:"Rendimento stimato",
+    ba_prima:"Prima", ba_dopo:"Dopo", ba_alt_prima:"Prima della ristrutturazione", ba_alt_dopo:"Dopo la ristrutturazione",
+    cantiere_title:"Foto avanzamento cantiere", cantiere_sub:"Scatti caricati dal team RealFlipping a ogni fase completata.", cantiere_alt_prefix:"Avanzamento cantiere — ",
+    invcard_gia_portafoglio:"Già in portafoglio", invcard_roi_lab:"Rendimento stimato sull'intera durata",
+    row_raccolto:"Raccolto", row_percentuale:"Percentuale raggiunta", row_prezzo_operazione:"Prezzo operazione",
+    row_avanzamento:"Avanzamento cantiere", row_tuo_investimento:"Tuo investimento", row_ricavo_atteso:"Ricavo atteso operazione",
+    row_ticket_minimo:"Ticket minimo", row_ricavo_vendita:"Ricavo atteso alla vendita", row_utile_atteso:"Utile atteso",
+    row_tipo_operazione:"Tipo di operazione", row_rilievo_intero:"Rilievo intero",
+    note_gia_sottoscritta:"Operazione già sottoscritta. Trovi cronoprogramma, foto del cantiere e situazione fiscale stimata qui sotto.",
+    amount_label:"Importo da investire", btn_investi_ora:"Investi ora",
+    note_flipping_intero:"Il flipping è un'operazione a copertura intera. Un consulente ti guiderà nella strutturazione dell'investimento.",
+    btn_richiedi_rilevazione:"Richiedi rilevazione operazione",
+    est_return_tpl:"Investendo {amt} il ritorno stimato a fine operazione è di circa {est} ({duration}).",
+    proj_tab_plan:"Business plan", proj_tab_time:"Tempistiche", proj_tab_mkt:"Analisi di mercato",
+    plan_costi_h3:"Costi dell'operazione", plan_costo_totale:"Costo totale operazione", plan_margine:"Margine operativo atteso",
+    time_cronoprogramma_h3:"Cronoprogramma",
+    mkt_andamento_h3:"Andamento raccolta / avanzamento (%)", mkt_nota_h3:"Nota di mercato",
+    mkt_nota_tpl:"La zona di {city} registra una domanda {trend} per immobili ristrutturati nella fascia di prezzo target. Il prezzo al metro quadro stimato alla vendita è coerente con le transazioni comparabili degli ultimi 12 mesi rilevate dal modulo di analisi IA di RealFlipping.",
+    mkt_trend_up:"in forte crescita", mkt_trend_stable:"stabile",
+    alert_invest_confirm_tpl:'Richiesta di investimento in "{title}" registrata. Riceverai il fascicolo informativo e il contratto da firmare digitalmente via email.',
+    alert_flip_request_tpl:'Richiesta inviata per "{title}". Un consulente RealFlipping ti contatterà per strutturare l\'operazione di flipping.',
+    fiscal_h1:"Fiscalità", fiscal_sub:"Situazione fiscale stimata per ciascun progetto in portafoglio",
+    fiscal_th_progetto:"Progetto", fiscal_th_regime:"Regime", fiscal_th_investito:"Investito",
+    fiscal_th_plusvalenza:"Plusvalenza stimata", fiscal_th_imposta:"Imposta stimata", fiscal_th_aliquota:"Aliquota",
+    fiscal_regime_flipping:"Persona fisica — plusvalenza immobiliare", fiscal_regime_crowd:"SPV di progetto — proventi da partecipazione",
+    fiscal_note:"Le stime fiscali sono indicative e calcolate sul regime di tassazione separata delle plusvalenze immobiliari (operazioni entro 5 anni dall'acquisto) o su imposta sostitutiva ove applicabile ai proventi da crowdfunding immobiliare. Per una valutazione puntuale rivolgiti al tuo commercialista o richiedi il report fiscale annuale generato dalla piattaforma.",
+    ai_h1:"Consulente IA", ai_sub:"Risposte immediate sui tuoi investimenti. Se serve, ti mettiamo in contatto con un consulente fisico.",
+    ai_disclaimer:"Le risposte si basano sui dati dimostrativi di questa piattaforma (i tuoi progetti e le altre operazioni pubblicate) e non su un'analisi del mercato immobiliare reale. Non costituiscono consulenza finanziaria: per decisioni reali rivolgiti a un consulente abilitato.",
+    ai_side_h3:"Prova a chiedere", ai_input_placeholder:"Scrivi una domanda sui tuoi investimenti…", ai_send_btn:"Invia",
+    ai_greeting:"Ciao Marco 👋 Sono il consulente IA di RealFlipping. Puoi farmi domande libere, con parole tue: calcolo il tuo rendimento reale sul portafoglio, simulo un importo su un progetto specifico, confronto o classifico le operazioni, ti do un'analisi descrittiva della diversificazione del tuo portafoglio e rispondo su fiscalità e funzionamento di flipping e crowdfunding. Se non riesco a risponderti, ti metto in contatto con un consulente fisico.",
+    ai_sim_result_tpl:"Investendo {amt} in {title} (rendimento stimato {roi}%, durata {duration}), il ritorno stimato a fine operazione è di circa {est} — cioè un guadagno stimato di {gain}. È una proiezione sul business plan del progetto, non una garanzia di rendimento.",
+    ai_sim_need_project_tpl:'Per simulare un importo mi serve sapere su quale operazione — dimmi il nome del progetto (es. "quanto guadagnerei investendo {amt} in Casa Alloro?") oppure guarda la scheda del progetto in "Investi": trovi la stessa simulazione con il campo importo.',
+    ai_sim_need_amount_tpl:'Dimmi anche un importo — es. "quanto guadagnerei investendo 5.000€ in {title}?" — e ti calcolo la stima.',
+    ai_best_none:"Al momento non ci sono operazioni aperte disponibili su cui investire.",
+    ai_best_item_tpl:"{i}. {title} — {typeLabel}, rendimento stimato {roi}, durata {duration}",
+    ai_best_intro_outro_tpl:'Le operazioni disponibili con il rendimento stimato più alto in questo momento sono:<br>{list}<br><br>Rendimento più alto non significa automaticamente scelta migliore per te: durata, rischio e categoria contano quanto il numero. Trovi il dettaglio di ognuna nella sezione "Investi".',
+    ai_open_none:"Non ci sono campagne di crowdfunding in raccolta al momento.",
+    ai_open_item_tpl:"{title} ({city}) — {pct}% raccolto, ticket minimo {ticket}{portfolioNote}",
+    ai_open_portfolio_note:" · già in portafoglio",
+    ai_open_intro_tpl:"Campagne di crowdfunding attualmente in raccolta:<br>{list}",
+    ai_diversify_empty:'Non hai ancora investimenti in portafoglio, quindi non c\'è ancora una composizione da analizzare — trovi le operazioni aperte in "Investi".',
+    ai_diversify_tpl:"Il tuo portafoglio è per {flipPct} in flipping e {crowdPct} in crowdfunding{catTxt}. La singola operazione più pesante vale il {maxSingle} del tuo capitale investito.{concentrationNote} Questa è un'osservazione descrittiva sui tuoi dati, non una raccomandazione personalizzata: per una valutazione sul tuo caso specifico rivolgiti a un consulente abilitato.",
+    ai_diversify_cat_tpl:" (crowdfunding per categoria: {cats})",
+    ai_diversify_high_note:" È una concentrazione piuttosto alta su un'unica operazione: molti investitori preferiscono restare sotto il 30-40% per singola operazione, per limitare l'impatto se un singolo progetto va peggio del previsto.",
+    ai_diversify_ok_note:" Non risultano concentrazioni eccessive su una singola operazione.",
+    ai_compare_tpl:"{title} ha un rendimento stimato del {roi}.{avgNote} Ricorda: è un confronto tra le operazioni di esempio su questa piattaforma, non un'analisi del mercato immobiliare reale.",
+    ai_compare_avg_tpl:" Le altre operazioni di tipo {typeLabel} pubblicate sulla piattaforma hanno un rendimento medio del {avg}, quindi questa operazione è {aboveBelow} media di {diff} punti.",
+    ai_above:"sopra", ai_below:"sotto",
+    ai_mentioned_tpl:"{title} — {city}, {mq} m².<br>Rendimento stimato: {roi} su {duration}.<br>Ricavo atteso: {ricavo}.{investedNote}",
+    ai_mentioned_invested_tpl:" Il tuo investimento in questa operazione è di {amount}.",
+    ai_mentioned_not_invested:" Non hai ancora investito in questa operazione — trovi tutti i dettagli nella sua scheda.",
+    ai_personal_tpl:"Hai investito {amount} in {n} operazioni, con un rendimento medio ponderato stimato del {roi}. Trovi il dettaglio operazione per operazione nella tua Dashboard.",
+    ai_offer_human:'Se vuoi, posso metterti in contatto con un consulente RealFlipping in carne e ossa.<br><br><button class="btn brass sm" onclick="bookAdvisor()">Prenota una chiamata ora</button>',
+    ai_escalate_tpl:'<b>Non ho una risposta certa per questo.</b><br>Ho segnalato la tua domanda — "<i>{text}</i>" — a un consulente RealFlipping in carne e ossa, che ti risponderà entro 1 giorno lavorativo.<br><br><button class="btn brass sm" onclick="bookAdvisor()">Prenota una chiamata ora</button>',
+    ai_booked:"Fatto ✅ Ho prenotato una chiamata conoscitiva con un consulente. Riceverai la conferma via email con l'orario proposto.",
+    faq_1:'In base ai progetti attivi nel tuo portafoglio, il rendimento atteso varia dal 14% al 21% sull\'intera durata dell\'operazione, a seconda del rischio e della categoria. Puoi vedere il dettaglio di ogni progetto nella sua scheda, alla voce "Rendimento stimato".',
+    faq_2:'Le plusvalenze da flipping, se l\'immobile viene rivenduto entro 5 anni dall\'acquisto, sono soggette a tassazione separata o ordinaria in base alla scelta in dichiarazione. I proventi da crowdfunding immobiliare seguono invece il regime dei proventi da partecipazione all\'SPV di progetto. Trovi la stima aggiornata per ogni progetto nella sezione "Fiscalità".',
+    faq_3:'Le quote di crowdfunding non sono normalmente liquidabili prima della chiusura dell\'operazione, salvo un eventuale mercato secondario tra investitori della piattaforma, oggi non ancora attivo. Per i flipping interi, l\'uscita coincide con la vendita dell\'immobile a fine lavori.',
+    faq_4:"L'investimento minimo nel crowdfunding parte da 500€ per progetto. Il flipping intero richiede invece la copertura per intero del capitale dell'operazione, generalmente tra 250.000€ e 650.000€: per queste operazioni ti mettiamo comunque in contatto con un consulente per definire i dettagli.",
+    faq_5:"Ogni investimento immobiliare comporta un rischio, incluso quello di ritardo nei lavori o di vendita a un prezzo inferiore a quello stimato nel business plan. Non ci sono garanzie di rendimento. Trovi un'analisi di rischio dedicata nella scheda di ciascun progetto.",
+    faq_6:'Le tempistiche variano da progetto a progetto, generalmente tra 8 e 14 mesi dall\'apertura della raccolta o dall\'acquisizione dell\'immobile. Il cronoprogramma dettagliato è visibile nella scheda progetto, sezione "Tempistiche".',
+    faq_7:"Nel flipping copri per intero un'operazione di ristrutturazione e vendita di un immobile: capitale più alto, ma controllo diretto sull'intera operazione. Nel crowdfunding partecipi con una quota (anche da 500€) insieme ad altri investitori tramite una SPV dedicata: capitale più basso, ma rendimento e rischio sono proporzionali alla quota sottoscritta.",
+    faq_8:"Ogni operazione di crowdfunding è veicolata da una SPV (società veicolo) dedicata al singolo progetto, separata dal patrimonio di RealFlipping: i fondi raccolti sono vincolati a quell'operazione specifica. È lo stesso meccanismo usato dalla maggior parte delle piattaforme di real estate crowdfunding regolamentate.",
+    bo_h1:"Backoffice — Scoring zone", bo_sub:"Motore quantitativo di investibilità per zona (MVP interno, non visibile agli investitori).",
+    bo_updated_prefix:"Ultimo aggiornamento: ",
+    bo_note:'Punteggio 0–100 calcolato da <code class="mono">tools/scoring_engine.py</code> su rendimento locativo, trend prezzi di vendita e trend canoni d\'affitto, con una penalità quando il dato affitto è statisticamente poco affidabile — nessun LLM coinvolto nel calcolo dei numeri. Le spiegazioni testuali per zona sono generate da un template deterministico che legge quegli stessi numeri (v1.5 del layer "IA racconta i dati", pronto per essere sostituito da una vera chiamata LLM). I punteggi sono un ranking relativo alle zone della <b>stessa</b> città: non sono comparabili 1:1 tra città diverse. Le righe segnate <span class="bo-flag">★</span> hanno una variazione affitto anomala da verificare con più storico prima di fidarsene. Clicca su una zona per leggere la spiegazione.',
+    rank_h3:"Classifica zone per punteggio di investibilità", rank_sub:"Le 8 zone con il punteggio più alto tra quelle analizzate.",
+    fascia_investire:"Investire", fascia_monitorare:"Monitorare", fascia_evitare:"Evitare",
+    bo_th_zona:"Zona", bo_th_punteggio:"Punteggio", bo_th_fascia:"Fascia", bo_th_rend_lordo:"Rend. lordo",
+    bo_th_rend_netto:"Rend. netto*", bo_th_affidabilita:"Affidabilità", bo_th_var_vendita:"Var. vendita", bo_th_var_affitto:"Var. affitto",
+    bo_spiegazione_tag:"Spiegazione generata dai dati",
+    bo_footnote:"* Rendimento netto: stima di massima al netto di una quota forfettaria di costi ricorrenti (IMU, condominio, manutenzione, gestione) uguale per tutte le zone — non sostituisce un business plan puntuale sul singolo immobile.",
+  },
+  en: {
+    nav_chi_siamo:"About us", nav_accedi:"Log in", nav_esci:"Log out", nav_notifiche:"Notifications",
+    sidebar_toggle_aria:"Open menu",
+    landing_eyebrow:"Real estate flipping & crowdfunding",
+    landing_h1:`Invest in <em>property</em>,<br>with the numbers in your pocket.`,
+    landing_lead:"RealFlipping selects renovation and value-add real estate deals across Italy. Take on a whole flipping deal or a crowdfunding share, follow every stage with real data, and get advice — human, whenever you need it.",
+    landing_btn_accedi:"Log in to the platform", landing_btn_progetti:"See the projects",
+    landing_hero_alt:"Renovated interior",
+    stat_capitale:"Capital managed", stat_operazioni:"Deals closed", stat_rendimento:"Average return",
+    stat_note:"Demo numbers for this prototype, not real results — no deal has been closed on the platform yet.",
+    hero_float_t2:"Renovation completed",
+    how_h2:"How it works", how_p:"Two ways into property investing, one dashboard to track them both.",
+    how1_n:"01 — SIGN IN", how1_h3:"Sign in with your credentials", how1_p:"One personal dashboard shows everything you've invested in, sorted by flipping and crowdfunding, with real-time visual and statistical updates.",
+    how2_n:"02 — CHOOSE", how2_h3:"Whole flip or a crowdfunding share", how2_p:"In flipping you take on the whole deal. In crowdfunding you choose the category and amount: see costs, business plan and timeline before you decide.",
+    how3_n:"03 — TRACK", how3_h3:"Track the site, the numbers, and taxes", how3_p:"Before/after renders, work progress, and a dedicated tax dashboard. For everything else, the AI advisor — or a flesh-and-blood one.",
+    projects_h2:"Deals raising now", projects_p:"A preview. Log in to see the full business plan, timeline and estimated return.",
+    footer_copy:"© 2026 RealFlipping S.r.l. — Real estate flipping and crowdfunding platform.",
+    footer_risk:"The value of a real estate investment can go down. Pre-contractual documentation is available for every project.",
+    footer_about_link:"About us & Pre-Seed round",
+    about_back:"← Back to the site", about_eyebrow:"RealFlipping, the company", about_h1:"Who we are, what we're looking for, where we're going.",
+    about_lead:"This page isn't about the real estate investments on the platform — it's for anyone who wants to know more about RealFlipping as a startup: the Pre-Seed round, the team we're building, and the method behind the product.",
+    about_mission_h3:"Our mission",
+    about_mission_p:"RealFlipping wants to make real estate investing — today reserved for people with a lot of capital or a lot of time — accessible to investors large and small, with an analysis engine that estimates a deal's return before you even visit it. We're starting with the Italian market, with Palermo as the first testing ground for the zone-scoring engine.",
+    about_method_h3:"The method, in brief",
+    about_method_p:"Every deal proposed on RealFlipping starts from a quantitative engine that analyzes rental yield and sale/rent price trends zone by zone, penalizing statistically unreliable data instead of ignoring it. The result is a 0–100 investability score — not an opinion, a number you can verify and recalculate. The engine's technical details are in our public repository.",
+    about_roadmap_h3:"Roadmap",
+    rm1_h4:"MVP — AI market analysis dashboard", rm1_date:"In progress", rm1_p:"Zone scoring engine, AI advisor, investor dashboard — what you're seeing in this demo.",
+    rm2_h4:"First real deals and Pre-Seed round", rm2_date:"Next step", rm2_p:"Structuring the first flipping/crowdfunding deals in Palermo, raising a Pre-Seed round to fund the team and initial working capital.",
+    rm3_h4:"An app to search, buy and rent a home", rm3_date:"After the investor launch", rm3_p:"Expanding beyond investors: an app for home seekers, with lower fees than traditional agencies.",
+    rm4_h4:"A sales agency and a secondary market", rm4_date:"Next phase", rm4_p:"A second company for buying and selling real estate; for crowdfunding, a secondary market letting investors resell their shares instead of staying locked in until the deal closes.",
+    rm5_h4:"Expansion beyond Italy", rm5_date:"Long term", rm5_p:"Same scoring methodology applied to other markets where real estate flipping is strong — Europe, then beyond.",
+    about_team_h3:"Who we're looking for now",
+    team_tag:"TEAM",
+    team1_h3:"AI student / recent graduate", team1_p:"To take the scoring engine and AI advisor beyond the prototype.",
+    team2_h3:"Software engineer", team2_p:"To build the product beyond the demo: backend, real data, security.",
+    team3_h3:"Real estate / acquisitions expert", team3_p:"With hands-on experience in the Palermo market, for the first real deals.",
+    about_preseed_note:"Pre-Seed round underway — we're looking for a business angel or private investor who believes in the method. Details on amount, equity and exit available on request.",
+    about_talk_h3:"Let's talk", about_talk_p:"Write to us about the round, to join the team, or for a demo of the scoring engine.", about_talk_btn:"Email team@realflipping.it",
+    login_h3:"Welcome back", login_sub:"Log in with your investor credentials.",
+    login_email_label:"Email", login_email_placeholder:"name@example.com", login_pass_label:"Password",
+    login_btn:"Log in to the dashboard", login_note:"Demo environment — any credentials are accepted.",
+    account_plan_h4:"Subscription plan", plan_free:"Free",
+    plan_basic_desc:"Dashboard, deal list, estimated tax overview.",
+    plan_standard_desc:"+ Unlimited AI advisor, real-time notifications.",
+    plan_pro_desc:"+ Priority access to new deals, annual tax report.",
+    plan_elite_desc:"+ Dedicated advisor, lower minimum ticket, exclusive early access.",
+    account_settings_h4:"Settings", account_lang_label:"Language",
+    account_pay_h4:"Default payment method", pay_card:"Card", pay_bonifico:"Bank transfer",
+    account_close_btn:"Close", account_plan_word:"Plan",
+    side_dashboard:"Dashboard", side_investi:"Invest", side_fiscalita:"Tax", side_consulente:"AI Advisor", side_backoffice:"Backoffice",
+    side_next_update:"Next site update", side_next_update_date:"04 AUG 2026",
+    dash_h1:"Your dashboard", dash_sub:"Portfolio overview — updated July 27, 2026", dash_new_btn:"+ New investment",
+    kpi_capitale:"Capital invested", kpi_ops_suffix:"deals",
+    kpi_rendimento:"Estimated average return", kpi_rendimento_delta:"↑ annualized",
+    kpi_attive:"Active deals", kpi_attive_delta:"in progress or raising",
+    kpi_chiuse:"Closed deals", kpi_chiuse_delta:"profits distributed",
+    chart_composizione_h3:"Portfolio composition", chart_composizione_csub:"Capital invested by deal type",
+    chart_empty:'You don\'t have any investments to show here yet. Go to "Invest" to get started.',
+    label_flipping:"Flipping", label_crowdfunding:"Crowdfunding",
+    chart_rendimento_h3:"Estimated return by deal", chart_rendimento_csub:"Comparison across the deals in your portfolio",
+    tab_all:"All investments", tab_flipping:"Whole flips", tab_crowdfunding:"Crowdfunding",
+    dash_empty_cat:"No investments in this category.",
+    card_rendimento:"Estimated return", card_durata:"Duration", card_tuo_investimento:"Your investment",
+    card_raccolti_suffix:"raised", card_avanzamento:"Site progress",
+    card_chiuso:"Closed", card_attivo:"active", card_accedi_dettagli:"Log in for details",
+    explore_empty:"No projects available in this category right now.",
+    filter_all:"All", filter_flipping:"Whole flips",
+    filter_res:"Crowdfunding · Residential", filter_tur:"Crowdfunding · Hospitality", filter_com:"Crowdfunding · Commercial",
+    cat_residenziale:"Residential", cat_turistico:"Hospitality", cat_commerciale:"Commercial",
+    explore_h1:"Invest", explore_sub:"Deals open for funding or available as a whole flip",
+    project_back_explore:"Back to Invest", project_back_dashboard:"Back to dashboard",
+    proj_tagline_flip:"Flipping · Whole deal",
+    proj_meta_localita:"Location", proj_meta_superficie:"Size", proj_meta_durata:"Estimated duration", proj_meta_rendimento:"Estimated return",
+    ba_prima:"Before", ba_dopo:"After", ba_alt_prima:"Before renovation", ba_alt_dopo:"After renovation",
+    cantiere_title:"Site progress photos", cantiere_sub:"Photos uploaded by the RealFlipping team at each completed stage.", cantiere_alt_prefix:"Site progress — ",
+    invcard_gia_portafoglio:"Already in your portfolio", invcard_roi_lab:"Estimated return over the full duration",
+    row_raccolto:"Raised", row_percentuale:"Percentage reached", row_prezzo_operazione:"Deal price",
+    row_avanzamento:"Site progress", row_tuo_investimento:"Your investment", row_ricavo_atteso:"Expected deal proceeds",
+    row_ticket_minimo:"Minimum ticket", row_ricavo_vendita:"Expected proceeds at sale", row_utile_atteso:"Expected profit",
+    row_tipo_operazione:"Deal type", row_rilievo_intero:"Full takeover",
+    note_gia_sottoscritta:"You've already subscribed to this deal. You'll find the timeline, site photos and estimated tax position below.",
+    amount_label:"Amount to invest", btn_investi_ora:"Invest now",
+    note_flipping_intero:"Flipping is a full-coverage deal. An advisor will guide you through structuring the investment.",
+    btn_richiedi_rilevazione:"Request to take over the deal",
+    est_return_tpl:"Investing {amt} the estimated return at the end of the deal is about {est} ({duration}).",
+    proj_tab_plan:"Business plan", proj_tab_time:"Timeline", proj_tab_mkt:"Market analysis",
+    plan_costi_h3:"Deal costs", plan_costo_totale:"Total deal cost", plan_margine:"Expected operating margin",
+    time_cronoprogramma_h3:"Timeline",
+    mkt_andamento_h3:"Funding / progress trend (%)", mkt_nota_h3:"Market note",
+    mkt_nota_tpl:"The {city} area shows {trend} demand for renovated properties in the target price range. The estimated price per square meter at sale is consistent with comparable transactions from the last 12 months tracked by RealFlipping's AI analysis module.",
+    mkt_trend_up:"strongly growing", mkt_trend_stable:"stable",
+    alert_invest_confirm_tpl:'Your investment request for "{title}" has been recorded. You\'ll receive the information pack and the contract to sign digitally by email.',
+    alert_flip_request_tpl:'Request sent for "{title}". A RealFlipping advisor will contact you to structure the flip.',
+    fiscal_h1:"Tax", fiscal_sub:"Estimated tax position for each project in your portfolio",
+    fiscal_th_progetto:"Project", fiscal_th_regime:"Regime", fiscal_th_investito:"Invested",
+    fiscal_th_plusvalenza:"Estimated gain", fiscal_th_imposta:"Estimated tax", fiscal_th_aliquota:"Rate",
+    fiscal_regime_flipping:"Individual — real estate capital gain", fiscal_regime_crowd:"Project SPV — participation proceeds",
+    fiscal_note:"These tax estimates are indicative, calculated under the separate taxation regime for real estate capital gains (deals within 5 years of purchase) or under substitute tax where applicable to real estate crowdfunding proceeds. For a precise assessment, consult your accountant or request the platform's annual tax report.",
+    ai_h1:"AI Advisor", ai_sub:"Instant answers about your investments. If needed, we'll connect you with a human advisor.",
+    ai_disclaimer:"Answers are based on this platform's demo data (your projects and the other published deals), not on an analysis of the real property market. They do not constitute financial advice: for real decisions, consult a licensed advisor.",
+    ai_side_h3:"Try asking", ai_input_placeholder:"Type a question about your investments…", ai_send_btn:"Send",
+    ai_greeting:"Hi Marco 👋 I'm RealFlipping's AI advisor. Ask me anything, in your own words: I'll work out your real portfolio return, simulate an amount on a specific project, compare or rank deals, give you a descriptive breakdown of your portfolio's diversification, and answer questions on taxes and how flipping and crowdfunding work. If I can't answer, I'll connect you with a human advisor.",
+    ai_sim_result_tpl:"Investing {amt} in {title} (estimated return {roi}%, duration {duration}), the estimated return at the end of the deal is about {est} — that's an estimated gain of {gain}. This is a projection based on the project's business plan, not a guaranteed return.",
+    ai_sim_need_project_tpl:'To simulate an amount I need to know which deal — tell me the project name (e.g. "how much would I earn investing {amt} in Casa Alloro?") or check the project page under "Invest": you\'ll find the same simulation with the amount field.',
+    ai_sim_need_amount_tpl:'Give me an amount too — e.g. "how much would I earn investing €5,000 in {title}?" — and I\'ll work out the estimate.',
+    ai_best_none:"There are no open deals available to invest in right now.",
+    ai_best_item_tpl:"{i}. {title} — {typeLabel}, estimated return {roi}, duration {duration}",
+    ai_best_intro_outro_tpl:'The available deals with the highest estimated return right now are:<br>{list}<br><br>The highest return isn\'t automatically the best choice for you: duration, risk and category matter as much as the number. You\'ll find details on each in the "Invest" section.',
+    ai_open_none:"There are no crowdfunding campaigns raising funds right now.",
+    ai_open_item_tpl:"{title} ({city}) — {pct}% raised, minimum ticket {ticket}{portfolioNote}",
+    ai_open_portfolio_note:" · already in your portfolio",
+    ai_open_intro_tpl:"Crowdfunding campaigns currently raising funds:<br>{list}",
+    ai_diversify_empty:'You don\'t have any investments in your portfolio yet, so there\'s no composition to analyze — you\'ll find open deals under "Invest".',
+    ai_diversify_tpl:"Your portfolio is {flipPct} flipping and {crowdPct} crowdfunding{catTxt}. The single largest deal accounts for {maxSingle} of your invested capital.{concentrationNote} This is a descriptive observation about your data, not personalized advice: for guidance on your specific situation, consult a licensed advisor.",
+    ai_diversify_cat_tpl:" (crowdfunding by category: {cats})",
+    ai_diversify_high_note:" That's a fairly high concentration in a single deal: many investors prefer to stay under 30-40% per deal, to limit the impact if a single project underperforms.",
+    ai_diversify_ok_note:" There's no excessive concentration in a single deal.",
+    ai_compare_tpl:"{title} has an estimated return of {roi}.{avgNote} Remember: this compares example deals on this platform, not an analysis of the real property market.",
+    ai_compare_avg_tpl:" The other {typeLabel} deals published on the platform have an average return of {avg}, so this deal is {aboveBelow} average by {diff} points.",
+    ai_above:"above", ai_below:"below",
+    ai_mentioned_tpl:"{title} — {city}, {mq} m².<br>Estimated return: {roi} over {duration}.<br>Expected proceeds: {ricavo}.{investedNote}",
+    ai_mentioned_invested_tpl:" Your investment in this deal is {amount}.",
+    ai_mentioned_not_invested:" You haven't invested in this deal yet — you'll find all the details on its page.",
+    ai_personal_tpl:"You've invested {amount} across {n} deals, with an estimated weighted average return of {roi}. You'll find the deal-by-deal breakdown in your Dashboard.",
+    ai_offer_human:'If you\'d like, I can connect you with a real, human RealFlipping advisor.<br><br><button class="btn brass sm" onclick="bookAdvisor()">Book a call now</button>',
+    ai_escalate_tpl:'<b>I don\'t have a reliable answer for that.</b><br>I\'ve passed your question — "<i>{text}</i>" — on to a real, human RealFlipping advisor, who\'ll get back to you within 1 business day.<br><br><button class="btn brass sm" onclick="bookAdvisor()">Book a call now</button>',
+    ai_booked:"Done ✅ I've booked an introductory call with an advisor. You'll receive a confirmation email with the proposed time.",
+    faq_1:'Based on the active projects in your portfolio, expected returns range from 14% to 21% over the full duration of the deal, depending on risk and category. You can see the detail for each project on its page, under "Estimated return".',
+    faq_2:'Flipping capital gains, if the property is resold within 5 years of purchase, are subject to separate or ordinary taxation depending on the choice made in your tax return. Real estate crowdfunding proceeds instead follow the regime for proceeds from participating in the project SPV. You\'ll find the updated estimate for each project in the "Tax" section.',
+    faq_3:'Crowdfunding shares are normally not liquid before the deal closes, except for a possible secondary market between investors on the platform, not yet active today. For whole flips, the exit coincides with the sale of the property at the end of the works.',
+    faq_4:"The minimum investment in crowdfunding starts at €500 per project. A whole flip instead requires covering the entire capital for the deal, generally between €250,000 and €650,000: for these deals we'll put you in touch with an advisor to work out the details either way.",
+    faq_5:"Every real estate investment carries risk, including the risk of delays in the works or of selling at a price lower than estimated in the business plan. There are no guaranteed returns. You'll find a dedicated risk analysis on each project's page.",
+    faq_6:'Timelines vary from project to project, generally between 8 and 14 months from the opening of fundraising or the acquisition of the property. The detailed schedule is visible on the project page, under "Timeline".',
+    faq_7:"In flipping you fully cover a renovation-and-sale deal on a property: higher capital, but direct control over the whole deal. In crowdfunding you take part with a share (from as little as €500) alongside other investors through a dedicated SPV: lower capital, but return and risk are proportional to your subscribed share.",
+    faq_8:"Every crowdfunding deal is carried out through a dedicated SPV (special purpose vehicle) for that single project, separate from RealFlipping's own assets: the funds raised are ring-fenced to that specific deal. It's the same mechanism used by most regulated real estate crowdfunding platforms.",
+    bo_h1:"Backoffice — Zone scoring", bo_sub:"Quantitative zone-investability engine (internal MVP, not visible to investors).",
+    bo_updated_prefix:"Last updated: ",
+    bo_note:'Score 0–100 calculated by <code class="mono">tools/scoring_engine.py</code> from rental yield, sale-price trend and rent trend, with a penalty when the rent data is statistically unreliable — no LLM involved in computing the numbers. The per-zone text explanations are generated by a deterministic template that reads those same numbers (v1.5 of the "AI narrates the data" layer, ready to be swapped for a real LLM call). Scores are a ranking relative to zones within the <b>same</b> city: they aren\'t comparable 1:1 across different cities. Rows flagged <span class="bo-flag">★</span> have an anomalous rent variation to verify with more history before trusting them. Click a zone to read its explanation.',
+    rank_h3:"Zone ranking by investability score", rank_sub:"The 8 highest-scoring zones among those analyzed.",
+    fascia_investire:"Invest", fascia_monitorare:"Monitor", fascia_evitare:"Avoid",
+    bo_th_zona:"Zone", bo_th_punteggio:"Score", bo_th_fascia:"Tier", bo_th_rend_lordo:"Gross yield",
+    bo_th_rend_netto:"Net yield*", bo_th_affidabilita:"Reliability", bo_th_var_vendita:"Price trend", bo_th_var_affitto:"Rent trend",
+    bo_spiegazione_tag:"Explanation generated from the data",
+    bo_footnote:"* Net yield: a rough estimate net of a flat allowance for recurring costs (property tax, condo fees, maintenance, management) equal across all zones — it doesn't replace a detailed business plan for a specific property.",
+  },
+};
+const CATEGORY_KEY = {Residenziale:'cat_residenziale', Turistico:'cat_turistico', Commerciale:'cat_commerciale'};
+const FASCIA_KEY = {Investire:'fascia_investire', Monitorare:'fascia_monitorare', Evitare:'fascia_evitare'};
+function t(key){
+  const dict = I18N[state.language] || I18N.it;
+  return (key in dict) ? dict[key] : (I18N.it[key] !== undefined ? I18N.it[key] : key);
+}
+function tpl(key, vars){
+  let s = t(key);
+  for(const k in vars) s = s.split('{'+k+'}').join(vars[k]);
+  return s;
+}
+function catLabel(cat){ return cat ? t(CATEGORY_KEY[cat] || cat) : cat; }
+function fasciaLabel(fascia){ return t(FASCIA_KEY[fascia] || fascia); }
+function dealTypeLabel(p){ return p.type==='flipping' ? t('label_flipping') : t('label_crowdfunding')+' · '+catLabel(p.category); }
+function applyTranslations(){
+  document.documentElement.lang = state.language;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    const val = t(key);
+    if(/[<&]/.test(val)) el.innerHTML = val; else el.textContent = val;
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+  });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>{
+    el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
+  });
+  document.querySelectorAll('[data-i18n-alt]').forEach(el=>{
+    el.setAttribute('alt', t(el.getAttribute('data-i18n-alt')));
+  });
+}
+
+let state = {loggedIn:false, dashFilter:'all', exploreFilter:'all', currentProjectId:null, currentView:'dashboard', fromView:'dashboard', language:(function(){ try{ return localStorage.getItem('rf_lang') || 'it'; }catch(e){ return 'it'; } })(), paymentMethod:'card', plan:'Pro', notifUnread:4, backofficeCity:'Palermo'};
 
 const NOTIFICATIONS = [
   {title:'Nuove foto di cantiere caricate', project:'Palazzina Via dei Tigli', date:'2 giorni fa'},
@@ -1009,6 +1454,16 @@ const NOTIFICATIONS = [
    ============================================================ */
 const eur = n => '€' + Math.round(n).toLocaleString('it-IT');
 function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+function showAbout(){
+  document.getElementById('view-landing').classList.add('hidden');
+  document.getElementById('view-about').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+function hideAbout(){
+  document.getElementById('view-about').classList.add('hidden');
+  document.getElementById('view-landing').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'instant'});
+}
 
 /* ============================================================
    LOGIN
@@ -1023,7 +1478,19 @@ function openAccount(){
   document.getElementById('account-overlay').classList.remove('hidden');
 }
 function closeAccount(){document.getElementById('account-overlay').classList.add('hidden');}
-function setLanguage(lang){ state.language = lang; }
+function setLanguage(lang){
+  state.language = lang;
+  try{ localStorage.setItem('rf_lang', lang); }catch(e){}
+  applyTranslations();
+  renderNav();
+  renderLandingPreview();
+  if(state.currentView==='dashboard') renderDashboard();
+  if(state.currentView==='explore') renderExplore();
+  if(state.currentView==='project' && state.currentProjectId) renderProject(state.currentProjectId);
+  if(state.currentView==='fiscal') renderFiscal();
+  if(state.currentView==='backoffice') renderBackoffice();
+  if(state.currentView==='ai') renderAiSuggestions();
+}
 function renderPaymentOptions(){
   document.querySelectorAll('.pay-option').forEach(el=>{
     el.classList.toggle('selected', el.dataset.method===state.paymentMethod);
@@ -1089,17 +1556,17 @@ function renderNav(){
   const cta = document.getElementById('navcta');
   if(!state.loggedIn){
     links.innerHTML = '';
-    cta.innerHTML = `<button class="btn outline sm" onclick="openLogin()">Accedi</button>`;
+    cta.innerHTML = `<button class="btn outline sm" onclick="showAbout()">${t('nav_chi_siamo')}</button><button class="btn outline sm" onclick="openLogin()">${t('nav_accedi')}</button>`;
   } else {
     links.innerHTML = '';
     cta.innerHTML = `
       <div style="position:relative;">
-        <button class="notif-btn" onclick="toggleNotifications()" aria-label="Notifiche">
+        <button class="notif-btn" onclick="toggleNotifications()" aria-label="${t('nav_notifiche')}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 4.5 1.5 6 2 7H4c.5-1 2-2.5 2-7z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
           ${state.notifUnread>0 ? `<span class="notif-dot">${state.notifUnread}</span>` : ''}
         </button>
         <div class="notif-dropdown" id="notif-dropdown">
-          <div class="notif-dropdown-head">Notifiche</div>
+          <div class="notif-dropdown-head">${t('nav_notifiche')}</div>
           <div class="notif-list">
             ${NOTIFICATIONS.map(n=>`
               <div class="notif-item"><div class="n-dot"></div><div><div class="n-title">${n.title}</div><div class="n-meta">${n.project} · ${n.date}</div></div></div>
@@ -1108,7 +1575,7 @@ function renderNav(){
         </div>
       </div>
       <div class="userchip" onclick="openAccount()" style="cursor:pointer;"><div class="avatar">MV</div>Marco V.<span class="plan-badge">${state.plan}</span></div>
-      <button class="btn outline sm" onclick="logout()">Esci</button>`;
+      <button class="btn outline sm" onclick="logout()">${t('nav_esci')}</button>`;
   }
 }
 
@@ -1144,14 +1611,14 @@ function renderLandingPreview(){
   grid.innerHTML = featured.map(p=>`
     <div class="inv-card">
       <div class="inv-thumb"><img src="${p.thumb}" alt="${p.title}">
-        <div class="inv-tag ${p.type==='flipping'?'flip':'crowd'}">${p.type==='flipping'?'Flipping':'Crowdfunding · '+p.category}</div>
+        <div class="inv-tag ${p.type==='flipping'?'flip':'crowd'}">${dealTypeLabel(p)}</div>
       </div>
       <div class="inv-body">
         <h3>${p.title}</h3>
         <div class="inv-loc">${p.city} · ${p.mq} m²</div>
-        <div class="inv-stats"><span class="k">Rendimento stimato</span><span class="v">${p.roi}%</span></div>
-        <div class="inv-stats"><span class="k">Durata</span><span class="v">${p.duration}</span></div>
-        <button class="btn outline sm" style="width:100%;margin-top:10px;" onclick="openLogin()">Accedi per i dettagli</button>
+        <div class="inv-stats"><span class="k">${t('card_rendimento')}</span><span class="v">${p.roi}%</span></div>
+        <div class="inv-stats"><span class="k">${t('card_durata')}</span><span class="v">${p.duration}</span></div>
+        <button class="btn outline sm" style="width:100%;margin-top:10px;" onclick="openLogin()">${t('card_accedi_dettagli')}</button>
       </div>
     </div>`).join('');
 }
@@ -1165,10 +1632,10 @@ function renderDashboard(){
   const avgRoi = (mine.reduce((s,p)=>s+p.roi,0)/mine.length).toFixed(1);
   const active = mine.filter(p=>!p.closed).length;
   document.getElementById('kpi-row').innerHTML = `
-    <div class="kpi"><div class="lab">Capitale investito</div><div class="val">${eur(totInvested)}</div><div class="delta flat">${mine.length} operazioni</div></div>
-    <div class="kpi"><div class="lab">Rendimento medio stimato</div><div class="val">${avgRoi}%</div><div class="delta up">↑ su base annua</div></div>
-    <div class="kpi"><div class="lab">Operazioni attive</div><div class="val">${active}</div><div class="delta flat">in corso o in raccolta</div></div>
-    <div class="kpi"><div class="lab">Operazioni chiuse</div><div class="val">${mine.length-active}</div><div class="delta up">utili distribuiti</div></div>
+    <div class="kpi"><div class="lab">${t('kpi_capitale')}</div><div class="val">${eur(totInvested)}</div><div class="delta flat">${mine.length} ${t('kpi_ops_suffix')}</div></div>
+    <div class="kpi"><div class="lab">${t('kpi_rendimento')}</div><div class="val">${avgRoi}%</div><div class="delta up">${t('kpi_rendimento_delta')}</div></div>
+    <div class="kpi"><div class="lab">${t('kpi_attive')}</div><div class="val">${active}</div><div class="delta flat">${t('kpi_attive_delta')}</div></div>
+    <div class="kpi"><div class="lab">${t('kpi_chiuse')}</div><div class="val">${mine.length-active}</div><div class="delta up">${t('kpi_chiuse_delta')}</div></div>
   `;
   renderDashCharts(mine, totInvested);
   renderDashGrid();
@@ -1194,7 +1661,7 @@ function donutSvg(segments, size, stroke){
 function renderDashCharts(mine, totInvested){
   const wrap = document.getElementById('dash-charts');
   if(!mine.length){
-    wrap.innerHTML = `<div class="chart-card"><h3>Composizione del portafoglio</h3><p class="dash-empty">Non hai ancora investimenti da mostrare qui. Vai su "Investi" per iniziare.</p></div>`;
+    wrap.innerHTML = `<div class="chart-card"><h3>${t('chart_composizione_h3')}</h3><p class="dash-empty">${t('chart_empty')}</p></div>`;
     return;
   }
   const flipAmt = mine.filter(p=>p.type==='flipping').reduce((s,p)=>s+p.myAmount,0);
@@ -1212,19 +1679,19 @@ function renderDashCharts(mine, totInvested){
 
   wrap.innerHTML = `
     <div class="chart-card">
-      <h3>Composizione del portafoglio</h3>
-      <div class="csub">Capitale investito per tipo di operazione</div>
+      <h3>${t('chart_composizione_h3')}</h3>
+      <div class="csub">${t('chart_composizione_csub')}</div>
       <div class="donut-wrap">
-        ${donutSvg([{value:flipAmt,color:'var(--brick)',label:'Flipping'},{value:crowdAmt,color:'var(--petrol)',label:'Crowdfunding'}], 116, 20)}
+        ${donutSvg([{value:flipAmt,color:'var(--brick)',label:t('label_flipping')},{value:crowdAmt,color:'var(--petrol)',label:t('label_crowdfunding')}], 116, 20)}
         <div class="donut-legend">
-          <div class="li"><span class="dot flip"></span><div><div>Flipping</div><div class="sub">${eur(flipAmt)} · ${flipPct}%</div></div></div>
-          <div class="li"><span class="dot crowd"></span><div><div>Crowdfunding</div><div class="sub">${eur(crowdAmt)} · ${crowdPct}%</div></div></div>
+          <div class="li"><span class="dot flip"></span><div><div>${t('label_flipping')}</div><div class="sub">${eur(flipAmt)} · ${flipPct}%</div></div></div>
+          <div class="li"><span class="dot crowd"></span><div><div>${t('label_crowdfunding')}</div><div class="sub">${eur(crowdAmt)} · ${crowdPct}%</div></div></div>
         </div>
       </div>
     </div>
     <div class="chart-card">
-      <h3>Rendimento stimato per operazione</h3>
-      <div class="csub">Confronto tra le operazioni che hai in portafoglio</div>
+      <h3>${t('chart_rendimento_h3')}</h3>
+      <div class="csub">${t('chart_rendimento_csub')}</div>
       ${roiRows}
     </div>
   `;
@@ -1238,7 +1705,7 @@ function setDashFilter(cat, el){
 function renderDashGrid(){
   let mine = PROJECTS.filter(p=>p.invested);
   if(state.dashFilter!=='all') mine = mine.filter(p=>p.type===state.dashFilter);
-  document.getElementById('dash-grid').innerHTML = mine.map(cardHtml).join('') || `<p style="color:var(--ink-soft);font-size:13.5px;">Nessun investimento in questa categoria.</p>`;
+  document.getElementById('dash-grid').innerHTML = mine.map(cardHtml).join('') || `<p style="color:var(--ink-soft);font-size:13.5px;">${t('dash_empty_cat')}</p>`;
 }
 
 function cardHtml(p){
@@ -1246,17 +1713,17 @@ function cardHtml(p){
   return `
   <div class="inv-card" onclick="go('project','${p.id}')" style="cursor:pointer;">
     <div class="inv-thumb"><img src="${p.thumb}" alt="${p.title}">
-      <div class="inv-tag ${p.type==='flipping'?'flip':'crowd'}">${p.type==='flipping'?'Flipping':'Crowdfunding · '+p.category}</div>
+      <div class="inv-tag ${p.type==='flipping'?'flip':'crowd'}">${dealTypeLabel(p)}</div>
     </div>
     <div class="inv-body">
       <h3>${p.title}</h3>
       <div class="inv-loc">${p.city} · ${p.mq} m²</div>
-      ${p.invested ? `<div class="inv-stats"><span class="k">Tuo investimento</span><span class="v">${eur(p.myAmount)}</span></div>` : ''}
-      <div class="inv-stats"><span class="k">Rendimento stimato</span><span class="v">${p.roi}%</span></div>
-      ${p.type==='crowdfunding' ? `<div class="progressbar"><div class="fill" style="width:${pct}%"></div></div><div class="inv-stats"><span class="k">${eur(p.raised)} raccolti</span><span class="v">${pct}%</span></div>` :
-        `<div class="progressbar"><div class="fill" style="width:${pct}%"></div></div><div class="inv-stats"><span class="k">Avanzamento cantiere</span><span class="v">${pct}%</span></div>`}
+      ${p.invested ? `<div class="inv-stats"><span class="k">${t('card_tuo_investimento')}</span><span class="v">${eur(p.myAmount)}</span></div>` : ''}
+      <div class="inv-stats"><span class="k">${t('card_rendimento')}</span><span class="v">${p.roi}%</span></div>
+      ${p.type==='crowdfunding' ? `<div class="progressbar"><div class="fill" style="width:${pct}%"></div></div><div class="inv-stats"><span class="k">${eur(p.raised)} ${t('card_raccolti_suffix')}</span><span class="v">${pct}%</span></div>` :
+        `<div class="progressbar"><div class="fill" style="width:${pct}%"></div></div><div class="inv-stats"><span class="k">${t('card_avanzamento')}</span><span class="v">${pct}%</span></div>`}
       <div class="inv-foot">
-        <span class="pill ${p.closed?'ok':'wip'}">${p.closed?'Chiuso':(p.status||'attivo')}</span>
+        <span class="pill ${p.closed?'ok':'wip'}">${p.closed?t('card_chiuso'):(p.status?p.status:t('card_attivo'))}</span>
         <span class="mono" style="font-size:11.5px;color:var(--ink-faint);">${p.duration}</span>
       </div>
     </div>
@@ -1267,9 +1734,9 @@ function cardHtml(p){
    EXPLORE
    ============================================================ */
 function renderExplore(){
-  const filters = [['all','Tutti'],['flipping','Flipping interi'],['crowdfunding-Residenziale','Crowdfunding · Residenziale'],['crowdfunding-Turistico','Crowdfunding · Turistico'],['crowdfunding-Commerciale','Crowdfunding · Commerciale']];
-  document.getElementById('explore-filters').innerHTML = filters.map(([k,l])=>
-    `<button class="chip ${state.exploreFilter===k?'active':''}" onclick="setExploreFilter('${k}')">${l}</button>`).join('');
+  const filters = [['all','filter_all'],['flipping','filter_flipping'],['crowdfunding-Residenziale','filter_res'],['crowdfunding-Turistico','filter_tur'],['crowdfunding-Commerciale','filter_com']];
+  document.getElementById('explore-filters').innerHTML = filters.map(([k,lk])=>
+    `<button class="chip ${state.exploreFilter===k?'active':''}" onclick="setExploreFilter('${k}')">${t(lk)}</button>`).join('');
   renderExploreGrid();
 }
 function setExploreFilter(k){ state.exploreFilter=k; renderExplore(); }
@@ -1280,7 +1747,7 @@ function renderExploreGrid(){
     const cat = state.exploreFilter.split('-')[1];
     list = list.filter(p=>p.type==='crowdfunding' && p.category===cat);
   }
-  document.getElementById('explore-grid').innerHTML = list.map(cardHtml).join('') || `<p style="color:var(--ink-soft);font-size:13.5px;">Nessun progetto disponibile in questa categoria al momento.</p>`;
+  document.getElementById('explore-grid').innerHTML = list.map(cardHtml).join('') || `<p style="color:var(--ink-soft);font-size:13.5px;">${t('explore_empty')}</p>`;
 }
 
 /* ============================================================
@@ -1292,39 +1759,39 @@ function renderProject(id){
   const el = document.getElementById('view-project');
   const isCrowd = p.type==='crowdfunding';
   const pct = isCrowd ? Math.round((p.raised/p.target)*100) : (p.progress||0);
-  const backLabel = state.fromView==='explore' ? 'Torna a Investi' : 'Torna alla dashboard';
+  const backLabel = state.fromView==='explore' ? t('project_back_explore') : t('project_back_dashboard');
 
   el.innerHTML = `
     <button class="backlink" onclick="go('${state.fromView}')">← ${backLabel}</button>
     <div class="proj-head">
       <div>
-        <div class="proj-tagline">${p.type==='flipping'?'Flipping · Operazione intera':'Crowdfunding · '+p.category}</div>
+        <div class="proj-tagline">${p.type==='flipping'?t('proj_tagline_flip'):t('label_crowdfunding')+' · '+catLabel(p.category)}</div>
         <div class="proj-title-row"><h1>${p.title}</h1></div>
         <div class="proj-meta">
-          <div class="m">Località<b>${p.city}</b></div>
-          <div class="m">Superficie<b>${p.mq} m²</b></div>
-          <div class="m">Durata stimata<b>${p.duration}</b></div>
-          <div class="m">Rendimento stimato<b>${p.roi}%</b></div>
+          <div class="m">${t('proj_meta_localita')}<b>${p.city}</b></div>
+          <div class="m">${t('proj_meta_superficie')}<b>${p.mq} m²</b></div>
+          <div class="m">${t('proj_meta_durata')}<b>${p.duration}</b></div>
+          <div class="m">${t('proj_meta_rendimento')}<b>${p.roi}%</b></div>
         </div>
 
         <div class="ba-wrap" id="ba-wrap">
-          <div class="layer before"><img src="${p.before}" alt="Prima della ristrutturazione"></div>
-          <div class="layer after" id="ba-after"><img src="${p.after}" alt="Dopo la ristrutturazione"></div>
+          <div class="layer before"><img src="${p.before}" alt="${t('ba_alt_prima')}"></div>
+          <div class="layer after" id="ba-after"><img src="${p.after}" alt="${t('ba_alt_dopo')}"></div>
           <div class="ba-handle" id="ba-handle"></div>
-          <div class="ba-label before">Prima</div>
-          <div class="ba-label after">Dopo</div>
+          <div class="ba-label before">${t('ba_prima')}</div>
+          <div class="ba-label after">${t('ba_dopo')}</div>
         </div>
         <input type="range" class="ba-slider" min="0" max="100" value="50" oninput="updateBA(this.value)">
 
         ${p.invested ? `
         <div class="cantiere-photos">
-          <h3 class="cantiere-photos-title">Foto avanzamento cantiere</h3>
-          <div class="cantiere-photos-sub">Scatti caricati dal team RealFlipping a ogni fase completata.</div>
+          <h3 class="cantiere-photos-title">${t('cantiere_title')}</h3>
+          <div class="cantiere-photos-sub">${t('cantiere_sub')}</div>
           <div class="cantiere-photos-grid">
-            ${p.timeline.filter(t=>t.done||t.now).map((t,i)=>`
+            ${p.timeline.filter(tl=>tl.done||tl.now).map((tl,i)=>`
               <figure class="cantiere-photo">
-                <img src="${CANTIERE_IMGS[i % CANTIERE_IMGS.length]}" alt="Avanzamento cantiere — ${t.t}">
-                <figcaption><b>${t.d}</b><span>${t.t}</span></figcaption>
+                <img src="${CANTIERE_IMGS[i % CANTIERE_IMGS.length]}" alt="${t('cantiere_alt_prefix')}${tl.t}">
+                <figcaption><b>${tl.d}</b><span>${tl.t}</span></figcaption>
               </figure>
             `).join('')}
           </div>
@@ -1333,48 +1800,48 @@ function renderProject(id){
       </div>
 
       <div class="invest-card">
-        ${p.invested ? `<div class="ai-tag">Già in portafoglio</div>` : ''}
+        ${p.invested ? `<div class="ai-tag">${t('invcard_gia_portafoglio')}</div>` : ''}
         <div class="roi">${p.roi}%</div>
-        <div class="roi-lab">Rendimento stimato sull'intera durata</div>
+        <div class="roi-lab">${t('invcard_roi_lab')}</div>
         ${p.invested ? `
           ${isCrowd ? `
             <div class="progressbar"><div class="fill" style="width:${pct}%"></div></div>
-            <div class="rowline"><span>Raccolto</span><span class="v">${eur(p.raised)} / ${eur(p.target)}</span></div>
-            <div class="rowline"><span>Percentuale raggiunta</span><span class="v">${pct}%</span></div>
+            <div class="rowline"><span>${t('row_raccolto')}</span><span class="v">${eur(p.raised)} / ${eur(p.target)}</span></div>
+            <div class="rowline"><span>${t('row_percentuale')}</span><span class="v">${pct}%</span></div>
           ` : `
-            <div class="rowline"><span>Prezzo operazione</span><span class="v">${eur(p.totalPrice)}</span></div>
-            <div class="rowline"><span>Avanzamento cantiere</span><span class="v">${pct}%</span></div>
+            <div class="rowline"><span>${t('row_prezzo_operazione')}</span><span class="v">${eur(p.totalPrice)}</span></div>
+            <div class="rowline"><span>${t('row_avanzamento')}</span><span class="v">${pct}%</span></div>
           `}
-          <div class="rowline"><span>Tuo investimento</span><span class="v">${eur(p.myAmount)}</span></div>
-          <div class="rowline"><span>Ricavo atteso operazione</span><span class="v">${eur(p.ricavoAtteso)}</span></div>
-          <p style="font-size:12px;color:var(--ink-soft);margin-top:14px;line-height:1.5;">Operazione già sottoscritta. Trovi cronoprogramma, foto del cantiere e situazione fiscale stimata qui sotto.</p>
+          <div class="rowline"><span>${t('row_tuo_investimento')}</span><span class="v">${eur(p.myAmount)}</span></div>
+          <div class="rowline"><span>${t('row_ricavo_atteso')}</span><span class="v">${eur(p.ricavoAtteso)}</span></div>
+          <p style="font-size:12px;color:var(--ink-soft);margin-top:14px;line-height:1.5;">${t('note_gia_sottoscritta')}</p>
         ` : isCrowd ? `
           <div class="progressbar"><div class="fill" style="width:${pct}%"></div></div>
-          <div class="rowline"><span>Raccolto</span><span class="v">${eur(p.raised)} / ${eur(p.target)}</span></div>
-          <div class="rowline"><span>Percentuale raggiunta</span><span class="v">${pct}%</span></div>
-          <div class="rowline"><span>Ticket minimo</span><span class="v">${eur(p.minTicket)}</span></div>
-          <div class="rowline"><span>Ricavo atteso operazione</span><span class="v">${eur(p.ricavoAtteso)}</span></div>
+          <div class="rowline"><span>${t('row_raccolto')}</span><span class="v">${eur(p.raised)} / ${eur(p.target)}</span></div>
+          <div class="rowline"><span>${t('row_percentuale')}</span><span class="v">${pct}%</span></div>
+          <div class="rowline"><span>${t('row_ticket_minimo')}</span><span class="v">${eur(p.minTicket)}</span></div>
+          <div class="rowline"><span>${t('row_ricavo_atteso')}</span><span class="v">${eur(p.ricavoAtteso)}</span></div>
           <div class="amount-box">
-            <label>Importo da investire</label>
+            <label>${t('amount_label')}</label>
             <div class="amount-input"><span>€</span><input type="number" id="invest-amount" value="${p.minTicket}" min="${p.minTicket}" step="100" oninput="updateEstimate('${p.id}')"></div>
           </div>
           <div class="est-return" id="est-return"></div>
-          <button class="btn brass" style="width:100%;margin-top:14px;" onclick="confirmInvest('${p.title.replace(/'/g,"\\'")}')">Investi ora</button>
+          <button class="btn brass" style="width:100%;margin-top:14px;" onclick="confirmInvest('${p.title.replace(/'/g,"\\'")}')">${t('btn_investi_ora')}</button>
         ` : `
-          <div class="rowline"><span>Prezzo operazione</span><span class="v">${eur(p.totalPrice)}</span></div>
-          <div class="rowline"><span>Ricavo atteso alla vendita</span><span class="v">${eur(p.ricavoAtteso)}</span></div>
-          <div class="rowline"><span>Utile atteso</span><span class="v">${eur(p.ricavoAtteso-p.totalPrice)}</span></div>
-          <div class="rowline"><span>Tipo di operazione</span><span class="v">Rilievo intero</span></div>
-          <p style="font-size:12px;color:var(--ink-soft);margin-top:14px;line-height:1.5;">Il flipping è un'operazione a copertura intera. Un consulente ti guiderà nella strutturazione dell'investimento.</p>
-          <button class="btn brass" style="width:100%;margin-top:6px;" onclick="requestFlipCall('${p.title.replace(/'/g,"\\'")}')">Richiedi rilevazione operazione</button>
+          <div class="rowline"><span>${t('row_prezzo_operazione')}</span><span class="v">${eur(p.totalPrice)}</span></div>
+          <div class="rowline"><span>${t('row_ricavo_vendita')}</span><span class="v">${eur(p.ricavoAtteso)}</span></div>
+          <div class="rowline"><span>${t('row_utile_atteso')}</span><span class="v">${eur(p.ricavoAtteso-p.totalPrice)}</span></div>
+          <div class="rowline"><span>${t('row_tipo_operazione')}</span><span class="v">${t('row_rilievo_intero')}</span></div>
+          <p style="font-size:12px;color:var(--ink-soft);margin-top:14px;line-height:1.5;">${t('note_flipping_intero')}</p>
+          <button class="btn brass" style="width:100%;margin-top:6px;" onclick="requestFlipCall('${p.title.replace(/'/g,"\\'")}')">${t('btn_richiedi_rilevazione')}</button>
         `}
       </div>
     </div>
 
     <div class="proj-tabs">
-      <button class="tabbtn active" onclick="setProjTab('plan',this)">Business plan</button>
-      <button class="tabbtn" onclick="setProjTab('time',this)">Tempistiche</button>
-      <button class="tabbtn" onclick="setProjTab('mkt',this)">Analisi di mercato</button>
+      <button class="tabbtn active" onclick="setProjTab('plan',this)">${t('proj_tab_plan')}</button>
+      <button class="tabbtn" onclick="setProjTab('time',this)">${t('proj_tab_time')}</button>
+      <button class="tabbtn" onclick="setProjTab('mkt',this)">${t('proj_tab_mkt')}</button>
     </div>
     <div id="proj-tab-content"></div>
   `;
@@ -1392,13 +1859,13 @@ function updateEstimate(id){
   const p = PROJECTS.find(x=>x.id===id);
   const amt = parseFloat(document.getElementById('invest-amount').value) || 0;
   const est = amt * (1 + p.roi/100);
-  document.getElementById('est-return').innerHTML = `Investendo ${eur(amt)} il ritorno stimato a fine operazione è di circa <b>${eur(est)}</b> (${p.duration}).`;
+  document.getElementById('est-return').innerHTML = tpl('est_return_tpl', {amt:eur(amt), est:'<b>'+eur(est)+'</b>', duration:p.duration});
 }
 function confirmInvest(title){
-  alert('Richiesta di investimento in "'+title+'" registrata. Riceverai il fascicolo informativo e il contratto da firmare digitalmente via email.');
+  alert(tpl('alert_invest_confirm_tpl', {title}));
 }
 function requestFlipCall(title){
-  alert('Richiesta inviata per "'+title+'". Un consulente RealFlipping ti contatterà per strutturare l\'operazione di flipping.');
+  alert(tpl('alert_flip_request_tpl', {title}));
 }
 
 function setProjTab(tab, el){
@@ -1411,31 +1878,31 @@ function setProjTab(tab, el){
     const margine = p.ricavoAtteso - totCosti;
     c.innerHTML = `
       <div class="card-block">
-        <h3>Costi dell'operazione</h3>
+        <h3>${t('plan_costi_h3')}</h3>
         <table class="bp-table">
           ${p.costi.map(([k,v])=>`<tr><td>${k}</td><td>${eur(v)}</td></tr>`).join('')}
-          <tr class="total"><td>Costo totale operazione</td><td>${eur(totCosti)}</td></tr>
-          <tr><td>Ricavo atteso alla vendita</td><td>${eur(p.ricavoAtteso)}</td></tr>
-          <tr class="total"><td>Margine operativo atteso</td><td>${eur(margine)}</td></tr>
+          <tr class="total"><td>${t('plan_costo_totale')}</td><td>${eur(totCosti)}</td></tr>
+          <tr><td>${t('row_ricavo_vendita')}</td><td>${eur(p.ricavoAtteso)}</td></tr>
+          <tr class="total"><td>${t('plan_margine')}</td><td>${eur(margine)}</td></tr>
         </table>
       </div>`;
   } else if(tab==='time'){
-    c.innerHTML = `<div class="card-block"><h3>Cronoprogramma</h3><div class="timeline">
-      ${p.timeline.map(t=>`<div class="tl-item ${t.done?'done':''} ${t.now?'now':''}">
+    c.innerHTML = `<div class="card-block"><h3>${t('time_cronoprogramma_h3')}</h3><div class="timeline">
+      ${p.timeline.map(tl=>`<div class="tl-item ${tl.done?'done':''} ${tl.now?'now':''}">
         <div class="tl-dot"></div>
-        <div><h4>${t.t}</h4><div class="tl-date">${t.d}</div><p>${t.note||''}</p></div>
+        <div><h4>${tl.t}</h4><div class="tl-date">${tl.d}</div><p>${tl.note||''}</p></div>
       </div>`).join('')}
     </div></div>`;
   } else {
     c.innerHTML = `<div class="card-block">
-      <h3>Andamento raccolta / avanzamento (%)</h3>
+      <h3>${t('mkt_andamento_h3')}</h3>
       <div class="chartwrap">
         ${p.chart.map((v,i)=>`<div class="bar" style="height:${Math.max(v,4)}%"><span class="blab">${p.chartLabels[i]}</span></div>`).join('')}
       </div>
     </div>
     <div class="card-block" style="margin-top:34px;">
-      <h3>Nota di mercato</h3>
-      <p style="font-size:13.5px;color:var(--ink-soft);line-height:1.6;">La zona di ${p.city.split(',')[0]} registra una domanda ${p.roi>18?'in forte crescita':'stabile'} per immobili ristrutturati nella fascia di prezzo target. Il prezzo al metro quadro stimato alla vendita è coerente con le transazioni comparabili degli ultimi 12 mesi rilevate dal modulo di analisi IA di RealFlipping.</p>
+      <h3>${t('mkt_nota_h3')}</h3>
+      <p style="font-size:13.5px;color:var(--ink-soft);line-height:1.6;">${tpl('mkt_nota_tpl', {city:p.city.split(',')[0], trend:(p.roi>18?t('mkt_trend_up'):t('mkt_trend_stable'))})}</p>
     </div>`;
   }
 }
@@ -1451,7 +1918,7 @@ function renderFiscal(){
     const imposta = Math.round(plusval * aliquota/100);
     return `<tr>
       <td>${p.title}</td>
-      <td>${p.type==='flipping'?'Persona fisica — plusvalenza immobiliare':'SPV di progetto — proventi da partecipazione'}</td>
+      <td>${p.type==='flipping'?t('fiscal_regime_flipping'):t('fiscal_regime_crowd')}</td>
       <td class="num">${eur(p.myAmount)}</td>
       <td class="num">${eur(plusval)}</td>
       <td class="num">${eur(imposta)}</td>
@@ -1461,12 +1928,31 @@ function renderFiscal(){
 }
 
 /* ============================================================
-   BACKOFFICE — scoring zone (output di tools/palermo_zone_scoring.py)
+   BACKOFFICE — scoring zone multi-città (output di tools/scoring_engine.py)
    ============================================================ */
+/* Nota per città: solo un avviso in più quando i dati non hanno ancora lo
+   stesso livello di verifica di Palermo — vedi i commenti in
+   tools/milano_zone_scoring.py per il dettaglio della provenienza dati. */
+const BO_CITY_NOTES = {
+  Milano: `I prezzi di Milano sono reali (fonte pubblica, 2026); i trend (variazioni %) sono per lo più stimati — verificati solo per due zone. Vedi <code class="mono">tools/milano_zone_scoring.py</code> per la provenienza esatta prima di usare questi numeri in un pitch.`,
+};
+function setBackofficeCity(city){
+  state.backofficeCity = city;
+  renderBackoffice();
+}
 function renderBackoffice(){
-  document.getElementById('bo-updated').textContent = `Ultimo aggiornamento: ${ZONE_SCORES_UPDATED}`;
+  if(!state.backofficeCity || !ZONE_SCORES_BY_CITY[state.backofficeCity]) state.backofficeCity = Object.keys(ZONE_SCORES_BY_CITY)[0];
+  const city = state.backofficeCity;
+  const scores = ZONE_SCORES_BY_CITY[city];
 
-  const top = ZONE_SCORES.slice(0, 8);
+  document.getElementById('bo-updated').textContent = `${t('bo_updated_prefix')}${ZONE_SCORES_UPDATED}`;
+  document.getElementById('bo-city-tabs').innerHTML = Object.keys(ZONE_SCORES_BY_CITY).map(c=>
+    `<button class="tabbtn ${c===city?'active':''}" onclick="setBackofficeCity('${c}')">${c}</button>`).join('');
+  const noteEl = document.getElementById('bo-city-note');
+  if(BO_CITY_NOTES[city]){ noteEl.innerHTML = BO_CITY_NOTES[city]; noteEl.classList.remove('hidden'); }
+  else { noteEl.classList.add('hidden'); }
+
+  const top = scores.slice(0, 8);
   document.getElementById('rank-chart-body').innerHTML = top.map(z=>{
     const short = z.zona.split(',')[0].trim();
     const cls = z.fascia.toLowerCase();
@@ -1478,10 +1964,10 @@ function renderBackoffice(){
     </div>`;
   }).join('');
 
-  document.getElementById('backoffice-body').innerHTML = ZONE_SCORES.map((z,i)=>`<tr class="bo-row" onclick="toggleBoDetail(${i})" id="bo-row-${i}">
+  document.getElementById('backoffice-body').innerHTML = scores.map((z,i)=>`<tr class="bo-row" onclick="toggleBoDetail(${i})" id="bo-row-${i}">
     <td class="zona">${z.zona}${z.dato_da_verificare?' <span class="bo-flag">★</span>':''}<span class="chev">▶</span></td>
     <td class="num">${z.punteggio.toFixed(1)}</td>
-    <td><span class="bo-fascia ${z.fascia.toLowerCase()}">${z.fascia}</span></td>
+    <td><span class="bo-fascia ${z.fascia.toLowerCase()}">${fasciaLabel(z.fascia)}</span></td>
     <td class="num">${z.rendimento_lordo_pct.toFixed(2)}%</td>
     <td class="num">${z.rendimento_netto_pct.toFixed(2)}%</td>
     <td class="num bo-affid ${z.indice_affidabilita_pct<70?'low':''}">${z.indice_affidabilita_pct.toFixed(0)}/100</td>
@@ -1489,7 +1975,7 @@ function renderBackoffice(){
     <td class="num">${z.var_affitto_pct>0?'+':''}${z.var_affitto_pct.toFixed(1)}%</td>
   </tr>
   <tr class="bo-detail hidden" id="bo-detail-${i}"><td colspan="8">
-    <span class="ai-tag">Spiegazione generata dai dati</span><br>${z.spiegazione}
+    <span class="ai-tag">${t('bo_spiegazione_tag')}</span><br>${z.spiegazione}
   </td></tr>`).join('');
 }
 function toggleBoDetail(i){
@@ -1500,11 +1986,37 @@ function toggleBoDetail(i){
 /* ============================================================
    AI CONSULTANT
    ============================================================ */
+/* Domande suggerite: testo bilingue sia per il pulsante sia per la query
+   inviata ad askAi(), così il motore locale (che matcha parole chiave in
+   entrambe le lingue, vedi respondLocal) riconosce la domanda a prescindere
+   dalla lingua attiva. */
+const QUICK_QUESTIONS = [
+  {it:'Quanto ho investito in totale e qual è il mio rendimento medio?', en:"How much have I invested in total and what's my average return?"},
+  {it:'Come si posiziona Casa Alloro rispetto alle altre operazioni?', en:'How does Casa Alloro compare to the other deals?'},
+  {it:'Qual è il rendimento atteso del progetto Casa Alloro?', en:"What's the expected return on the Casa Alloro project?"},
+  {it:'Come vengono tassate le plusvalenze da crowdfunding?', en:'How are crowdfunding capital gains taxed?'},
+  {it:'Posso vendere la mia quota prima della fine del progetto?', en:'Can I sell my share before the project ends?'},
+  {it:"Qual è l'investimento minimo nel flipping?", en:"What's the minimum investment for flipping?"},
+  {it:'Quale operazione ha il rendimento più alto disponibile ora?', en:'Which available deal has the highest return right now?'},
+  {it:'Quanto guadagnerei investendo 5000€ in Baglio San Vito?', en:'How much would I earn investing €5,000 in Baglio San Vito?'},
+  {it:'Il mio portafoglio è diversificato?', en:'Is my portfolio diversified?'},
+  {it:'Quali campagne di crowdfunding sono aperte ora?', en:'Which crowdfunding campaigns are open right now?'},
+  {it:'Voglio parlare con un consulente umano', en:'I want to talk to a human advisor'},
+];
+function renderAiSuggestions(){
+  const wrap = document.getElementById('ai-suggest-list');
+  if(!wrap) return;
+  wrap.innerHTML = QUICK_QUESTIONS.map(q=>{
+    const text = state.language==='en' ? q.en : q.it;
+    return `<button class="ai-suggest" onclick='askAi(${JSON.stringify(text).replace(/'/g,'&#39;')})'>${escapeHtml(text)}</button>`;
+  }).join('');
+}
 let aiInited = false;
 function renderAiInit(){
+  renderAiSuggestions();
   if(aiInited) return;
   aiInited = true;
-  addAiMsg('bot', `Ciao Marco 👋 Sono il consulente IA di RealFlipping. Puoi farmi domande libere, con parole tue: calcolo il tuo rendimento reale sul portafoglio, simulo un importo su un progetto specifico, confronto o classifico le operazioni, ti do un'analisi descrittiva della diversificazione del tuo portafoglio e rispondo su fiscalità e funzionamento di flipping e crowdfunding. Se non riesco a risponderti, ti metto in contatto con un consulente fisico.`);
+  addAiMsg('bot', t('ai_greeting'));
 }
 function addAiMsg(type, text){
   const wrap = document.getElementById('ai-msgs');
@@ -1574,7 +2086,7 @@ let aiRequestSeq = 0; // scarta risposte arrivate in ritardo se l'utente ha già
 function askAi(text){
   addAiMsg('user', text);
   const lower = text.toLowerCase();
-  const escalateWords = ['umano','persona','consulente fisico','chiamare','parlare con qualcuno'];
+  const escalateWords = ['umano','persona','consulente fisico','chiamare','parlare con qualcuno','human','a person','human advisor','call me','talk to someone','talk to a human'];
   if(escalateWords.some(w=>lower.includes(w))){
     setTimeout(()=>escalate(text), 400);
     return;
@@ -1603,6 +2115,7 @@ function buildAiContext(){
       prezzo_operazione_eur:p.totalPrice||null,
     })),
     fatti_piattaforma: PLATFORM_FACTS,
+    lingua_risposta: state.language==='en' ? 'inglese' : 'italiano',
   };
 }
 
@@ -1666,7 +2179,7 @@ async function askAiBackend(text){
 }
 
 function offerHumanAdvisor(){
-  addAiMsg('escalate', `Se vuoi, posso metterti in contatto con un consulente RealFlipping in carne e ossa.<br><br><button class="btn brass sm" onclick="bookAdvisor()">Prenota una chiamata ora</button>`);
+  addAiMsg('escalate', t('ai_offer_human'));
 }
 
 /* Motore a regole locale — usato quando AI_BACKEND_URL non è configurato,
@@ -1676,22 +2189,22 @@ function offerHumanAdvisor(){
 function respondLocal(text){
   const lower = text.toLowerCase();
   const mentioned = findProjectMention(lower);
-  const compareWords = ['confront','posizion','rispetto alle altre','media','comparabil'];
-  const simWords = ['se investissi','se investo','quanto guadagn','simula','simulazione','ritorno se'];
-  const bestWords = ['rendimento più alto','miglior rendimento','migliore operazione','miglior operazione','quale operazione conviene','top operazione','operazione migliore'];
-  const openWords = ['campagn','in raccolta','raccolta fondi aperte','operazioni aperte','cosa posso finanziare'];
-  const diversifyWords = ['diversificat','diversificaz','troppo concentrato','equilibrat','distribuzione del portafoglio','distribuzione portafoglio'];
+  const compareWords = ['confront','posizion','rispetto alle altre','media','comparabil','compare','position','vs the other','versus'];
+  const simWords = ['se investissi','se investo','quanto guadagn','simula','simulazione','ritorno se','if i invest','how much would i earn','simulate','simulation','return if'];
+  const bestWords = ['rendimento più alto','miglior rendimento','migliore operazione','miglior operazione','quale operazione conviene','top operazione','operazione migliore','highest return','best return','best deal','which deal is best','top deal','best performing deal'];
+  const openWords = ['campagn','in raccolta','raccolta fondi aperte','operazioni aperte','cosa posso finanziare','campaign','open for funding','open deals','fundraising open','what can i fund'];
+  const diversifyWords = ['diversificat','diversificaz','troppo concentrato','equilibrat','distribuzione del portafoglio','distribuzione portafoglio','diversif','too concentrated','balanced','portfolio distribution','portfolio allocation'];
   const amt = parseAmount(text);
 
   setTimeout(()=>{
     if(simWords.some(w=>lower.includes(w))){
       if(mentioned && amt){
         const est = estimateReturn(mentioned, amt);
-        addAiMsg('bot', `Investendo <b>${eur(amt)}</b> in <b>${mentioned.title}</b> (rendimento stimato ${mentioned.roi}%, durata ${mentioned.duration}), il ritorno stimato a fine operazione è di circa <b>${eur(est)}</b> — cioè un guadagno stimato di <b>${eur(est-amt)}</b>. È una proiezione sul business plan del progetto, non una garanzia di rendimento.`);
+        addAiMsg('bot', tpl('ai_sim_result_tpl', {amt:'<b>'+eur(amt)+'</b>', title:'<b>'+mentioned.title+'</b>', roi:mentioned.roi, duration:mentioned.duration, est:'<b>'+eur(est)+'</b>', gain:'<b>'+eur(est-amt)+'</b>'}));
       } else if(amt && !mentioned){
-        addAiMsg('bot', `Per simulare un importo mi serve sapere su quale operazione — dimmi il nome del progetto (es. "quanto guadagnerei investendo ${eur(amt)} in Casa Alloro?") oppure guarda la scheda del progetto in "Investi": trovi la stessa simulazione con il campo importo.`);
+        addAiMsg('bot', tpl('ai_sim_need_project_tpl', {amt:eur(amt)}));
       } else if(mentioned && !amt){
-        addAiMsg('bot', `Dimmi anche un importo — es. "quanto guadagnerei investendo 5.000€ in ${mentioned.title}?" — e ti calcolo la stima.`);
+        addAiMsg('bot', tpl('ai_sim_need_amount_tpl', {title:mentioned.title}));
       } else {
         escalate(text);
       }
@@ -1699,49 +2212,54 @@ function respondLocal(text){
     }
     if(bestWords.some(w=>lower.includes(w))){
       const top = rankOpenProjects().slice(0,3);
-      if(!top.length){ addAiMsg('bot', `Al momento non ci sono operazioni aperte disponibili su cui investire.`); return; }
-      const list = top.map((p,i)=>`${i+1}. <b>${p.title}</b> — ${p.type==='flipping'?'Flipping':'Crowdfunding · '+p.category}, rendimento stimato <b>${p.roi}%</b>, durata ${p.duration}`).join('<br>');
-      addAiMsg('bot', `Le operazioni disponibili con il rendimento stimato più alto in questo momento sono:<br>${list}<br><br>Rendimento più alto non significa automaticamente scelta migliore per te: durata, rischio e categoria contano quanto il numero. Trovi il dettaglio di ognuna nella sezione "Investi".`);
+      if(!top.length){ addAiMsg('bot', t('ai_best_none')); return; }
+      const list = top.map((p,i)=>tpl('ai_best_item_tpl', {i:i+1, title:'<b>'+p.title+'</b>', typeLabel:dealTypeLabel(p), roi:'<b>'+p.roi+'%</b>', duration:p.duration})).join('<br>');
+      addAiMsg('bot', tpl('ai_best_intro_outro_tpl', {list}));
       return;
     }
     if(openWords.some(w=>lower.includes(w))){
       const open = PROJECTS.filter(p=>p.type==='crowdfunding' && !p.closed && p.target);
-      if(!open.length){ addAiMsg('bot', `Non ci sono campagne di crowdfunding in raccolta al momento.`); return; }
-      const list = open.map(p=>`<b>${p.title}</b> (${p.city}) — ${Math.round(p.raised/p.target*100)}% raccolto, ticket minimo ${eur(p.minTicket)}${p.invested?' · già in portafoglio':''}`).join('<br>');
-      addAiMsg('bot', `Campagne di crowdfunding attualmente in raccolta:<br>${list}`);
+      if(!open.length){ addAiMsg('bot', t('ai_open_none')); return; }
+      const list = open.map(p=>tpl('ai_open_item_tpl', {title:'<b>'+p.title+'</b>', city:p.city, pct:Math.round(p.raised/p.target*100), ticket:eur(p.minTicket), portfolioNote:(p.invested?t('ai_open_portfolio_note'):'')})).join('<br>');
+      addAiMsg('bot', tpl('ai_open_intro_tpl', {list}));
       return;
     }
     if(diversifyWords.some(w=>lower.includes(w))){
       const {mine, totInvested} = portfolioStats();
-      if(!mine.length){ addAiMsg('bot', `Non hai ancora investimenti in portafoglio, quindi non c'è ancora una composizione da analizzare — trovi le operazioni aperte in "Investi".`); return; }
+      if(!mine.length){ addAiMsg('bot', t('ai_diversify_empty')); return; }
       const flipPct = totInvested ? Math.round(mine.filter(p=>p.type==='flipping').reduce((s,p)=>s+p.myAmount,0)/totInvested*100) : 0;
       const crowdPct = 100-flipPct;
       const cats = {};
       mine.filter(p=>p.type==='crowdfunding').forEach(p=>{ cats[p.category]=(cats[p.category]||0)+p.myAmount; });
-      const catTxt = Object.keys(cats).length ? Object.entries(cats).map(([k,v])=>`${k} ${Math.round(v/totInvested*100)}%`).join(', ') : null;
+      const catTxt = Object.keys(cats).length ? tpl('ai_diversify_cat_tpl', {cats:Object.entries(cats).map(([k,v])=>`${catLabel(k)} ${Math.round(v/totInvested*100)}%`).join(', ')}) : '';
       const maxSingle = Math.max(...mine.map(p=>p.myAmount/totInvested*100));
-      addAiMsg('bot', `Il tuo portafoglio è per <b>${flipPct}%</b> in flipping e <b>${crowdPct}%</b> in crowdfunding${catTxt?` (crowdfunding per categoria: ${catTxt})`:''}. La singola operazione più pesante vale il <b>${Math.round(maxSingle)}%</b> del tuo capitale investito.` +
-        (maxSingle>40 ? ` È una concentrazione piuttosto alta su un'unica operazione: molti investitori preferiscono restare sotto il 30-40% per singola operazione, per limitare l'impatto se un singolo progetto va peggio del previsto.` : ` Non risultano concentrazioni eccessive su una singola operazione.`) +
-        ` Questa è un'osservazione descrittiva sui tuoi dati, non una raccomandazione personalizzata: per una valutazione sul tuo caso specifico rivolgiti a un consulente abilitato.`);
+      addAiMsg('bot', tpl('ai_diversify_tpl', {
+        flipPct:'<b>'+flipPct+'%</b>', crowdPct:'<b>'+crowdPct+'%</b>', catTxt,
+        maxSingle:'<b>'+Math.round(maxSingle)+'%</b>',
+        concentrationNote: maxSingle>40 ? t('ai_diversify_high_note') : t('ai_diversify_ok_note'),
+      }));
       return;
     }
     if(mentioned && compareWords.some(w=>lower.includes(w))){
       const avg = categoryAverage(mentioned);
       const diff = avg!=null ? (mentioned.roi-avg) : null;
-      addAiMsg('bot', `<b>${mentioned.title}</b> ha un rendimento stimato del <b>${mentioned.roi}%</b>.` +
-        (avg!=null ? ` Le altre operazioni di tipo ${mentioned.type==='flipping'?'flipping':'crowdfunding'} pubblicate sulla piattaforma hanno un rendimento medio del <b>${avg.toFixed(1)}%</b>, quindi questa operazione è ${diff>=0?'sopra':'sotto'} media di ${Math.abs(diff).toFixed(1)} punti.` : '') +
-        ` Ricorda: è un confronto tra le operazioni di esempio su questa piattaforma, non un'analisi del mercato immobiliare reale.`);
+      addAiMsg('bot', tpl('ai_compare_tpl', {
+        title:'<b>'+mentioned.title+'</b>', roi:'<b>'+mentioned.roi+'%</b>',
+        avgNote: avg!=null ? tpl('ai_compare_avg_tpl', {typeLabel:dealTypeLabel(mentioned), avg:'<b>'+avg.toFixed(1)+'%</b>', aboveBelow:(diff>=0?t('ai_above'):t('ai_below')), diff:Math.abs(diff).toFixed(1)}) : '',
+      }));
       return;
     }
     if(mentioned){
-      addAiMsg('bot', `<b>${mentioned.title}</b> — ${mentioned.city}, ${mentioned.mq} m².<br>Rendimento stimato: <b>${mentioned.roi}%</b> su ${mentioned.duration}.<br>Ricavo atteso: <b>${eur(mentioned.ricavoAtteso)}</b>.` +
-        (mentioned.invested ? ` Il tuo investimento in questa operazione è di ${eur(mentioned.myAmount)}.` : ` Non hai ancora investito in questa operazione — trovi tutti i dettagli nella sua scheda.`));
+      addAiMsg('bot', tpl('ai_mentioned_tpl', {
+        title:'<b>'+mentioned.title+'</b>', city:mentioned.city, mq:mentioned.mq, roi:'<b>'+mentioned.roi+'%</b>', duration:mentioned.duration, ricavo:'<b>'+eur(mentioned.ricavoAtteso)+'</b>',
+        investedNote: mentioned.invested ? tpl('ai_mentioned_invested_tpl', {amount:eur(mentioned.myAmount)}) : t('ai_mentioned_not_invested'),
+      }));
       return;
     }
-    const personalWords = ['quanto ho investito','il mio rendimento','mio portafoglio','capitale investito','ho guadagnato'];
+    const personalWords = ['quanto ho investito','il mio rendimento','mio portafoglio','capitale investito','ho guadagnato','how much have i invested','my return','my portfolio','how much have i earned','have i earned'];
     if(personalWords.some(w=>lower.includes(w))){
       const {mine, totInvested, weightedRoi} = portfolioStats();
-      addAiMsg('bot', `Hai investito <b>${eur(totInvested)}</b> in <b>${mine.length}</b> operazioni, con un rendimento medio ponderato stimato del <b>${weightedRoi.toFixed(1)}%</b>. Trovi il dettaglio operazione per operazione nella tua Dashboard.`);
+      addAiMsg('bot', tpl('ai_personal_tpl', {amount:'<b>'+eur(totInvested)+'</b>', n:'<b>'+mine.length+'</b>', roi:'<b>'+weightedRoi.toFixed(1)+'%</b>'}));
       return;
     }
     const match = FAQ.find(f=>f.kw.some(k=>lower.includes(k)));
@@ -1753,15 +2271,16 @@ function respondLocal(text){
   }, 450);
 }
 function escalate(text){
-  addAiMsg('escalate', `<b>Non ho una risposta certa per questo.</b><br>Ho segnalato la tua domanda — "<i>${text}</i>" — a un consulente RealFlipping in carne e ossa, che ti risponderà entro 1 giorno lavorativo.<br><br><button class="btn brass sm" onclick="bookAdvisor()">Prenota una chiamata ora</button>`);
+  addAiMsg('escalate', tpl('ai_escalate_tpl', {text}));
 }
 function bookAdvisor(){
-  addAiMsg('bot', `Fatto ✅ Ho prenotato una chiamata conoscitiva con un consulente. Riceverai la conferma via email con l'orario proposto.`);
+  addAiMsg('bot', t('ai_booked'));
 }
 
 /* ============================================================
    INIT
    ============================================================ */
+applyTranslations();
 renderLandingPreview();
 renderNav();
 </script>

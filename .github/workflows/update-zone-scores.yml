@@ -1,9 +1,10 @@
 name: Aggiorna punteggi zone (Backoffice)
 
-# Simula un aggiornamento giornaliero dei dati del Backoffice (vedi
-# tools/palermo_zone_scoring.py per il perché è una simulazione e non
-# un feed di mercato reale). Gira una volta al giorno e, quando i
-# numeri cambiano, apre una commit diretta su main con i nuovi valori.
+# Simula un aggiornamento giornaliero dei dati del Backoffice, per tutte
+# le città configurate (vedi tools/scoring_engine.py per il perché è una
+# simulazione e non un feed di mercato reale). Gira una volta al giorno e,
+# quando i numeri cambiano, apre una commit diretta su main con i nuovi
+# valori.
 
 on:
   schedule:
@@ -30,7 +31,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html tools/palermo_zone_scores.json
+          git add index.html tools/palermo_zone_scores.json tools/milano_zone_scores.json
           if git diff --cached --quiet; then
             echo "Nessuna modifica da committare."
           else
