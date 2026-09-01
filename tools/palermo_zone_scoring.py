@@ -130,6 +130,19 @@ def applica_variazione_giornaliera(
 # del punteggio, ma segnalate come dato da verificare.
 SOGLIA_AFFIDABILITA_VAR = 15.0
 
+# Quota stimata di costi ricorrenti (IMU su seconda casa, spese condominiali
+# non ribaltabili, manutenzione ordinaria, gestione/vacancy) sottratta dal
+# rendimento lordo per stimare un rendimento netto di massima. E' un'ipotesi
+# forfettaria uguale per tutte le zone (v1): un raffinamento futuro la
+# calcolerebbe per singolo immobile/comune.
+QUOTA_COSTI_RICORRENTI = 0.28
+
+# Ogni punto di variazione affitto oltre la soglia di affidabilità toglie
+# questi punti di punteggio (fino a un massimo), per riflettere che un dato
+# fuori soglia e' meno fidato — non solo "clippato" ma penalizzato.
+PENALITA_PER_PUNTO_INAFFIDABILE = 0.6
+PENALITA_MASSIMA = 12.0
+
 
 @dataclass
 class ZoneScore:
@@ -137,11 +150,14 @@ class ZoneScore:
     vendita_mq: float
     affitto_mq: float
     rendimento_lordo_pct: float
+    rendimento_netto_pct: float
     var_vendita_pct: float
     var_affitto_pct: float
     punteggio: float
     fascia: Literal["Investire", "Monitorare", "Evitare"]
+    indice_affidabilita_pct: float
     dato_da_verificare: bool
+    spiegazione: str
 
 
 def carica_da_csv(path: str) -> list[tuple]:
@@ -180,9 +196,12 @@ def calcola_punteggi(
 ) -> list[ZoneScore]:
     """Calcola il punteggio composito di investibilità per ogni zona.
 
-    Metodologia (v1 - da raffinare con più storico quando disponibile):
+    Metodologia (v1.5 — clipping + penalità di affidabilità):
       - rendimento_lordo = affitto_mq * 12 / vendita_mq * 100
         (rendimento locativo lordo annuo stimato)
+      - rendimento_netto = rendimento_lordo * (1 - QUOTA_COSTI_RICORRENTI),
+        stima di massima al netto di IMU/condominio/manutenzione/gestione
+        (ipotesi forfettaria uguale per tutte le zone, v1)
       - trend_vendita = variazione % prezzo di vendita
         (momentum di rivalutazione, utile soprattutto per il flipping)
       - trend_affitto = variazione % canone di affitto, con clipping a
@@ -190,6 +209,14 @@ def calcola_punteggi(
       - ogni componente è normalizzata 0-100 tra le zone analizzate,
         poi combinata con i pesi indicati (di default: rendimento conta
         di più, poi rivalutazione, poi domanda locativa)
+      - indice_affidabilita: 100 se la variazione affitto è entro soglia,
+        altrimenti scende in proporzione a quanto la supera (una zona con
+        var. affitto +66% è meno affidabile di una con +16%, anche se
+        entrambe vengono "clippate" allo stesso modo nel calcolo)
+      - penalità di affidabilità: il punteggio finale viene ridotto (fino a
+        un tetto) in base a quanto il dato è fuori soglia, cosi' una zona
+        con dato dubbio non compete alla pari con una zona genuinamente
+        solida che si ferma vicino al limite di clipping
 
     Nota: il clipping serve SOLO al calcolo del punteggio; il valore
     originale non clippato resta in var_affitto_pct per trasparenza.
@@ -207,11 +234,17 @@ def calcola_punteggi(
 
     risultati = []
     for i, (zona, vendita, var_v, affitto, var_a) in enumerate(dati):
-        punteggio = (
+        punteggio_grezzo = (
             peso_rendimento * rendimenti_norm[i]
             + peso_trend_vendita * trend_vendita_norm[i]
             + peso_trend_affitto * trend_affitto_norm[i]
         )
+
+        eccesso = max(0.0, abs(var_a) - SOGLIA_AFFIDABILITA_VAR)
+        penalita = min(PENALITA_MASSIMA, eccesso * PENALITA_PER_PUNTO_INAFFIDABILE)
+        indice_affidabilita = round(max(0.0, 100.0 - (eccesso * 4.0)), 1)
+        punteggio = max(0.0, punteggio_grezzo - penalita)
+
         fascia: Literal["Investire", "Monitorare", "Evitare"]
         if punteggio >= 65:
             fascia = "Investire"
@@ -220,32 +253,99 @@ def calcola_punteggi(
         else:
             fascia = "Evitare"
 
+        rendimento_lordo = round(rendimenti[i], 2)
+        rendimento_netto = round(rendimento_lordo * (1 - QUOTA_COSTI_RICORRENTI), 2)
+
         risultati.append(ZoneScore(
             zona=zona,
             vendita_mq=vendita,
             affitto_mq=affitto,
-            rendimento_lordo_pct=round(rendimenti[i], 2),
+            rendimento_lordo_pct=rendimento_lordo,
+            rendimento_netto_pct=rendimento_netto,
             var_vendita_pct=var_v,
             var_affitto_pct=var_a,
             punteggio=round(punteggio, 1),
             fascia=fascia,
+            indice_affidabilita_pct=indice_affidabilita,
             dato_da_verificare=abs(var_a) > SOGLIA_AFFIDABILITA_VAR,
+            spiegazione="",
         ))
 
     risultati.sort(key=lambda r: r.punteggio, reverse=True)
+
+    for r in risultati:
+        r.spiegazione = genera_spiegazione(r, rendimenti, trend_vendita)
+
     return risultati
 
 
+def genera_spiegazione(
+    r: ZoneScore, rendimenti: list[float], trend_vendita: list[float]
+) -> str:
+    """Genera 2-3 frasi che spiegano il punteggio, a partire dai numeri già
+    calcolati — non da un LLM (v1.5, motore quantitativo "racconta se
+    stesso" con un template).
+
+    Segue esattamente lo schema descritto nel docstring del modulo per il
+    layer v2 ("Come collegare il layer LLM"): stessi campi, stesso compito
+    (spiegare, non modificare i numeri). Questa funzione può essere
+    sostituita 1:1 da una chiamata a un LLM reale (es. Claude) che riceva
+    gli stessi campi e produca un testo più naturale — i numeri restano
+    sempre calcolati dal motore quantitativo qui sopra, mai dal layer di
+    spiegazione.
+    """
+    rend_medio = sum(rendimenti) / len(rendimenti)
+    vendita_media = sum(trend_vendita) / len(trend_vendita)
+
+    if r.fascia == "Investire":
+        apertura = f"{r.zona} è in fascia Investire con punteggio {r.punteggio}/100"
+    elif r.fascia == "Monitorare":
+        apertura = f"{r.zona} è in fascia Monitorare con punteggio {r.punteggio}/100"
+    else:
+        apertura = f"{r.zona} è in fascia Evitare con punteggio {r.punteggio}/100"
+
+    if r.rendimento_lordo_pct >= rend_medio:
+        frase_rendimento = (
+            f"il rendimento locativo lordo stimato ({r.rendimento_lordo_pct}%, "
+            f"circa {r.rendimento_netto_pct}% al netto di costi ricorrenti stimati) "
+            f"è sopra la media delle zone analizzate"
+        )
+    else:
+        frase_rendimento = (
+            f"il rendimento locativo lordo stimato ({r.rendimento_lordo_pct}%, "
+            f"circa {r.rendimento_netto_pct}% al netto di costi ricorrenti stimati) "
+            f"è sotto la media delle zone analizzate"
+        )
+
+    if r.var_vendita_pct >= vendita_media:
+        frase_trend = f"i prezzi di vendita mostrano un trend di {r.var_vendita_pct:+.1f}%, sopra la media"
+    else:
+        frase_trend = f"i prezzi di vendita mostrano un trend di {r.var_vendita_pct:+.1f}%, sotto la media"
+
+    frase_affidabilita = ""
+    if r.dato_da_verificare:
+        frase_affidabilita = (
+            f" Attenzione: la variazione dei canoni d'affitto rilevata ({r.var_affitto_pct:+.1f}%) "
+            f"supera la soglia di affidabilità statistica (indice di affidabilità stimato "
+            f"{r.indice_affidabilita_pct}/100) — probabile bassa liquidità del mercato degli "
+            f"affitti in questa zona: verificare con più storico prima di darle peso."
+        )
+
+    return f"{apertura}: {frase_rendimento} e {frase_trend}.{frase_affidabilita}"
+
+
 def stampa_report(risultati: list[ZoneScore]) -> None:
-    print(f"{'Zona':<65}{'Punt.':>7}{'Fascia':>13}{'Rend.%':>9}{'VarV%':>8}{'VarA%':>8}")
-    print("-" * 115)
+    print(f"{'Zona':<65}{'Punt.':>7}{'Fascia':>13}{'Rend.lordo%':>12}{'Rend.netto%':>13}{'Affid.':>8}{'VarV%':>8}{'VarA%':>8}")
+    print("-" * 145)
     for r in risultati:
         flag = " *" if r.dato_da_verificare else ""
         print(
             f"{r.zona:<65}{r.punteggio:>7.1f}{r.fascia:>13}"
-            f"{r.rendimento_lordo_pct:>9.2f}{r.var_vendita_pct:>8.1f}{r.var_affitto_pct:>7.1f}{flag}"
+            f"{r.rendimento_lordo_pct:>12.2f}{r.rendimento_netto_pct:>13.2f}"
+            f"{r.indice_affidabilita_pct:>8.1f}{r.var_vendita_pct:>8.1f}{r.var_affitto_pct:>7.1f}{flag}"
         )
     print("\n* = variazione affitto anomala (oltre soglia affidabilità), dato da verificare con più storico")
+    print("\nEsempio di spiegazione generata per la prima zona:\n" + risultati[0].spiegazione)
 
 
 def esporta_json(risultati: list[ZoneScore], nome_file: str = "palermo_zone_scores.json") -> None:
