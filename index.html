@@ -495,6 +495,11 @@ input[type=range].ba-slider{width:100%;margin-top:12px;accent-color:var(--brass)
 .msg.user{background:var(--ink);color:var(--white);align-self:flex-end;border-bottom-right-radius:4px;}
 .msg.escalate{background:var(--brass-tint);align-self:flex-start;border:1px solid #EBD3AE;}
 .msg.escalate b{color:var(--brass-deep);}
+.msg.typing{display:flex;gap:4px;align-items:center;padding:14px 16px;}
+.msg.typing .dot{width:6px;height:6px;border-radius:50%;background:var(--ink-faint);animation:aiTypingBounce 1.2s infinite ease-in-out;}
+.msg.typing .dot:nth-child(2){animation-delay:.15s;}
+.msg.typing .dot:nth-child(3){animation-delay:.3s;}
+@keyframes aiTypingBounce{0%,60%,100%{opacity:.35;transform:translateY(0);}30%{opacity:1;transform:translateY(-3px);}}
 .ai-input-row{display:flex;gap:10px;padding:16px 20px;border-top:1px solid var(--line);}
 .ai-input-row input{flex:1;padding:11px 14px;border:1px solid var(--line-strong);border-radius:10px;font-size:13.5px;font-family:inherit;}
 .ai-input-row input:focus{outline:2px solid var(--brass);}
@@ -963,6 +968,32 @@ const FAQ = [
   {kw:['differenza','flipping o crowdfunding','flipping e crowdfunding'], a:()=>`Nel flipping copri per intero un'operazione di ristrutturazione e vendita di un immobile: capitale più alto, ma controllo diretto sull'intera operazione. Nel crowdfunding partecipi con una quota (anche da 500€) insieme ad altri investitori tramite una SPV dedicata: capitale più basso, ma rendimento e rischio sono proporzionali alla quota sottoscritta.`},
   {kw:['spv','societ','sicurezza dei fondi','dove vanno i miei soldi'], a:()=>`Ogni operazione di crowdfunding è veicolata da una SPV (società veicolo) dedicata al singolo progetto, separata dal patrimonio di RealFlipping: i fondi raccolti sono vincolati a quell'operazione specifica. È lo stesso meccanismo usato dalla maggior parte delle piattaforme di real estate crowdfunding regolamentate.`},
 ];
+
+/* ============================================================
+   CONSULENTE IA — backend LLM (opzionale)
+   ============================================================
+   Se AI_BACKEND_URL è vuoto, il Consulente IA usa solo il motore a
+   regole locale (askAiLocal) — il sito funziona esattamente come prima,
+   zero setup. Se imposti qui l'URL del Worker (vedi worker/README.md),
+   le domande libere vengono mandate a un vero LLM con il contesto del
+   portafoglio; solo in caso di errore/timeout si ricade sul motore
+   locale, così il consulente non si "rompe" mai per l'investitore. */
+const AI_BACKEND_URL = ""; // es: "https://realflipping-ai.<tuo-account>.workers.dev"
+const AI_BACKEND_TIMEOUT_MS = 15000;
+
+/* Fatti fissi della piattaforma, usati sia dalla FAQ locale sia come
+   contesto per il backend LLM, così le risposte restano coerenti tra i
+   due motori (stessi numeri, stessa fonte di verità). */
+const PLATFORM_FACTS = {
+  ticket_minimo_crowdfunding_eur: 500,
+  range_capitale_flipping_eur: [250000, 650000],
+  aliquota_plusvalenza_flipping_pct: 26,
+  aliquota_proventi_crowdfunding_pct: 12.5,
+  mercato_secondario_crowdfunding_attivo: false,
+  quote_liquidabili_prima_fine_operazione: false,
+  meccanismo_crowdfunding: "SPV (società veicolo) dedicata a ogni progetto, separata dal patrimonio di RealFlipping",
+  durata_tipica_operazioni_mesi: [8, 14],
+};
 
 let state = {loggedIn:false, dashFilter:'all', exploreFilter:'all', currentProjectId:null, currentView:'dashboard', fromView:'dashboard', language:'it', paymentMethod:'card', plan:'Pro', notifUnread:4};
 
@@ -1473,7 +1504,7 @@ let aiInited = false;
 function renderAiInit(){
   if(aiInited) return;
   aiInited = true;
-  addAiMsg('bot', `Ciao Marco 👋 Sono il consulente IA di RealFlipping. Posso calcolare il tuo rendimento reale sul portafoglio, simulare un importo su un progetto specifico, confrontarlo o classificarlo rispetto alle altre operazioni, darti un'analisi descrittiva della diversificazione del tuo portafoglio e rispondere su fiscalità e funzionamento di flipping e crowdfunding. Se non riesco a risponderti, ti metto in contatto con un consulente fisico.`);
+  addAiMsg('bot', `Ciao Marco 👋 Sono il consulente IA di RealFlipping. Puoi farmi domande libere, con parole tue: calcolo il tuo rendimento reale sul portafoglio, simulo un importo su un progetto specifico, confronto o classifico le operazioni, ti do un'analisi descrittiva della diversificazione del tuo portafoglio e rispondo su fiscalità e funzionamento di flipping e crowdfunding. Se non riesco a risponderti, ti metto in contatto con un consulente fisico.`);
 }
 function addAiMsg(type, text){
   const wrap = document.getElementById('ai-msgs');
@@ -1533,6 +1564,13 @@ function rankOpenProjects(){
 }
 function estimateReturn(p, amt){ return amt * (1 + p.roi/100); }
 
+/* ============================================================
+   CONSULENTE IA — dispatch: backend LLM (se configurato) con fallback
+   sul motore a regole locale
+   ============================================================ */
+let aiHistory = []; // [{role:'user'|'assistant', text:'...'}] — turni già scambiati in questa sessione
+let aiRequestSeq = 0; // scarta risposte arrivate in ritardo se l'utente ha già mandato un altro messaggio
+
 function askAi(text){
   addAiMsg('user', text);
   const lower = text.toLowerCase();
@@ -1542,6 +1580,101 @@ function askAi(text){
     return;
   }
 
+  if(AI_BACKEND_URL){
+    askAiBackend(text);
+  } else {
+    respondLocal(text);
+  }
+}
+
+function buildAiContext(){
+  const {mine, totInvested, weightedRoi} = portfolioStats();
+  return {
+    portafoglio: {
+      capitale_investito_eur: totInvested,
+      rendimento_medio_ponderato_pct: Math.round(weightedRoi*10)/10,
+      operazioni: mine.map(p=>({titolo:p.title, tipo:p.type, categoria:p.category||null, importo_investito_eur:p.myAmount, rendimento_stimato_pct:p.roi, durata:p.duration, chiuso:!!p.closed})),
+    },
+    progetti_piattaforma: PROJECTS.map(p=>({
+      titolo:p.title, tipo:p.type, categoria:p.category||null, citta:p.city, mq:p.mq,
+      rendimento_stimato_pct:p.roi, durata:p.duration, gia_in_portafoglio_utente:!!p.invested,
+      chiuso:!!p.closed,
+      ticket_minimo_eur:p.minTicket||null, target_raccolta_eur:p.target||null, raccolto_eur:p.raised||null,
+      prezzo_operazione_eur:p.totalPrice||null,
+    })),
+    fatti_piattaforma: PLATFORM_FACTS,
+  };
+}
+
+function showTyping(){
+  const wrap = document.getElementById('ai-msgs');
+  const div = document.createElement('div');
+  div.className = 'msg bot typing';
+  div.id = 'ai-typing';
+  div.innerHTML = `<span class="dot"></span><span class="dot"></span><span class="dot"></span>`;
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+function hideTyping(){
+  const el = document.getElementById('ai-typing');
+  if(el) el.remove();
+}
+
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+/* Il testo torna dal backend come testo semplice: lo escapiamo sempre
+   (anche se il prompt del backend istruisce il modello a non farlo, un
+   input malevolo nella domanda dell'utente potrebbe provare a far
+   rispondere il modello con del markup) e poi riabilitiamo solo <b> e gli
+   a-capo, l'unica formattazione che il Consulente IA usa. */
+function sanitizeAiHtml(text){
+  return escapeHtml(text)
+    .replace(/&lt;b&gt;/g, '<b>')
+    .replace(/&lt;\/b&gt;/g, '</b>')
+    .replace(/\n/g, '<br>');
+}
+
+async function askAiBackend(text){
+  const seq = ++aiRequestSeq;
+  showTyping();
+  const controller = new AbortController();
+  const timeout = setTimeout(()=>controller.abort(), AI_BACKEND_TIMEOUT_MS);
+  try {
+    const res = await fetch(AI_BACKEND_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ message: text, history: aiHistory, context: buildAiContext() }),
+      signal: controller.signal,
+    });
+    if(seq !== aiRequestSeq) return; // l'utente ha mandato un altro messaggio nel frattempo
+    if(!res.ok) throw new Error('backend status '+res.status);
+    const data = await res.json();
+    if(!data || typeof data.reply !== 'string' || !data.reply.trim()) throw new Error('risposta vuota dal backend');
+    hideTyping();
+    addAiMsg('bot', sanitizeAiHtml(data.reply));
+    aiHistory.push({role:'user', text}, {role:'assistant', text:data.reply});
+    if(data.escalate) offerHumanAdvisor();
+  } catch(err){
+    if(seq !== aiRequestSeq) return;
+    console.warn('Consulente IA: backend non disponibile, uso il motore locale.', err);
+    hideTyping();
+    respondLocal(text);
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function offerHumanAdvisor(){
+  addAiMsg('escalate', `Se vuoi, posso metterti in contatto con un consulente RealFlipping in carne e ossa.<br><br><button class="btn brass sm" onclick="bookAdvisor()">Prenota una chiamata ora</button>`);
+}
+
+/* Motore a regole locale — usato quando AI_BACKEND_URL non è configurato,
+   oppure come rete di sicurezza se il backend LLM non risponde. Copre le
+   domande più comuni con parole chiave; per tutto il resto passa la mano
+   a un consulente umano (escalate). */
+function respondLocal(text){
+  const lower = text.toLowerCase();
   const mentioned = findProjectMention(lower);
   const compareWords = ['confront','posizion','rispetto alle altre','media','comparabil'];
   const simWords = ['se investissi','se investo','quanto guadagn','simula','simulazione','ritorno se'];
