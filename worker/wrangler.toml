@@ -1,0 +1,13 @@
+name = "realflipping-ai"
+main = "index.js"
+compatibility_date = "2026-06-01"
+
+# Restringi l'origine in produzione al dominio dove pubblichi index.html,
+# es. "https://tuo-utente.github.io" — con "*" chiunque può chiamare il
+# Worker da un'altra pagina e consumare la tua quota Anthropic.
+[vars]
+ALLOWED_ORIGIN = "*"
+# ANTHROPIC_MODEL = "claude-haiku-4-5"   # opzionale, sovrascrive il default nel codice
+
+# La chiave API NON va qui (questo file finisce su GitHub): impostala con
+#   wrangler secret put ANTHROPIC_API_KEY
